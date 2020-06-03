@@ -1,0 +1,150 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using System.Linq;
+
+public class Junction : PowerableBase
+{
+
+    [SerializeField]
+    private List<ColorType> _currentColorTypes = null;
+    public override List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
+
+    public override bool IsClickable => false;
+
+    [SerializeField]
+    private bool _isPowered = false;
+    public override bool IsPowered { get { return _isPowered; } }
+
+    [SerializeField]
+    private List<Image> _junctionColors = null;
+
+    [SerializeField]
+    private List<PowerableBase> _powerables = null;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        UpdateColorDisplay();
+    }
+
+    public void Setup()
+    {
+        
+    }
+
+    private void SetCurrentPower()
+    {
+        if (_powerables == null)
+            return;
+
+        _currentColorTypes.Clear();
+        foreach (var ps in _powerables)
+        {
+            _currentColorTypes.AddRange(ps.CurrentColorTypes);
+        }
+
+        //var colors = new List<ColorType>();
+
+        ////Figure out our current power/colors
+        //foreach (var powerable in _powerables)
+        //{
+        //    var colorsToAdd = powerable.GetPowers(this);
+        //    colorsToAdd.Remove(ColorType.None);
+        //    colors.AddRange(colorsToAdd);
+        //}
+        //colors.Distinct().ToList();
+        //if (colors.Count > 0)
+        //    _currentColorTypes = colors;
+        //else
+        //{
+        //    _currentColorTypes = _originalColorTypes;
+        //}
+        //foreach (var powerable in _powerables)
+        //{
+        //    var currentPower = powerable.GetPowers(null);
+        //    foreach (var power in currentPower)
+        //    {
+        //        if (CurrentColorTypes.Contains(power))
+        //        {
+        //            _junctionColors[GetIndexFromPower(power)].gameObject.SetActive(true);
+        //        }
+        //    }
+        //}        
+    }
+
+    private int GetIndexFromPower(ColorType power)
+    {
+        switch (power)
+        {
+            case ColorType.None:
+                return 0;
+            case ColorType.Red:
+                return 1;
+            case ColorType.Green:
+                return 2;
+            case ColorType.Blue:
+                return 3;
+            default:
+                return 0;
+        }
+    }
+
+    private void UpdateColorDisplay()
+    {
+        _junctionColors[1].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Red));
+        _junctionColors[2].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Green));
+        _junctionColors[3].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
+
+        _junctionColors[0].gameObject.SetActive(!_junctionColors[1].IsActive() && !_junctionColors[2].IsActive() && !_junctionColors[3].IsActive());
+    }
+   
+    public override List<ColorType> GetPowers(PowerableBase requestor)
+    {
+        return _currentColorTypes;
+    }
+
+    public override void ResetPowerable()
+    {
+        _currentColorTypes = new List<ColorType>(_originalColorTypes);        
+    }
+
+    public override void UpdatePowerState(PowerableBase powerableBase)
+    {
+        ResetPowerable();
+        SetCurrentPower();
+        CheckPoweredState(powerableBase);
+        UpdateColorDisplay();
+
+        ////Notify everyone we updated
+        //foreach (var powerable in _powerables)
+        //{
+        //    if (powerable == powerableBase)
+        //        continue;
+        //    powerable.UpdatePowerState(this);
+        //}
+    }
+
+    private void CheckPoweredState(PowerableBase powerableBase)
+    {
+        var isPowered = false;
+        foreach (var source in _powerables)
+        {
+            if (isPowered)
+                break;
+            isPowered = source.IsPowered;
+        }
+        _isPowered = isPowered;
+    }
+
+    public override void CascadeReset(PowerableBase powerableBase)
+    {
+        
+        //_powerables.ForEach(o => { if (o != powerableBase) { o.CascadeReset(this); } });
+    }
+
+    public override bool GetPoweredState(PowerableBase requestor)
+    {
+        return _currentColorTypes.Count > 0;
+    }
+}
