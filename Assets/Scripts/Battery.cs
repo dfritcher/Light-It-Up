@@ -63,7 +63,8 @@ public class Battery : PowerableBase
 
     public override void ResetPowerable()
     {
-        SetBatteryTypes(_originalColorTypes);
+        _currentColorTypes = new List<ColorType>(_originalColorTypes);
+        UpdateColorDisplay();
     }
 
     public void IncreasePower()

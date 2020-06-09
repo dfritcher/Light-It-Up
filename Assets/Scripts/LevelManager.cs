@@ -6,7 +6,11 @@ using TMPro;
 public class LevelManager : MonoBehaviour
 {
     [SerializeField]
-    private TextMeshProUGUI _victoryDisplay = null;
+    private GameObject _victoryDisplay = null;
+    [SerializeField]
+    private TextMeshProUGUI _victoryMessage = null;
+    [SerializeField]
+    private TextMeshProUGUI _defeatMessage = null;
     [SerializeField]
     private TextMeshProUGUI _levelDisplay = null;
     [SerializeField]
@@ -25,8 +29,17 @@ public class LevelManager : MonoBehaviour
     private PassThroughOptionsManager _passThroughOptionsManager = null;
     public PassThroughOptionsManager PassThroughOptionsManager { get {return _passThroughOptionsManager; } }
 
+    [SerializeField]
+    private GameObject _actionsMenu = null;
+
     private static LevelManager _instance = null;
     public static LevelManager Instance { get { return _instance; } }
+
+    private void Awake()
+    {
+        _victoryDisplay.SetActive(false);
+        _actionsMenu.SetActive(false);
+    }
     private void Start()
     {
         if (_instance == null)
@@ -76,21 +89,35 @@ public class LevelManager : MonoBehaviour
 
     public void ResetVictoryState()
     {
-        _victoryDisplay.text = string.Empty;
+        _victoryDisplay.SetActive(false);
+        _victoryMessage.text = string.Empty;
+        _defeatMessage.text = string.Empty;
     }
 
     public void SetVictoryState(bool hasWon)
     {
-        if(hasWon)
-            _victoryDisplay.text = "YOU WIN!";
+        _victoryDisplay.SetActive(true);
+        if (hasWon)
+        {
+            _victoryMessage.gameObject.SetActive(true);
+            _victoryMessage.text = "YOU WIN!";
+            _defeatMessage.gameObject.SetActive(false);
+        }            
         else 
         {
-            _victoryDisplay.text = "SORRY YOU LOSE! \n TRY AGAIN!";
+            _defeatMessage.gameObject.SetActive(true);
+            _defeatMessage.text = "SORRY YOU LOSE! \n TRY AGAIN!";
+            _victoryMessage.gameObject.SetActive(false);
         }
     }
 
     public void SetLevelDisplay(int levelNumber)
     {
         _levelDisplay.text = $"Level {levelNumber}";
+    }
+    
+    public void ToggleActionMenu()
+    {
+        _actionsMenu.SetActive(!_actionsMenu.activeSelf);
     }
 }

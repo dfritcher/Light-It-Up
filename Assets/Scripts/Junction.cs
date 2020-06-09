@@ -22,6 +22,16 @@ public class Junction : PowerableBase
     [SerializeField]
     private List<PowerableBase> _powerables = null;
 
+    [SerializeField]
+    private List<PowerSource> _poweredBulbs = null;
+
+    /// <summary>
+    /// Reference to all the sources providing us power and the direction the power is coming from.
+    /// This will help us determine which directions power is flowing when asked for our colors.
+    /// </summary>
+    [SerializeField]
+    private List<PowerSource> _powerSources = null;
+
     protected override void Awake()
     {
         base.Awake();
@@ -106,7 +116,8 @@ public class Junction : PowerableBase
 
     public override void ResetPowerable()
     {
-        _currentColorTypes = new List<ColorType>(_originalColorTypes);        
+        _currentColorTypes = new List<ColorType>(_originalColorTypes);
+        UpdateColorDisplay();
     }
 
     public override void UpdatePowerState(PowerableBase powerableBase)

@@ -36,9 +36,11 @@ public class Level : MonoBehaviour
 
     private bool _canPlay = false;
     private bool _hasWon = false;
-    private bool _hasLost = false;
+    
     private void Start()
     {
+        _canPlay = true;
+        _hasWon = false;
         _batteries = transform.GetComponentsInChildren<Battery>().ToList();
         _bulbs = transform.GetComponentsInChildren<Bulb>().ToList();
         _wires = transform.GetComponentsInChildren<Wire>().ToList();
@@ -87,7 +89,10 @@ public class Level : MonoBehaviour
 
     private void LateUpdate()
     {
-        CheckWinCondition();
+        if (_canPlay)
+        {
+            CheckWinCondition();
+        }        
     }
 
     public void Setup(LevelManager levelManager)
@@ -103,7 +108,9 @@ public class Level : MonoBehaviour
         _batteries.ForEach(p => p.ResetPowerable());
         _inhibitors.ForEach(i => i.ResetPowerable());
         _passThroughs.ForEach(p => p.ResetPowerable());
-        _levelManger.ResetVictoryState();        
+        _levelManger.ResetVictoryState();
+        _canPlay = true;
+        _hasWon = false;
     }
     
     public void SetActiveState(bool isActive)
@@ -124,10 +131,14 @@ public class Level : MonoBehaviour
         if(_bulbs.All(b => b.IsOn))
         {
             _levelManger.SetVictoryState(true);
+            _hasWon = true;
+            _canPlay = false;
         }
         else if(_bulbs.Any(b => b.IsBroken))
         {
             _levelManger.SetVictoryState(false);
+            _hasWon = false;
+            _canPlay = false;
         }
     }
 }

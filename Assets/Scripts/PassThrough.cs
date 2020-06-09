@@ -13,12 +13,10 @@ public class PassThrough : PowerableBase
     private List<ColorType> _currentColorTypes = null;
     public override List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
 
-    /// <summary>
-    /// Reference to all that objects we can get power from.
-    /// </summary>    
     [SerializeField]
-    private List<PowerableBase> _powerables = null;
+    private List<Image> _passThroughColors = null;
 
+    [Header("Scene Initialized Fields")]
     [SerializeField]
     private List<Wire> _wires = null;
 
@@ -26,14 +24,7 @@ public class PassThrough : PowerableBase
     private List<Junction> _junctions = null;
 
     [SerializeField]
-    private List<Bulb> _bulbs = null;
-
-    [SerializeField]
     private List<PowerSource> _poweredBulbs = null;
-
-    [SerializeField]
-    private List<Image> _passThroughColors = null;
-
     /// <summary>
     /// Reference to all the Batteries providing us power and the direction the power is coming from.
     /// This will help us determine which directions power is flowing when asked for our colors.
@@ -155,9 +146,9 @@ public class PassThrough : PowerableBase
     {
         CheckPoweredState(powerableBase);
         _currentColorTypes.Clear();
-        foreach(var powerable in _powerables)
+        foreach(var source in _powerSources)
         {
-            foreach(var color in powerable.CurrentColorTypes)
+            foreach(var color in source.Powerable.CurrentColorTypes)
             {
                 if (_userSetColorType.Contains(color))
                 {
@@ -168,11 +159,11 @@ public class PassThrough : PowerableBase
 
         //Some source has updated we need to update all the sources that we power
         // We don't need to update the source that is telling us to update.
-        foreach (var sources in _powerables)
+        foreach (var source in _powerSources)
         {
-            if (sources == powerableBase) //skip the guy who is telling us to update
+            if (source.Powerable == powerableBase) //skip the guy who is telling us to update
                 continue;            
-            sources.UpdatePowerState(this);
+            source.Powerable.UpdatePowerState(this);
         }
 
         foreach (var wire in _wires)

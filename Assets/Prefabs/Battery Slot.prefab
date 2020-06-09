@@ -178,11 +178,11 @@ RectTransform:
   m_Father: {fileID: 8062819531126888595}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -55.1, y: 0.8}
-  m_SizeDelta: {x: -25.6, y: -46.35}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: -40.3, y: 33.7}
+  m_SizeDelta: {x: 86.4, y: 89.59499}
+  m_Pivot: {x: 0, y: 1}
 --- !u!222 &8443606545792279585
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -583,13 +583,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a37bfd85b9911f449009dca268231c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentBatteryColorTypes: 
-  _previousBatteryColorTypes: 
+  _originalColorTypes: 
+  _currentColorTypes: 
+  _objectsWePower: []
+  _wires: []
+  _junctions: []
+  _bulbs: []
   _batteryColors:
   - {fileID: 1088923532753017517}
   - {fileID: 5713439894108596701}
   - {fileID: 5395244444948190662}
-  _attachedBulbs: []
   _isClickable: 0
   _selectBatteryOption: {fileID: 8062819531126888596}
   _lockedIcon: {fileID: 299642497019450056}

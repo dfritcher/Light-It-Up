@@ -84,7 +84,8 @@ public class Wire : PowerableBase
 
     public override void ResetPowerable()
     {
-        _currentColorTypes = new List<ColorType>(_originalColorTypes);        
+        _currentColorTypes = new List<ColorType>(_originalColorTypes);
+        UpdateColorDisplay();
     }
 
     public override void UpdatePowerState(PowerableBase powerableBase)

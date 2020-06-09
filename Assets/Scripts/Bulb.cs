@@ -86,7 +86,6 @@ public class Bulb : PowerableBase
                 if (CurrentColorTypes.Contains(power))
                 {
                     IncreasePower(); //TODO: This will need to change to grabbing the power level plus color coming from the source.
-
                     break;
                 }                    
             }
