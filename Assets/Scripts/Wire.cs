@@ -77,9 +77,9 @@ public class Wire : PowerableBase
         _wireColors[0].gameObject.SetActive(!_wireColors[1].IsActive() && !_wireColors[2].IsActive() && !_wireColors[3].IsActive());
     }
 
-    public override List<ColorType> GetPowers(PowerableBase requestor)
+    public override List<Power> GetPowers(PowerableBase requestor)
     {
-        return _currentColorTypes;
+        return new List<Power>() { _power };
     }
 
     public override void ResetPowerable()
@@ -109,7 +109,7 @@ public class Wire : PowerableBase
         _currentColorTypes.Clear();
         foreach(var ps in _powerables)
         {
-            _currentColorTypes.AddRange(ps.GetPowers(this));
+            _currentColorTypes.AddRange(ps.CurrentColorTypes);
         }
 
         ////Figure out our current power/colors
@@ -141,12 +141,6 @@ public class Wire : PowerableBase
             isPowered = source.IsPowered;
         }
         _isPowered = isPowered;
-    }
-
-    public override void CascadeReset(PowerableBase powerableBase)
-    {
-        
-        //_powerables.ForEach(o => { if (o != powerableBase) { o.CascadeReset(this); } });
     }
 
     public override bool GetPoweredState(PowerableBase requestor)

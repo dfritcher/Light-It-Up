@@ -105,9 +105,10 @@ public class Level : MonoBehaviour
         _bulbs.ForEach(b => b.ResetPowerable());
         _wires.ForEach(w => w.ResetPowerable());
         _junctions.ForEach(j => j.ResetPowerable());
-        _batteries.ForEach(p => p.ResetPowerable());
         _inhibitors.ForEach(i => i.ResetPowerable());
         _passThroughs.ForEach(p => p.ResetPowerable());
+        _batteries.ForEach(p => p.ResetPowerable());
+        _batteries.ForEach(p => p.ResetPower());
         _levelManger.ResetVictoryState();
         _canPlay = true;
         _hasWon = false;

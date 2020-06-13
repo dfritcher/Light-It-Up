@@ -89,16 +89,12 @@ public class PassThrough : PowerableBase
         _passThroughColors[2].gameObject.SetActive(_userSetColorType.Contains(ColorType.Blue));
     }
 
-    public override List<ColorType> GetPowers(PowerableBase requestor)
+    public override List<Power> GetPowers(PowerableBase requestor)
     {
-        //return _currentColorTypes;
-        //TODO: Look at all our power sources, check if they are on. 
-        //TODO: Return the colors we pass that are also being powered to us.
+        var passingPowers = new List<Power>();
+        var poweredColors = new List<Power>();
 
-        var passingColors = new List<ColorType>();
-        var poweredColors = new List<ColorType>();
-
-        var direction = _poweredBulbs.Find(ps => ps.Powerable == requestor)?.InputDirection;
+        var direction = _powerSources.Find(ps => ps.Powerable == requestor)?.InputDirection;
 
         foreach (var source in _powerSources)
         {
@@ -110,19 +106,29 @@ public class PassThrough : PowerableBase
             }
         }
 
-        foreach (var color in poweredColors)
+        foreach (var power in poweredColors)
         {
-            if (_currentColorTypes.Contains(color))
+            var passingColors = new List<ColorType>();
+            foreach (var color in power.ColorTypes)
             {
-                passingColors.Add(color);
+                //Pass all colors that we don't block
+                if (_userSetColorType.Contains(color))
+                {
+                    passingColors.Add(color);
+                }
             }
+            if (passingColors.Count > 0)
+                passingPowers.Add(new Power() { Amount = power.Amount, ColorTypes = passingColors });
         }
 
-        return passingColors;
+        return passingPowers;
     }
 
-    
-
+    /// <summary>
+    /// Method to determine if this powerable is getting power from another source.
+    /// </summary>
+    /// <param name="requestor"></param>
+    /// <returns></returns>
     public override bool GetPoweredState(PowerableBase requestor)
     {
         var inputDirection = _powerSources.Find(ps => ps.Powerable == requestor)?.InputDirection;
@@ -183,11 +189,6 @@ public class PassThrough : PowerableBase
             if(inputDirection != bulb.InputDirection)
                 bulb.Powerable.UpdatePowerState(this);
         }
-
-        //Go through our list of power sources.
-        //Get the direction of that power source.
-        //If that source is being powered from any battery
-        //Notify all objects in the other directions to update.
     }
 
     private void CheckPoweredState(PowerableBase powerableBase)
@@ -203,10 +204,5 @@ public class PassThrough : PowerableBase
         }
         _isPowered = isPowered;
     }
-
-    public override void CascadeReset(PowerableBase powerableBase)
-    {
-        //_powerSources.ForEach(o => { if (o.Powerable != powerableBase) { o.Powerable.CascadeReset(this); } });
-    }
-
+  
 }

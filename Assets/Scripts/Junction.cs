@@ -109,9 +109,9 @@ public class Junction : PowerableBase
         _junctionColors[0].gameObject.SetActive(!_junctionColors[1].IsActive() && !_junctionColors[2].IsActive() && !_junctionColors[3].IsActive());
     }
    
-    public override List<ColorType> GetPowers(PowerableBase requestor)
+    public override List<Power> GetPowers(PowerableBase requestor)
     {
-        return _currentColorTypes;
+        return new List<Power>() { _power };
     }
 
     public override void ResetPowerable()
@@ -146,12 +146,6 @@ public class Junction : PowerableBase
             isPowered = source.IsPowered;
         }
         _isPowered = isPowered;
-    }
-
-    public override void CascadeReset(PowerableBase powerableBase)
-    {
-        
-        //_powerables.ForEach(o => { if (o != powerableBase) { o.CascadeReset(this); } });
     }
 
     public override bool GetPoweredState(PowerableBase requestor)

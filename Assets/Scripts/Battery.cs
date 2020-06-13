@@ -9,9 +9,7 @@ public class Battery : PowerableBase
     /// <summary>
     /// Reference to the current colors we are generating.
     /// </summary>
-    [SerializeField]
-    private List<ColorType> _currentColorTypes = null;
-    public override List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
+    public override List<ColorType> CurrentColorTypes { get { return _power.ColorTypes; } }
 
     [SerializeField]
     private List<PowerableBase> _objectsWePower = new List<PowerableBase>();
@@ -32,7 +30,7 @@ public class Battery : PowerableBase
     private bool _isClickable = true;
     public override bool IsClickable { get { return _isClickable; } }
 
-    public override bool IsPowered { get { return _currentColorTypes.Any(c => c != ColorType.None); } }
+    public override bool IsPowered { get { return _power.ColorTypes.Any(c => c != ColorType.None); } }
 
     [SerializeField]
     private Button _selectBatteryOption = null;
@@ -43,12 +41,10 @@ public class Battery : PowerableBase
     public delegate void BatteryEvent(Battery battery);
     public event BatteryEvent OnClick; // Event for user selecting a color
 
-
     protected override void Awake()
     {
         _selectBatteryOption.interactable = _isClickable;
-        _lockedIcon.gameObject.SetActive(!_isClickable);
-        UpdateColorDisplay();        
+        _lockedIcon.gameObject.SetActive(!_isClickable);       
     }
 
     private void Start()
@@ -63,18 +59,13 @@ public class Battery : PowerableBase
 
     public override void ResetPowerable()
     {
-        _currentColorTypes = new List<ColorType>(_originalColorTypes);
+        _power.ColorTypes = new List<ColorType>(_originalColorTypes);
         UpdateColorDisplay();
     }
 
-    public void IncreasePower()
+    public void ResetPower()
     {
-
-    }
-
-    public void DecreasePower()
-    {
-
+        SetBatteryTypes(_originalColorTypes);
     }
 
     /// <summary>
@@ -92,7 +83,7 @@ public class Battery : PowerableBase
     /// <param name="colorTypes"></param>
     public void SetBatteryTypes(List<ColorType> colorTypes)
     {
-        _currentColorTypes = colorTypes;
+        _power.ColorTypes = colorTypes;
         UpdateColorDisplay();
         //CascadeReset(null);
         foreach (var powerable in _objectsWePower)
@@ -129,23 +120,18 @@ public class Battery : PowerableBase
     /// </summary>
     /// <param name="requestor"></param>
     /// <returns></returns>
-    public override List<ColorType> GetPowers(PowerableBase requestor)
+    public override List<Power> GetPowers(PowerableBase requestor)
     {
-        return _currentColorTypes;
+        return new List<Power>() { _power };
     }
 
     public override void UpdatePowerState(PowerableBase powerableBase)
     {
         //Do nothing
     }
-    
-    public override void CascadeReset(PowerableBase powerableBase)
-    {
-        //_objectsWePower.ForEach(o => { if (o != powerableBase) { o.CascadeReset(this); } });
-    }
-
+   
     public override bool GetPoweredState(PowerableBase requestor)
     {
-        return _currentColorTypes.Count > 0;
+        return _power.ColorTypes.Count > 0;
     }
 }

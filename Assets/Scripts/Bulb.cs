@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.Experimental.PlayerLoop;
 
 public class Bulb : PowerableBase
 {
@@ -49,7 +50,7 @@ public class Bulb : PowerableBase
     protected override void Awake()
     {
         base.Awake();
-        UpdateColorDisplay();
+        ResetPowerable();
         _objectname = gameObject.name;
     }
     public void Setup()
@@ -57,14 +58,14 @@ public class Bulb : PowerableBase
         UpdateUI();
     }
     
-    public void IncreasePower()
+    public void IncreasePower(int amount)
     {
-        _powerLevel++;        
+        _powerLevel = _powerLevel + amount;        
     }
 
-    public void DecreasePower()
+    public void DecreasePower(int amount)
     {
-        _powerLevel--;
+        _powerLevel = _powerLevel - amount;
         if (_powerLevel < _minPower)
             _powerLevel = _minPower;
 
@@ -83,11 +84,14 @@ public class Bulb : PowerableBase
             var currentPower = powerable.GetPowers(this);
             foreach(var power in currentPower)
             {
-                if (CurrentColorTypes.Contains(power))
+                foreach(var color in power.ColorTypes)
                 {
-                    IncreasePower(); //TODO: This will need to change to grabbing the power level plus color coming from the source.
-                    break;
-                }                    
+                    if (CurrentColorTypes.Contains(color))
+                    {
+                        IncreasePower(power.Amount); //TODO: This will need to change to grabbing the power level plus color coming from the source.
+                        break;
+                    }
+                }                                    
             }
         }
         CheckState();
@@ -125,9 +129,9 @@ public class Bulb : PowerableBase
         _bulbColors[2].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Blue));        
     }
 
-    public override List<ColorType> GetPowers(PowerableBase requestor)
+    public override List<Power> GetPowers(PowerableBase requestor)
     {
-        return new List<ColorType>() { ColorType.None };
+        return new List<Power>() { new Power() { Amount = 0, ColorTypes = new List<ColorType>() { ColorType.None } } };
     }
 
     public override void ResetPowerable()
@@ -143,14 +147,9 @@ public class Bulb : PowerableBase
     {
         ResetPowerable();
         SetCurrentPower();
-        UpdateUI();
-        //Bulbs don't update anyone.
+        UpdateUI();       
     }
 
-    public override void CascadeReset(PowerableBase powerableBase)
-    {
-        ResetPowerable();
-    }
     public override bool GetPoweredState(PowerableBase requestor)
     {
         return _powerLevel > 0;
