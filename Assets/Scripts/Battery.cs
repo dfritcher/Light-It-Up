@@ -1,11 +1,12 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class Battery : PowerableBase
 {
+    #region Fields, Properties
     /// <summary>
     /// Reference to the current colors we are generating.
     /// </summary>
@@ -30,6 +31,9 @@ public class Battery : PowerableBase
     private bool _isClickable = true;
     public override bool IsClickable { get { return _isClickable; } }
 
+    [SerializeField]
+    private bool _hasVariablePower = false;
+
     public override bool IsPowered { get { return _power.ColorTypes.Any(c => c != ColorType.None); } }
 
     [SerializeField]
@@ -38,9 +42,29 @@ public class Battery : PowerableBase
     [SerializeField]
     private Image _lockedIcon = null;
 
+    [SerializeField]
+    private TextMeshProUGUI _powerDisplay = null;
+
+    [SerializeField]
+    private Button _increasePowerButton = null;
+
+    [SerializeField]
+    private Button _decreasePowerButton = null;
+
+    [SerializeField]
+    private int _minPower = 0;
+
+    [SerializeField]
+    private int _maxPower = 4;
+    #endregion Fields, Properties (end)
+
+    #region Delegates, Events
     public delegate void BatteryEvent(Battery battery);
     public event BatteryEvent OnClick; // Event for user selecting a color
+    #endregion Delegates, Events (end)
 
+    #region Methods
+    #region Unity Engine Methods
     protected override void Awake()
     {
         _selectBatteryOption.interactable = _isClickable;
@@ -51,15 +75,25 @@ public class Battery : PowerableBase
     {
         SetBatteryTypes(_originalColorTypes);
     }
+    #endregion Unity Engine Methos (end)
 
     public void Setup()
     {
+        _increasePowerButton.gameObject.SetActive(_hasVariablePower && _isClickable);
+        _increasePowerButton.interactable = _power.Amount < _maxPower;
+
+        _decreasePowerButton.gameObject.SetActive(_hasVariablePower && _isClickable);
+        _decreasePowerButton.interactable = _power.Amount > _minPower;
+        
+        _powerDisplay.text = _power.Amount.ToString();
         
     }
 
     public override void ResetPowerable()
     {
         _power.ColorTypes = new List<ColorType>(_originalColorTypes);
+        _power.Amount = _minPower;
+        _powerDisplay.text = _minPower.ToString();
         UpdateColorDisplay();
     }
 
@@ -68,6 +102,7 @@ public class Battery : PowerableBase
         SetBatteryTypes(_originalColorTypes);
     }
 
+    #region Unity Called Methods
     /// <summary>
     /// Called from Unity when the player clicks on us.
     /// </summary>
@@ -77,6 +112,32 @@ public class Battery : PowerableBase
             OnClick?.Invoke(this);
     }
 
+    public void IncreasePower()
+    {
+        _power.Amount++;
+        if (_power.Amount > _maxPower)
+        {
+            _power.Amount = _maxPower;
+            _increasePowerButton.interactable = false;
+        }
+        _decreasePowerButton.interactable = true;
+        _powerDisplay.text = _power.Amount.ToString();
+        UpdatePoweredObjects();
+    }
+
+    public void DecreasePower()
+    {
+        _power.Amount--;
+        if (_power.Amount < _minPower)
+        {
+            _power.Amount = _minPower;
+            _decreasePowerButton.interactable = false;
+        }
+        _increasePowerButton.interactable = true;
+        _powerDisplay.text = _power.Amount.ToString();
+        UpdatePoweredObjects();
+    }
+    #endregion Unity Called Methods (end)
     /// <summary>
     /// Sets our current colors.
     /// </summary>
@@ -85,7 +146,12 @@ public class Battery : PowerableBase
     {
         _power.ColorTypes = colorTypes;
         UpdateColorDisplay();
-        //CascadeReset(null);
+
+        UpdatePoweredObjects();
+    }
+
+    private void UpdatePoweredObjects()
+    {
         foreach (var powerable in _objectsWePower)
         {
             powerable.UpdatePowerState(this);
@@ -132,6 +198,7 @@ public class Battery : PowerableBase
    
     public override bool GetPoweredState(PowerableBase requestor)
     {
-        return _power.ColorTypes.Count > 0;
+        return _power.ColorTypes.Any(c => c != ColorType.None);
     }
+    #endregion Methods (end)
 }

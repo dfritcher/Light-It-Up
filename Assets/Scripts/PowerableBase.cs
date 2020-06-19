@@ -10,7 +10,7 @@ public abstract class PowerableBase : MonoBehaviour
     [SerializeField]
     protected List<ColorType> _originalColorTypes;
     [SerializeField]
-    protected Power _power = null;
+    protected Power _power = new Power() { Amount = 1, ColorTypes = new List<ColorType>() { ColorType.None } };
 
     public abstract bool IsClickable { get; }
     public abstract bool IsPowered { get; }

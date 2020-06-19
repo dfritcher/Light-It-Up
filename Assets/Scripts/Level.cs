@@ -7,6 +7,7 @@ using System;
 
 public class Level : MonoBehaviour
 {
+    #region Fields, Properties
     // Start is called before the first frame update
     [SerializeField]
     private List<Battery> _batteries = null;
@@ -36,7 +37,9 @@ public class Level : MonoBehaviour
 
     private bool _canPlay = false;
     private bool _hasWon = false;
+    #endregion Fields, Properties (end)
     
+    #region Methods
     private void Start()
     {
         _canPlay = true;
@@ -142,4 +145,5 @@ public class Level : MonoBehaviour
             _canPlay = false;
         }
     }
+    #endregion Methods (end)
 }

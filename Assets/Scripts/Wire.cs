@@ -5,6 +5,7 @@ using System.Linq;
 
 public class Wire : PowerableBase
 {
+    #region Fields, Properties
     [SerializeField]
     private List<ColorType> _currentColorTypes = null;
     public override List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
@@ -20,9 +21,9 @@ public class Wire : PowerableBase
 
     [SerializeField]
     private List<PowerableBase> _powerables = null;
+    #endregion Fields, Properties (end)
 
-    //[SerializeField]
-    //private List<PowerSource> _powerSources = null;
+    #region Methods
     protected override void Awake()
     {
         base.Awake();
@@ -31,8 +32,7 @@ public class Wire : PowerableBase
 
     public void Setup()
     {
-        //if(colors != null)
-        //    _currentColorTypes = colors;        
+        
     }
 
     //private void GetCurrentPower()
@@ -94,41 +94,28 @@ public class Wire : PowerableBase
         SetCurrentPower();
         CheckPoweredState();
         UpdateColorDisplay();
-
-        //Notify everyone we updated
-        //foreach (var powerable in _powerables)
-        //{
-        //    if (powerable == powerableBase)
-        //        continue;
-        //    powerable.UpdatePowerState(this);
-        //}
     }
 
     private void SetCurrentPower()
     {
-        _currentColorTypes.Clear();
-        foreach(var ps in _powerables)
+        var colors = new List<ColorType>();
+        //Figure out our current power/colors
+        foreach (var powerable in _powerables)
         {
-            _currentColorTypes.AddRange(ps.CurrentColorTypes);
+            if (powerable.IsPowered)
+            {
+                var colorsToAdd = powerable.GetPowers(this);
+                colorsToAdd.ForEach(c => c.ColorTypes.Remove(ColorType.None));
+                colors.AddRange(colorsToAdd.SelectMany(c => c.ColorTypes));
+            }
         }
-
-        ////Figure out our current power/colors
-        //foreach (var powerable in _powerables)
-        //{
-        //    if (powerable.IsPowered)
-        //    {
-        //        var colorsToAdd = powerable.GetPowers(this);
-        //        colorsToAdd.Remove(ColorType.None);
-        //        colors.AddRange(colorsToAdd);
-        //    }           
-        //}
-        //colors.Distinct().ToList();
-        //if (colors.Count > 0)
-        //    _currentColorTypes = colors;
-        //else
-        //{
-        //    _currentColorTypes = _originalColorTypes;
-        //}
+        colors.Distinct().ToList();
+        if (colors.Count > 0)
+            _currentColorTypes = colors;
+        else
+        {
+            _currentColorTypes = _originalColorTypes;
+        }
     }
 
     private void CheckPoweredState()
@@ -147,4 +134,5 @@ public class Wire : PowerableBase
     {
         return _currentColorTypes.Count > 0;
     }
+    #endregion Methods (end)
 }

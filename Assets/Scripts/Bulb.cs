@@ -2,11 +2,10 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
-using UnityEngine.Experimental.PlayerLoop;
 
 public class Bulb : PowerableBase
 {
+    #region Fields, Properties
     [SerializeField]
     private List<ColorType> _currentColorTypes = null;
     public override List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
@@ -46,13 +45,16 @@ public class Bulb : PowerableBase
     private List<PowerableBase> _powerables = null;
 
     private string _objectname = string.Empty;
+    #endregion Fields, Properties (end)
 
+    #region Methods
     protected override void Awake()
     {
         base.Awake();
         ResetPowerable();
         _objectname = gameObject.name;
     }
+    
     public void Setup()
     {
         UpdateUI();
@@ -154,4 +156,5 @@ public class Bulb : PowerableBase
     {
         return _powerLevel > 0;
     }
+    #endregion Methods (end)
 }

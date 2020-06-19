@@ -48,39 +48,24 @@ public class Junction : PowerableBase
         if (_powerables == null)
             return;
 
-        _currentColorTypes.Clear();
-        foreach (var ps in _powerables)
+        var colors = new List<ColorType>();
+        //Figure out our current power/colors
+        foreach (var powerable in _powerables)
         {
-            _currentColorTypes.AddRange(ps.CurrentColorTypes);
+            if (powerable.IsPowered)
+            {
+                var colorsToAdd = powerable.GetPowers(this);
+                colorsToAdd.ForEach(c => c.ColorTypes.Remove(ColorType.None));
+                colors.AddRange(colorsToAdd.SelectMany(c => c.ColorTypes));
+            }
         }
-
-        //var colors = new List<ColorType>();
-
-        ////Figure out our current power/colors
-        //foreach (var powerable in _powerables)
-        //{
-        //    var colorsToAdd = powerable.GetPowers(this);
-        //    colorsToAdd.Remove(ColorType.None);
-        //    colors.AddRange(colorsToAdd);
-        //}
-        //colors.Distinct().ToList();
-        //if (colors.Count > 0)
-        //    _currentColorTypes = colors;
-        //else
-        //{
-        //    _currentColorTypes = _originalColorTypes;
-        //}
-        //foreach (var powerable in _powerables)
-        //{
-        //    var currentPower = powerable.GetPowers(null);
-        //    foreach (var power in currentPower)
-        //    {
-        //        if (CurrentColorTypes.Contains(power))
-        //        {
-        //            _junctionColors[GetIndexFromPower(power)].gameObject.SetActive(true);
-        //        }
-        //    }
-        //}        
+        colors.Distinct().ToList();
+        if (colors.Count > 0)
+            _currentColorTypes = colors;
+        else
+        {
+            _currentColorTypes = _originalColorTypes;
+        }
     }
 
     private int GetIndexFromPower(ColorType power)

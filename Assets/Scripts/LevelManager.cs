@@ -5,6 +5,7 @@ using TMPro;
 
 public class LevelManager : MonoBehaviour
 {
+    #region Fields, Properties
     [SerializeField]
     private GameObject _victoryDisplay = null;
     [SerializeField]
@@ -34,7 +35,9 @@ public class LevelManager : MonoBehaviour
 
     private static LevelManager _instance = null;
     public static LevelManager Instance { get { return _instance; } }
+    #endregion Fields, Properties (end)
 
+    #region Methods
     private void Awake()
     {
         _victoryDisplay.SetActive(false);
@@ -120,4 +123,5 @@ public class LevelManager : MonoBehaviour
     {
         _actionsMenu.SetActive(!_actionsMenu.activeSelf);
     }
+    #endregion Methods (end)
 }

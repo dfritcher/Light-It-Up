@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
-using TMPro;
 
 public class Inhibitor : PowerableBase
 {
+    #region Fields, Properties
     [SerializeField]
     private List<ColorType> _userSetColorType = new List<ColorType>();
 
@@ -14,7 +12,6 @@ public class Inhibitor : PowerableBase
 
     [SerializeField]
     private List<Image> _inhibitorColors = null;
-
 
     [SerializeField]
     private bool _isClickable = true;
@@ -49,10 +46,14 @@ public class Inhibitor : PowerableBase
 
     private List<ColorType> _allColors = new List<ColorType>() { ColorType.Red, ColorType.Green, ColorType.Blue };
     private List<Power> _allPowers = new List<Power>() { new Power() { Amount = 1, ColorTypes = new List<ColorType>() { ColorType.Red, ColorType.Green, ColorType.Blue } } };
+    #endregion Fields, Properties (end)
 
+    #region Delegates, Events
     public delegate void InhibitorEvent(Inhibitor inhibitor);
     public event InhibitorEvent OnClick;
+    #endregion Delegates, Events (end)
 
+    #region Methods
     protected override void Awake()
     {
         base.Awake();
@@ -113,7 +114,7 @@ public class Inhibitor : PowerableBase
         var passingPowers = new List<Power>();
         var poweredColors = new List<Power>();
 
-        var direction = _poweredBulbs.Find(ps => ps.Powerable == requestor)?.InputDirection;
+        var direction = _powerSources.Find(ps => ps.Powerable == requestor)?.InputDirection;
 
         foreach (var source in _powerSources)
         {
@@ -142,79 +143,7 @@ public class Inhibitor : PowerableBase
 
         return passingPowers;
     }
-
     
-    //private List<ColorType> OLDGetPowers(PowerableBase requestor)
-    //{
-    //    if (_poweredBulbs == null || _poweredBulbs.Count == 0)
-    //        return _currentColorTypes;
-
-    //    if (_poweredBulbs.Any(pb => pb.Powerable == requestor))
-    //    {
-    //        var direction = _poweredBulbs.Find(p => p.Powerable == requestor).InputDirection;
-    //        var powerSources = _powerSources.FindAll(p => p.InputDirection != direction);
-
-    //        var poweredColors = new List<ColorType>();
-
-    //        foreach (var source in powerSources)
-    //        {
-    //            if (!source.Powerable.GetPoweredState(this))
-    //                continue;
-    //            var powers = source.Powerable.GetPowers(this);
-    //            foreach (var color in powers)
-    //            {
-    //                if (!_userSetColorType.Contains(color))
-    //                {
-    //                    poweredColors.Add(color);
-    //                }
-    //            }
-    //        }
-
-    //        poweredColors = poweredColors.Distinct().ToList();
-    //        //If no color is set, then set all colors as the default
-    //        if (CurrentColorTypes.Count == 0 || CurrentColorTypes.Contains(ColorType.None))
-    //            poweredColors = poweredColors.Except(_allColors).ToList();
-
-    //        //poweredColors = poweredColors.Except(CurrentColorTypes).ToList();
-
-    //        return poweredColors;
-    //    }
-    //    else if (_powerSources.Any(pb => pb.Powerable == requestor))
-    //    {
-    //        var direction = _powerSources.Find(p => p.Powerable == requestor).InputDirection;
-    //        var powerSources = _powerSources.FindAll(p => p.InputDirection != direction);
-
-    //        var poweredColors = new List<ColorType>();
-
-    //        foreach (var source in powerSources)
-    //        {
-    //            if (source.Powerable == requestor)
-    //                continue;
-    //            if (!source.Powerable.GetPoweredState(this))
-    //                continue;
-    //            var powers = source.Powerable.GetPowers(this);
-    //            foreach (var color in powers)
-    //            {
-    //                if (!_userSetColorType.Contains(color))
-    //                {
-    //                    poweredColors.Add(color);
-    //                }
-    //            }
-    //        }
-
-    //        poweredColors = poweredColors.Distinct().ToList();
-    //        //If no color is set, then set all colors as the default
-    //        if (CurrentColorTypes.Count == 0 || CurrentColorTypes.Contains(ColorType.None))
-    //            poweredColors = poweredColors.Except(_allColors).ToList();
-
-    //        //poweredColors = poweredColors.Except(CurrentColorTypes).ToList();
-
-    //        return poweredColors;
-    //    }
-    //    return _currentColorTypes;
-    //}
-
-
     public override void UpdatePowerState(PowerableBase powerableBase)
     {
         CheckPoweredState(powerableBase);
@@ -251,13 +180,14 @@ public class Inhibitor : PowerableBase
 
         var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
 
-        foreach (var bulb in _poweredBulbs)
-        {
-            if (inputDirection != bulb.InputDirection)
-                bulb.Powerable.UpdatePowerState(this);
-        }
+        //foreach (var bulb in _poweredBulbs)
+        //{
+        //    if (inputDirection != bulb.InputDirection)
+        //        bulb.Powerable.UpdatePowerState(this);
+        //}
 
     }
+    
     private void CheckPoweredState(PowerableBase powerableBase)
     {
         var isPowered = false;
@@ -269,16 +199,9 @@ public class Inhibitor : PowerableBase
             if (isPowered)
                 break;
         }
-        _isPowered = isPowered;
-        //foreach (var powerable in _powerables)
-        //{
-        //    var currentPower = powerable.GetPowers(this);
-        //    if (currentPower.Any(cp => cp != ColorType.None))
-        //    {
-        //        _isPowered = true;
-        //    }
-        //}
+        _isPowered = isPowered;       
     }
+    
     public override bool GetPoweredState(PowerableBase requestor)
     {
         var inputDirection = _powerSources.Find(ps => ps.Powerable == requestor)?.InputDirection;
@@ -293,5 +216,5 @@ public class Inhibitor : PowerableBase
 
         return _isPowered;
     }
-
+    #endregion Methods (end)
 }

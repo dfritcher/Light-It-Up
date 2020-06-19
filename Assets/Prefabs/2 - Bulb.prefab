@@ -780,6 +780,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _originalColorTypes: 
+  _power:
+    Amount: 0
+    ColorTypes: 00000000
   _currentColorTypes: 
   _bulbColors:
   - {fileID: 2320987146676072731}

@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class PassThrough : PowerableBase
 {
+    #region Fields, Properties
     [SerializeField]
     private List<ColorType> _userSetColorType = new List<ColorType>();
 
@@ -46,9 +45,15 @@ public class PassThrough : PowerableBase
     [SerializeField]
     private Image _lockedIcon = null;
 
+    private List<Power> _emptyPower = new List<Power>();
+    #endregion Fields, Properties (end)
+
+    #region Delegates, Events
     public delegate void PassThroughEvent(PassThrough passThrough);
     public event PassThroughEvent OnClick;
+    #endregion Delegates, Events (end)
 
+    #region Methods
     protected override void Awake()
     {
         base.Awake();
@@ -90,6 +95,15 @@ public class PassThrough : PowerableBase
     }
 
     public override List<Power> GetPowers(PowerableBase requestor)
+    {
+        CheckPoweredState(requestor);
+        if (_isPowered)
+            return GetPoweredColors(requestor);
+        else
+            return _emptyPower;
+    }
+
+    private List<Power> GetPoweredColors(PowerableBase requestor)
     {
         var passingPowers = new List<Power>();
         var poweredColors = new List<Power>();
@@ -184,11 +198,11 @@ public class PassThrough : PowerableBase
 
         var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
 
-        foreach (var bulb in _poweredBulbs)
-        {
-            if(inputDirection != bulb.InputDirection)
-                bulb.Powerable.UpdatePowerState(this);
-        }
+        //foreach (var bulb in _poweredBulbs)
+        //{
+        //    if(inputDirection != bulb.InputDirection)
+        //        bulb.Powerable.UpdatePowerState(this);
+        //}
     }
 
     private void CheckPoweredState(PowerableBase powerableBase)
@@ -204,5 +218,5 @@ public class PassThrough : PowerableBase
         }
         _isPowered = isPowered;
     }
-  
+    #endregion Methods (end)
 }

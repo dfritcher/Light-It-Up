@@ -507,7 +507,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -278.1, y: 18.9}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4649284598286241449
 MonoBehaviour:
@@ -521,13 +521,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e578eb5ce0460645b1f794414072e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _junctionColorTypes: 00000000010000000300000002000000
+  _originalColorTypes: 
+  _power:
+    Amount: 0
+    ColorTypes: 
+  _currentColorTypes: 
+  _isPowered: 0
   _junctionColors:
   - {fileID: 6583517174231096346}
   - {fileID: 1056348565337430306}
   - {fileID: 6280889721932434331}
   - {fileID: 7469565708217245998}
   _powerables: []
+  _poweredBulbs: []
+  _powerSources: []
 --- !u!222 &5724554861921763433
 CanvasRenderer:
   m_ObjectHideFlags: 0
