@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,10 +7,8 @@ using UnityEngine.UI;
 public class Bulb : PowerableBase
 {
     #region Fields, Properties
-    [SerializeField]
-    private List<ColorType> _currentColorTypes = null;
-    public override List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
-
+    #region Populated in Scene
+    [Header("Populated In Scene")]
     [SerializeField]
     private List<Image> _bulbColors = null;
 
@@ -25,9 +24,19 @@ public class Bulb : PowerableBase
     [SerializeField]
     private int _maxPower = 4;
 
-    [SerializeField, Range(0, 4)]
+    [SerializeField]
+    private List<PowerableBase> _powerables = null;
+    #endregion Populated in Scene (end)
+
+    #region Populated by Code
+    [Header("Populated by Code")]
+    [SerializeField, Range(0, 4), ReadOnly(true)]
     private int _powerLevel = 0;
-    public int CurrentPowerLevel { get { return _powerLevel;  } }
+    public int CurrentPowerLevel { get { return _powerLevel; } }
+
+    [SerializeField, ReadOnly(true)]
+    private List<ColorType> _currentColorTypes = null;
+    public override List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
 
     [SerializeField]
     private bool _isBroken = false;
@@ -40,19 +49,48 @@ public class Bulb : PowerableBase
     public override bool IsClickable => false;
 
     public override bool IsPowered { get { return false; } }
+    #endregion Populated by Code (end)
+
+    #region Populated By Prefab
+    [Header("Populated by Prefab")]
+    [SerializeField]
+    private GameObject _redFullLit = null;
+    [SerializeField]
+    private GameObject _redTopLit = null;
+    [SerializeField]
+    private GameObject _greenFullLit = null;
+    [SerializeField]
+    private GameObject _greenTopLit = null;
+    [SerializeField]
+    private GameObject _greenBottomLit = null;
+    [SerializeField]
+    private GameObject _blueFullLit = null;
+    [SerializeField]
+    private GameObject _blueBottomLit = null;
 
     [SerializeField]
-    private List<PowerableBase> _powerables = null;
+    private GameObject _redFullUnLit = null;
+    [SerializeField]
+    private GameObject _redTopUnLit = null;
+    [SerializeField]
+    private GameObject _greenFullUnLit = null;
+    [SerializeField]
+    private GameObject _greenTopUnLit = null;
+    [SerializeField]
+    private GameObject _greenBottomUnLit = null;
+    [SerializeField]
+    private GameObject _blueFullUnLit = null;
+    [SerializeField]
+    private GameObject _blueBottomUnLit = null;
+    #endregion Populated by Prefab (end)
 
-    private string _objectname = string.Empty;
     #endregion Fields, Properties (end)
 
     #region Methods
     protected override void Awake()
     {
         base.Awake();
-        ResetPowerable();
-        _objectname = gameObject.name;
+        ResetPowerable();        
     }
     
     public void Setup()
@@ -117,18 +155,97 @@ public class Bulb : PowerableBase
 
     private void UpdatePowerDisplay()
     {
-        if (_powerLevel > _maxPower)
-            _bulbStatusDisplay.text = $"BROKEN!";
-        else
-            _bulbStatusDisplay.text = string.Empty;
-        _bulbPowerDisplay.text = $"{_powerLevel} / {_maxPower} ";
+        if (_bulbStatusDisplay)
+        {
+            if (_powerLevel > _maxPower)
+                _bulbStatusDisplay.text = $"BROKEN!";
+            else
+                _bulbStatusDisplay.text = string.Empty;
+        }        
+        
+        _bulbPowerDisplay.text = $"{_powerLevel}/{_maxPower} ";
     }
 
     private void UpdateColorDisplay()
     {
-        _bulbColors[0].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Red));
-        _bulbColors[1].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Green));
-        _bulbColors[2].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Blue));        
+        _redFullLit.SetActive(false);
+        _redTopLit.SetActive(false);
+        _greenFullLit.SetActive(false);
+        _greenTopLit.SetActive(false);
+        _greenBottomLit.SetActive(false);
+        _blueFullLit.SetActive(false);
+        _blueBottomLit.SetActive(false);
+
+        _redFullUnLit.SetActive(false);
+        _redTopUnLit.SetActive(false);
+        _greenFullUnLit.SetActive(false);
+        _greenTopUnLit.SetActive(false);
+        _greenBottomUnLit.SetActive(false);
+        _blueFullUnLit.SetActive(false);
+        _blueBottomUnLit.SetActive(false);
+
+        if(CurrentPowerLevel > 0) {
+            if (CurrentColorTypes.Contains(ColorType.Red) && !(CurrentColorTypes.Contains(ColorType.Green) || CurrentColorTypes.Contains(ColorType.Blue)))
+            {
+                _redFullLit.SetActive(true);
+            }
+            else if (CurrentColorTypes.Contains(ColorType.Green) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Blue)))
+            {
+                _greenFullLit.SetActive(true);
+            }
+            else if (CurrentColorTypes.Contains(ColorType.Blue) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Green)))
+            {
+                _blueFullLit.SetActive(true);
+            }
+            else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && !CurrentColorTypes.Contains(ColorType.Blue))
+            {
+                _redTopLit.SetActive(true);
+                _greenBottomLit.SetActive(true);
+            }
+            else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Green))
+            {
+                _redTopLit.SetActive(true);
+                _blueBottomLit.SetActive(true);
+            }
+            else if (CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Red))
+            {
+                _greenTopLit.SetActive(true);
+                _blueBottomLit.SetActive(true);
+            }
+        }
+        else
+        {
+            if (CurrentColorTypes.Contains(ColorType.Red) && !(CurrentColorTypes.Contains(ColorType.Green) || CurrentColorTypes.Contains(ColorType.Blue)))
+            {
+                _redFullUnLit.SetActive(true);
+            }
+            else if (CurrentColorTypes.Contains(ColorType.Green) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Blue)))
+            {
+                _greenFullUnLit.SetActive(true);
+            }
+            else if (CurrentColorTypes.Contains(ColorType.Blue) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Green)))
+            {
+                _blueFullUnLit.SetActive(true);
+            }
+            else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && !CurrentColorTypes.Contains(ColorType.Blue))
+            {
+                _redTopUnLit.SetActive(true);
+                _greenBottomUnLit.SetActive(true);
+            }
+            else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Green))
+            {
+                _redTopUnLit.SetActive(true);
+                _blueBottomUnLit.SetActive(true);
+            }
+            else if (CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Red))
+            {
+                _greenTopUnLit.SetActive(true);
+                _blueBottomUnLit.SetActive(true);
+            }
+        }
+        //_bulbColors[0].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Red));
+        //_bulbColors[1].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Green));
+        //_bulbColors[2].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Blue));        
     }
 
     public override List<Power> GetPowers(PowerableBase requestor)

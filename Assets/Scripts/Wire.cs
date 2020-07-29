@@ -21,6 +21,13 @@ public class Wire : PowerableBase
 
     [SerializeField]
     private List<PowerableBase> _powerables = null;
+
+    [SerializeField]
+    private GameObject _red = null;
+    [SerializeField]
+    private GameObject _green = null;
+    [SerializeField]
+    private GameObject _blue = null;
     #endregion Fields, Properties (end)
 
     #region Methods
@@ -70,11 +77,14 @@ public class Wire : PowerableBase
     //}
 
     private void UpdateColorDisplay()
-    {       
-        _wireColors[1].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Red));
-        _wireColors[2].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Green));
-        _wireColors[3].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
-        _wireColors[0].gameObject.SetActive(!_wireColors[1].IsActive() && !_wireColors[2].IsActive() && !_wireColors[3].IsActive());
+    {
+        _red.SetActive(CurrentColorTypes.Contains(ColorType.Red));
+        _green.SetActive(CurrentColorTypes.Contains(ColorType.Green));
+        _blue.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
+        //_wireColors[1].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Red));
+        //_wireColors[2].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Green));
+        //_wireColors[3].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
+        //_wireColors[0].gameObject.SetActive(!_wireColors[1].IsActive() && !_wireColors[2].IsActive() && !_wireColors[3].IsActive());
     }
 
     public override List<Power> GetPowers(PowerableBase requestor)

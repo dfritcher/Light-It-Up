@@ -30,6 +30,9 @@ public class Level : MonoBehaviour
     [SerializeField]
     private int _levelNumber = 0;
 
+    [SerializeField]
+    private Canvas _levelCanvas = null;
+
     private bool _isActive = false;
     public bool IsActive { get { return _isActive; } }
 
@@ -132,6 +135,8 @@ public class Level : MonoBehaviour
 
     private void CheckWinCondition()
     {
+        if (_bulbs == null || _levelManger == null)
+            return;
         if(_bulbs.All(b => b.IsOn))
         {
             _levelManger.SetVictoryState(true);

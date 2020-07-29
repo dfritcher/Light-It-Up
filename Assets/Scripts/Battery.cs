@@ -56,6 +56,15 @@ public class Battery : PowerableBase
 
     [SerializeField]
     private int _maxPower = 4;
+
+    [SerializeField]
+    private GameObject _redSection = null;
+
+    [SerializeField]
+    private GameObject _greenSection = null;
+
+    [SerializeField]
+    private GameObject _blueSection = null;
     #endregion Fields, Properties (end)
 
     #region Delegates, Events
@@ -67,34 +76,71 @@ public class Battery : PowerableBase
     #region Unity Engine Methods
     protected override void Awake()
     {
-        _selectBatteryOption.interactable = _isClickable;
-        _lockedIcon.gameObject.SetActive(!_isClickable);       
+        if(_selectBatteryOption != null)
+            _selectBatteryOption.interactable = _isClickable;
+        if(_lockedIcon != null)
+            _lockedIcon.gameObject.SetActive(!_isClickable);
+
+        _power.ColorTypes = _originalColorTypes;
     }
 
     private void Start()
     {
         SetBatteryTypes(_originalColorTypes);
     }
+
+    private void Update()
+    {
+#if UNITY_EDITOR || UNITY_STANDALONE
+        if (Input.GetMouseButtonUp(0))
+        {
+            var response = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 100f);
+            
+            if (response.transform == transform)
+            {
+                BatteryClicked();
+            }                            
+        }
+#endif
+
+#if UNITY_ANDROID
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            var response = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.touches[0].position), Vector2.zero, 100f);
+
+            if (response.transform == transform)
+            {
+                BatteryClicked();
+            }
+        }
+#endif
+    }
     #endregion Unity Engine Methos (end)
 
     public void Setup()
     {
-        _increasePowerButton.gameObject.SetActive(_hasVariablePower && _isClickable);
-        _increasePowerButton.interactable = _power.Amount < _maxPower;
-
-        _decreasePowerButton.gameObject.SetActive(_hasVariablePower && _isClickable);
-        _decreasePowerButton.interactable = _power.Amount > _minPower;
+        if(_increasePowerButton)
+        {
+            _increasePowerButton.gameObject.SetActive(_hasVariablePower && _isClickable);
+            _increasePowerButton.interactable = _power.Amount < _maxPower;
+        }
+        if(_decreasePowerButton)
+        {
+            _decreasePowerButton.gameObject.SetActive(_hasVariablePower && _isClickable);
+            _decreasePowerButton.interactable = _power.Amount > _minPower;
+        }
         
-        _powerDisplay.text = _power.Amount.ToString();
-        
+        if(_powerDisplay)
+            _powerDisplay.text = _power.Amount.ToString();        
     }
 
     public override void ResetPowerable()
     {
         _power.ColorTypes = new List<ColorType>(_originalColorTypes);
         _power.Amount = _minPower;
-        _powerDisplay.text = _minPower.ToString();
-        UpdateColorDisplay();
+        if(_powerDisplay)
+            _powerDisplay.text = _minPower.ToString();
+        //UpdateColorDisplay();
     }
 
     public void ResetPower()
@@ -102,7 +148,7 @@ public class Battery : PowerableBase
         SetBatteryTypes(_originalColorTypes);
     }
 
-    #region Unity Called Methods
+#region Unity Called Methods
     /// <summary>
     /// Called from Unity when the player clicks on us.
     /// </summary>
@@ -137,7 +183,7 @@ public class Battery : PowerableBase
         _powerDisplay.text = _power.Amount.ToString();
         UpdatePoweredObjects();
     }
-    #endregion Unity Called Methods (end)
+#endregion Unity Called Methods (end)
     /// <summary>
     /// Sets our current colors.
     /// </summary>
@@ -175,9 +221,12 @@ public class Battery : PowerableBase
 
     private void UpdateColorDisplay()
     {
-        _batteryColors[0].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Red));
-        _batteryColors[1].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Green));
-        _batteryColors[2].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
+        _redSection.SetActive(CurrentColorTypes.Contains(ColorType.Red));
+        _greenSection.SetActive(CurrentColorTypes.Contains(ColorType.Green));
+        _blueSection.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
+        //_batteryColors[0].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Red));
+        //_batteryColors[1].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Green));
+        //_batteryColors[2].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
     }
 
     /// <summary>
@@ -200,5 +249,5 @@ public class Battery : PowerableBase
     {
         return _power.ColorTypes.Any(c => c != ColorType.None);
     }
-    #endregion Methods (end)
+#endregion Methods (end)
 }

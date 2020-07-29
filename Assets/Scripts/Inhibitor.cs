@@ -1,32 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Inhibitor : PowerableBase
 {
     #region Fields, Properties
-    [SerializeField]
-    private List<ColorType> _userSetColorType = new List<ColorType>();
-
-    public override List<ColorType> CurrentColorTypes { get { return _power.ColorTypes; } }
-
-    [SerializeField]
-    private List<Image> _inhibitorColors = null;
-
-    [SerializeField]
-    private bool _isClickable = true;
-    public override bool IsClickable { get { return _isClickable; } }
-
-    [SerializeField]
-    private bool _isPowered = false;
-    public override bool IsPowered { get { return _isPowered; } }
-
-    [SerializeField]
-    private Button _selectInhibitorOption = null;
-
-    [SerializeField]
-    private Image _lockedIcon = null;
-    
+    #region Populated in Scene
+    [Header("Populated In Scene")]
+    [SerializeField, FormerlySerializedAs("_userSetColorType")]
+    private List<ColorType> _userSetColorTypes = new List<ColorType>();
+    private List<ColorType> UserSetColorTypes { get { return _userSetColorTypes; } }
     [SerializeField]
     private List<PowerSource> _powerSources = null;
 
@@ -37,15 +22,61 @@ public class Inhibitor : PowerableBase
     private List<Junction> _junctions = null;
 
     [SerializeField]
+    private bool _isClickable = true;
+    public override bool IsClickable { get { return _isClickable; } }
+
+    [Space(8),SerializeField, ReadOnly(true)] //DEPRECATED, place bulbs in _powerSources.
     private List<PowerSource> _poweredBulbs = null;
 
-    private string _objectName = string.Empty;
+    #endregion Populated in Scene (end)
 
-    private List<ColorType> _emptyColors = new List<ColorType>() { ColorType.None };
+    #region Populated by Code
+    [Header("Populated by Code"), Space (8)]
+    [SerializeField]
+    private bool _isPowered = false;
+    public override bool IsPowered { get { return _isPowered; } }
+    public override List<ColorType> CurrentColorTypes { get { return _power.ColorTypes; } }
+
     private List<Power> _emptyPower = new List<Power>();
+    #endregion Populated by Code (end)
 
-    private List<ColorType> _allColors = new List<ColorType>() { ColorType.Red, ColorType.Green, ColorType.Blue };
-    private List<Power> _allPowers = new List<Power>() { new Power() { Amount = 1, ColorTypes = new List<ColorType>() { ColorType.Red, ColorType.Green, ColorType.Blue } } };
+    #region Populated By Prefab
+    [Space(8),Header("Populated by Prefab")]
+    [SerializeField]
+    private Image _lockedIcon = null;
+    [SerializeField]
+    private Button _selectInhibitorOption = null;
+    [SerializeField]
+    private GameObject _redFullLit = null;
+    [SerializeField]
+    private GameObject _redTopLit = null;
+    [SerializeField]
+    private GameObject _greenFullLit = null;
+    [SerializeField]
+    private GameObject _greenTopLit = null;
+    [SerializeField]
+    private GameObject _greenBottomLit = null;
+    [SerializeField]
+    private GameObject _blueFullLit = null;
+    [SerializeField]
+    private GameObject _blueBottomLit = null;
+
+    [SerializeField]
+    private GameObject _redFullUnLit = null;
+    [SerializeField]
+    private GameObject _redTopUnLit = null;
+    [SerializeField]
+    private GameObject _greenFullUnLit = null;
+    [SerializeField]
+    private GameObject _greenTopUnLit = null;
+    [SerializeField]
+    private GameObject _greenBottomUnLit = null;
+    [SerializeField]
+    private GameObject _blueFullUnLit = null;
+    [SerializeField]
+    private GameObject _blueBottomUnLit = null;
+    #endregion Populated by Prefab (end)
+
     #endregion Fields, Properties (end)
 
     #region Delegates, Events
@@ -58,13 +89,39 @@ public class Inhibitor : PowerableBase
     {
         base.Awake();
         _selectInhibitorOption.interactable = _isClickable;
-        _lockedIcon.gameObject.SetActive(!_isClickable);
-        _objectName = gameObject.name;
+        _lockedIcon.gameObject.SetActive(!_isClickable);        
     }
-    // Update is called once per frame
-    void Update()
-    {
 
+    private void Start()
+    {
+        GetPoweredState(null);
+        UpdateColorDisplay();
+    }
+    private void Update()
+    {
+#if UNITY_EDITOR || UNITY_STANDALONE
+        if (Input.GetMouseButtonUp(0))
+        {
+            var response = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 100f);
+
+            if (response.transform == transform)
+            {
+                InhibitorClicked();
+            }
+        }
+#endif
+
+#if UNITY_ANDROID
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            var response = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.touches[0].position), Vector2.zero, 100f);
+
+            if (response.transform == transform)
+            {
+                InhibitorClicked();
+            }
+        }
+#endif
     }
 
     public void Setup()
@@ -75,7 +132,7 @@ public class Inhibitor : PowerableBase
     public override void ResetPowerable()
     {
         _power.ColorTypes = new List<ColorType>(_originalColorTypes);
-        _userSetColorType = new List<ColorType>(_originalColorTypes);
+        _userSetColorTypes = new List<ColorType>(_originalColorTypes);
         UpdateColorDisplay();
     }
 
@@ -87,16 +144,90 @@ public class Inhibitor : PowerableBase
 
     public void SetUserSelectedPower(List<ColorType> colorTypes)
     {
-        _userSetColorType = colorTypes;
+        _userSetColorTypes = colorTypes;
         UpdateColorDisplay();
         UpdatePowerState(this);
     }
 
     private void UpdateColorDisplay()
     {
-        _inhibitorColors[0].gameObject.SetActive(_userSetColorType.Contains(ColorType.Red));
-        _inhibitorColors[1].gameObject.SetActive(_userSetColorType.Contains(ColorType.Green));
-        _inhibitorColors[2].gameObject.SetActive(_userSetColorType.Contains(ColorType.Blue));
+        _redFullLit.SetActive(false);
+        _redTopLit.SetActive(false);
+        _greenFullLit.SetActive(false);
+        _greenTopLit.SetActive(false);
+        _greenBottomLit.SetActive(false);
+        _blueFullLit.SetActive(false);
+        _blueBottomLit.SetActive(false);
+
+        _redFullUnLit.SetActive(false);
+        _redTopUnLit.SetActive(false);
+        _greenFullUnLit.SetActive(false);
+        _greenTopUnLit.SetActive(false);
+        _greenBottomUnLit.SetActive(false);
+        _blueFullUnLit.SetActive(false);
+        _blueBottomUnLit.SetActive(false);
+
+        if (IsPowered)
+        {
+            if (UserSetColorTypes.Contains(ColorType.Red) && !(UserSetColorTypes.Contains(ColorType.Green) || UserSetColorTypes.Contains(ColorType.Blue)))
+            {
+                _redFullLit.SetActive(true);
+            }
+            else if (UserSetColorTypes.Contains(ColorType.Green) && !(UserSetColorTypes.Contains(ColorType.Red) || UserSetColorTypes.Contains(ColorType.Blue)))
+            {
+                _greenFullLit.SetActive(true);
+            }
+            else if (UserSetColorTypes.Contains(ColorType.Blue) && !(UserSetColorTypes.Contains(ColorType.Red) || UserSetColorTypes.Contains(ColorType.Green)))
+            {
+                _blueFullLit.SetActive(true);
+            }
+            else if (UserSetColorTypes.Contains(ColorType.Red) && UserSetColorTypes.Contains(ColorType.Green) && !UserSetColorTypes.Contains(ColorType.Blue))
+            {
+                _redTopLit.SetActive(true);
+                _greenBottomLit.SetActive(true);
+            }
+            else if (UserSetColorTypes.Contains(ColorType.Red) && UserSetColorTypes.Contains(ColorType.Blue) && !UserSetColorTypes.Contains(ColorType.Green))
+            {
+                _redTopLit.SetActive(true);
+                _blueBottomLit.SetActive(true);
+            }
+            else if (UserSetColorTypes.Contains(ColorType.Green) && UserSetColorTypes.Contains(ColorType.Blue) && !UserSetColorTypes.Contains(ColorType.Red))
+            {
+                _greenTopLit.SetActive(true);
+                _blueBottomLit.SetActive(true);
+            }
+        }
+        else
+        {
+            if (UserSetColorTypes.Contains(ColorType.Red) && !(UserSetColorTypes.Contains(ColorType.Green) || UserSetColorTypes.Contains(ColorType.Blue)))
+            {
+                _redFullUnLit.SetActive(true);
+            }
+            else if (UserSetColorTypes.Contains(ColorType.Green) && !(UserSetColorTypes.Contains(ColorType.Red) || UserSetColorTypes.Contains(ColorType.Blue)))
+            {
+                _greenFullUnLit.SetActive(true);
+            }
+            else if (UserSetColorTypes.Contains(ColorType.Blue) && !(UserSetColorTypes.Contains(ColorType.Red) || UserSetColorTypes.Contains(ColorType.Green)))
+            {
+                _blueFullUnLit.SetActive(true);
+            }
+            else if (UserSetColorTypes.Contains(ColorType.Red) && UserSetColorTypes.Contains(ColorType.Green) && !UserSetColorTypes.Contains(ColorType.Blue))
+            {
+                _redTopUnLit.SetActive(true);
+                _greenBottomUnLit.SetActive(true);
+            }
+            else if (UserSetColorTypes.Contains(ColorType.Red) && UserSetColorTypes.Contains(ColorType.Blue) && !UserSetColorTypes.Contains(ColorType.Green))
+            {
+                _redTopUnLit.SetActive(true);
+                _blueBottomUnLit.SetActive(true);
+            }
+            else if (UserSetColorTypes.Contains(ColorType.Green) && UserSetColorTypes.Contains(ColorType.Blue) && !UserSetColorTypes.Contains(ColorType.Red))
+            {
+                _greenTopUnLit.SetActive(true);
+                _blueBottomUnLit.SetActive(true);
+            }
+        }
+        
     }
 
     public override List<Power> GetPowers(PowerableBase requestor)
@@ -132,7 +263,7 @@ public class Inhibitor : PowerableBase
             foreach(var color in power.ColorTypes)
             {
                 //Pass all colors that we don't block
-                if (!_userSetColorType.Contains(color))
+                if (!UserSetColorTypes.Contains(color))
                 {
                     passingColors.Add(color);                       
                 }                               
@@ -147,17 +278,20 @@ public class Inhibitor : PowerableBase
     public override void UpdatePowerState(PowerableBase powerableBase)
     {
         CheckPoweredState(powerableBase);
+        //Update our current Color types
         _power.ColorTypes.Clear();
         foreach (var source in _powerSources)
         {
             foreach (var color in source.Powerable.CurrentColorTypes)
             {
-                if (!_userSetColorType.Contains(color))
+                if (!UserSetColorTypes.Contains(color))
                 {
                     _power.ColorTypes.Add(color);
                 }
             }
         }
+
+        UpdateColorDisplay();
 
         //Some source has updated we need to update all the sources that we power
         // We don't need to update the source that is telling us to update.
@@ -173,31 +307,26 @@ public class Inhibitor : PowerableBase
             wire.UpdatePowerState(this);
         }
 
-        foreach (var junction in _junctions)
-        {
-            junction.UpdatePowerState(this);
-        }
-
-        var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
-
-        //foreach (var bulb in _poweredBulbs)
+        //May use these for sparking particle effects
+        //foreach (var junction in _junctions)
         //{
-        //    if (inputDirection != bulb.InputDirection)
-        //        bulb.Powerable.UpdatePowerState(this);
+        //    junction.UpdatePowerState(this);
         //}
 
+        var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
+        
     }
     
     private void CheckPoweredState(PowerableBase powerableBase)
     {
-        var isPowered = false;
+        var isPowered = powerableBase.GetType() == typeof(Battery) ? powerableBase.GetPoweredState(this):  false;
         var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
         foreach (var source in _powerSources)
         {
-            if (source.InputDirection != inputDirection)
-                isPowered = source.Powerable.GetPoweredState(this);
             if (isPowered)
                 break;
+            if (source.InputDirection != inputDirection)
+                isPowered = source.Powerable.GetPoweredState(this);            
         }
         _isPowered = isPowered;       
     }

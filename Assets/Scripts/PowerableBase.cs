@@ -4,14 +4,14 @@ using System;
 
 public abstract class PowerableBase : MonoBehaviour
 {
+
     /// <summary>
     /// Reference to our starting colors. Used to reset our state to starting state.
     /// </summary>
-    [SerializeField]
+    [Header("Base Fields"), SerializeField]
     protected List<ColorType> _originalColorTypes;
     [SerializeField]
-    protected Power _power = new Power() { Amount = 1, ColorTypes = new List<ColorType>() { ColorType.None } };
-
+    protected Power _power = new Power() { Amount = 1, ColorTypes = new List<ColorType>() { ColorType.None } };    
     public abstract bool IsClickable { get; }
     public abstract bool IsPowered { get; }
     public abstract List<Power> GetPowers(PowerableBase requestor);
