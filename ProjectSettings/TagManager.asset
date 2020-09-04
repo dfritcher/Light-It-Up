@@ -41,17 +41,20 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 928642587
+    locked: 0
   - name: Wire
     uniqueID: 1217794491
     locked: 0
   - name: Battery
     uniqueID: 3817477025
     locked: 0
-  - name: Bulb
-    uniqueID: 2549718675
-    locked: 0
   - name: Junction
     uniqueID: 771615643
+    locked: 0
+  - name: Bulb
+    uniqueID: 2549718675
     locked: 0
   - name: Inhibitor
     uniqueID: 1477541063
@@ -61,4 +64,7 @@ TagManager:
     locked: 0
   - name: Connector
     uniqueID: 1134169183
+    locked: 0
+  - name: UI
+    uniqueID: 741908845
     locked: 0
