@@ -46,7 +46,6 @@ public class CustomInhibitorDrawer : Editor
                 _colorTypes[i] = color;
             }
         }
-
     }
 
     public override void OnInspectorGUI()
@@ -58,6 +57,8 @@ public class CustomInhibitorDrawer : Editor
     
     private void UpdateEditorDisplay()
     {
+        if (Application.isPlaying)
+            return;
         _lockedIcon.gameObject?.SetActive(!_isClickable);
         _redFull.SetActive(false);
         _redTop.SetActive(false);

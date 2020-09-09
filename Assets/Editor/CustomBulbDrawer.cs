@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor (typeof(Bulb)), CanEditMultipleObjects]
+//[CustomEditor (typeof(Bulb)), CanEditMultipleObjects]
 public class CustomBulbDrawer : Editor
 {
     GameObject _redFull = null;
@@ -23,6 +23,8 @@ public class CustomBulbDrawer : Editor
     ColorType[] ColorTypes { get { return _colorTypes; } }
     private void OnEnable()
     {
+        if (Application.isPlaying)
+            return;
         _colorTypesProperty = serializedObject.FindProperty("_originalColorTypes");
         _redFull = serializedObject.FindProperty("_redFullUnLit").objectReferenceValue as GameObject;
         _greenFull = serializedObject.FindProperty("_greenFullUnLit").objectReferenceValue as GameObject;
@@ -43,7 +45,6 @@ public class CustomBulbDrawer : Editor
                 _colorTypes[i] = color;
             }
         }
-
     }
 
     public override void OnInspectorGUI()
@@ -55,6 +56,8 @@ public class CustomBulbDrawer : Editor
     
     private void UpdateEditorDisplay()
     {
+        if (Application.isPlaying)
+            return;
         _redFull?.SetActive(false);
         _redTop?.SetActive(false);
         _greenFull?.SetActive(false);

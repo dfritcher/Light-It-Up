@@ -38,6 +38,9 @@ public class LevelManager : MonoBehaviour
     public PassThroughOptionsManager PassThroughOptionsManager { get {return _passThroughOptionsManager; } }
 
     [SerializeField]
+    private BrokenBulbAnimationManager _brokenBulbAnimManager = null;
+
+    [SerializeField]
     private GameObject _actionsMenu = null;
 
     [SerializeField]
@@ -46,9 +49,12 @@ public class LevelManager : MonoBehaviour
     private GameObject _transitionObject = null;
 
     [SerializeField]
-    private CanvasGroup _levelOverlay = null;
+    private CanvasGroup _mainCanvas = null;
     [SerializeField]
     private CanvasGroup _playScreen = null;
+    [SerializeField]
+    private CanvasGroup _levelOverlay = null;
+    
 
     [SerializeField]
     private Camera _mainCamera;
@@ -78,6 +84,8 @@ public class LevelManager : MonoBehaviour
 
     private static LevelManager _instance = null;
     public static LevelManager Instance { get { return _instance; } }
+
+    private Level _currentLevel = null;
     #endregion Fields, Properties (end)
 
     #region Methods
@@ -94,6 +102,7 @@ public class LevelManager : MonoBehaviour
         _actionMenu.sizeDelta = new Vector2(0f, 0f);
 
         SetActionMenuInactive();
+        SetMainCanvasState(true);
         SetOverlayState(false);
         SetPlayScreenState(true);
     }
@@ -160,22 +169,32 @@ public class LevelManager : MonoBehaviour
         _defeatMessage.text = string.Empty;
     }
 
-    public void SetVictoryState(bool hasWon, string message = "")
+    public void SetVictoryState(bool hasWon, Level level)
     {
+        _currentLevel = level;
         _victoryDisplay.SetActive(true);
         if (hasWon)
         {
             _victoryParent.SetActive(true);
-            _victoryMessage.text = message != string.Empty ? message : "YOU WIN!";
+            _victoryMessage.text = _currentLevel.VictoryMessage != string.Empty ? _currentLevel.VictoryMessage : "YOU WIN!";
             _defeatParent.SetActive(false);
         }            
         else 
         {
+            // Show broken bulb animation
+            _brokenBulbAnimManager.Setup(this, _currentLevel.Bulbs.First(b => b.IsBroken));
+            _currentLevel.gameObject.SetActive(false);
+            SetOverlayState(false);
             _defeatParent.SetActive(true);
-            _defeatMessage.text = message != string.Empty ? message : "SORRY YOU LOSE! \n TRY AGAIN!";
+            _defeatMessage.text = _currentLevel.DefeatMessage != string.Empty ? _currentLevel.DefeatMessage : "SORRY YOU LOSE! \n TRY AGAIN!";
             _victoryParent.SetActive(false);
         }
+    }
 
+    public void OnBrokenBulbAnimationEnd()
+    {
+        SetOverlayState(true);
+        _currentLevel.gameObject.SetActive(true);
     }
 
     public void SetLevelDisplay(int levelNumber)
@@ -289,6 +308,13 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+
+    private void SetMainCanvasState(bool enabled)
+    {
+        _mainCanvas.alpha = enabled ? 1 : 0;
+        _mainCanvas.blocksRaycasts = enabled;
+        _mainCanvas.interactable = enabled;
+    }
     private void SetPlayScreenState(bool enabled)
     {
         _playScreen.alpha = enabled ? 1 : 0;

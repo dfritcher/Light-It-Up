@@ -11,6 +11,8 @@ public abstract class PowerableBase : MonoBehaviour
     /// </summary>
     [Header("Base Fields"), SerializeField]
     protected List<ColorType> _originalColorTypes;
+    public List<ColorType> OriginalColorTypes { get { return _originalColorTypes; } }
+
     [SerializeField]
     protected Power _power = new Power() { Amount = 1, ColorTypes = new List<ColorType>() { ColorType.None } };    
     public abstract bool IsClickable { get; }
@@ -27,5 +29,10 @@ public abstract class PowerableBase : MonoBehaviour
     protected virtual void Awake()
     {
         ResetPowerable();
+    }
+
+    public virtual void SetColorTypes(List<ColorType> colorTypes)
+    {
+        _originalColorTypes = colorTypes;        
     }
 }

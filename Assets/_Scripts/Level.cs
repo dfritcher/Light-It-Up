@@ -15,6 +15,7 @@ public class Level : MonoBehaviour
 
     [SerializeField]
     private List<Bulb> _bulbs = null;
+    public List<Bulb> Bulbs { get { return _bulbs; } }
 
     [SerializeField]
     private List<Wire> _wires = null;
@@ -35,10 +36,15 @@ public class Level : MonoBehaviour
     public int LevelNumber { get { return _levelNumber; } }
 
     [Header("Scene References"), Space(8)]
-    
-
     [SerializeField]
     private GameObject _gameObjectsParent = null;
+    [SerializeField]
+    private string _victoryMessage = string.Empty;
+    public string VictoryMessage { get { return _victoryMessage; } }
+    [SerializeField]
+    private string _defeatMessage = string.Empty;
+    public string DefeatMessage { get { return _defeatMessage; } }
+
 
     private bool _isActive = false;
     public bool IsActive { get { return _isActive; } }
@@ -223,7 +229,7 @@ public class Level : MonoBehaviour
             return;
         if(_bulbs.All(b => b.IsOn))
         {
-            _levelManger.SetVictoryState(true);
+            _levelManger.SetVictoryState(true, this);
             _levelManger.InhibitorOptionsManager.ResetOptions();
             _levelManger.BatteryOptionsManager.ResetOptions();
             _levelManger.PassThroughOptionsManager.ResetOptions();
@@ -231,7 +237,7 @@ public class Level : MonoBehaviour
         }
         else if(_bulbs.Any(b => b.IsBroken))
         {
-            _levelManger.SetVictoryState(false);
+            _levelManger.SetVictoryState(false, this);
             _levelManger.InhibitorOptionsManager.ResetOptions();
             _levelManger.BatteryOptionsManager.ResetOptions();
             _levelManger.PassThroughOptionsManager.ResetOptions();

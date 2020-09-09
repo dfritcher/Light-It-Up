@@ -179,8 +179,8 @@ public class LevelElevenTutorialResolver : TutorialResolverBase
                 _nextButton.interactable = true;
                 break;
             case 7:
-                _inhibitor2Animator.SetTrigger("GreenBlueOn");
-                _wire2Animators[1].SetTrigger("RedOn");
+                _inhibitor2Animator.SetTrigger("RedOn");
+                _wire2Animators[1].SetTrigger("GreenBlueOn");
                 _nextButton.gameObject.SetActive(false);
                 _closeButton.gameObject.SetActive(true);
                 _nextButton.interactable = false;

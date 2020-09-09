@@ -133,6 +133,7 @@ public class LevelSixTutorialResolver : TutorialResolverBase
                 _battery2Animator.SetTrigger("BlueOn");
                 _doubleColorBulb.IncreasePower(1, true);
                 _battery2WireAnimator.SetTrigger("BlueOn");
+                _doubleColorBulbAnimator.SetTrigger("RedBlueOff");
                 _nextButton.gameObject.SetActive(false);
                 _closeButton.gameObject.SetActive(true);
                 break;            
