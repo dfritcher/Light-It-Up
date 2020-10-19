@@ -71,6 +71,7 @@ public class PassThroughOptionsManager : MonoBehaviour
         else
         {
             AnimationController.Instance.StopAllCoroutines();
+            ((RectTransform)transform).anchoredPosition = _endPosition;
         }
         
     }

@@ -79,7 +79,8 @@ public class BatteryOptionsManager : MonoBehaviour
         }
         else
         {
-            AnimationController.Instance.StopAllCoroutines();            
+            AnimationController.Instance.StopAllCoroutines();
+            ((RectTransform)transform).anchoredPosition = _endPosition;
         }        
     }
 

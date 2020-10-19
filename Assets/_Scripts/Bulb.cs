@@ -120,6 +120,15 @@ public class Bulb : PowerableBase
     private Sprite _brokenSprite = null;
     [SerializeField]
     private Sprite _normalSprite = null;
+
+    [Header("Audio References"), Space(8)]
+    [SerializeField]
+    private AudioSource _bulbAudioSource = null;
+    [SerializeField]
+    private AudioClip _glassBreakClip = null;
+    [SerializeField]
+    private AudioClip _increasePowerClip = null;
+
     #endregion Populated by Prefab (end)
 
     #endregion Fields, Properties (end)
@@ -208,7 +217,7 @@ public class Bulb : PowerableBase
         _isBroken = false;
         _animatedSprites = GetLitMaterials();
         _originalSprites = new List<Material>(_animatedSprites);
-        
+        _bulbAudioSource.PlayOneShot(_increasePowerClip);
         //UpdateColorDisplay();
     }
 
@@ -231,7 +240,7 @@ public class Bulb : PowerableBase
     public void OnBulbBreaksAnimation()
     {
         //Play broken bulb sound.
-
+        _bulbAudioSource.PlayOneShot(_glassBreakClip);
         //Disable the bulb colors
         BreakBulb();
         UpdateUI();

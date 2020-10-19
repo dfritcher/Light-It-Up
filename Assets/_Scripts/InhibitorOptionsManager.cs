@@ -73,6 +73,7 @@ public class InhibitorOptionsManager : MonoBehaviour
         else
         {
             AnimationController.Instance.StopAllCoroutines();
+            ((RectTransform)transform).anchoredPosition = _endPosition;
         }
         _extended = true;
         

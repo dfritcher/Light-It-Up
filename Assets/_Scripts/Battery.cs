@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -74,6 +75,14 @@ public class Battery : PowerableBase
 
     [SerializeField]
     private Canvas _decreaseButtonCanvas = null;
+
+    [Header("Audio References"), Space(8)]
+    [SerializeField]
+    private AudioSource _audioSource = null;
+    [SerializeField]
+    private AudioClip _powerDownClip = null;
+    [SerializeField]
+    private AudioClip _powerUpClip = null;
     #endregion Fields, Properties (end)
 
     #region Delegates, Events
@@ -96,7 +105,9 @@ public class Battery : PowerableBase
 
     private void Start()
     {
-        SetBatteryTypes(_originalColorTypes);
+        _power.ColorTypes = _originalColorTypes;
+        UpdateColorDisplay();
+        UpdatePoweredObjects();
     }
 
     private void Update()
@@ -209,7 +220,19 @@ public class Battery : PowerableBase
         _power.ColorTypes = colorTypes;
         UpdateColorDisplay();
         UpdatePoweredObjects();
-        
+        PlayAudio();
+    }
+
+    private void PlayAudio()
+    {
+        if(_power.ColorTypes.Any(c => c != ColorType.None))
+        {
+            _audioSource.PlayOneShot(_powerUpClip);
+        }
+        else
+        {
+            _audioSource.PlayOneShot(_powerDownClip);
+        }
     }
 
     private void UpdatePoweredObjects()
