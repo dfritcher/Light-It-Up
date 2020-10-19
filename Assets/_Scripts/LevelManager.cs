@@ -15,6 +15,7 @@ public class LevelManager : MonoBehaviour
     private GameObject _victoryDisplay = null;
     [SerializeField]
     private TextMeshProUGUI _victoryMessage = null;
+
     [SerializeField]
     private GameObject _victoryParent = null;
     [SerializeField]
@@ -27,18 +28,22 @@ public class LevelManager : MonoBehaviour
     private List<Level> _levels = null;
     [SerializeField]
     private Transform _levelsParent = null;
+    [SerializeField]
+    private List<LevelSelect> _selectableLevels = null;
 
     [SerializeField]
     private Animator _levelTransition = null;
     [SerializeField]
     private GameObject _transitionObject = null;
-
+    [Header("Screens")]
     [SerializeField]
     private CanvasGroup _mainCanvas = null;
     [SerializeField]
     private CanvasGroup _playScreen = null;
     [SerializeField]
     private CanvasGroup _levelOverlay = null;
+    [SerializeField]
+    private CanvasGroup _levelSelect = null; 
 
     [SerializeField]
     private Camera _mainCamera;
@@ -82,6 +87,10 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private Button _tutorialButton = null;
 
+    [Header("Game Info"), Space(8)]
+    [SerializeField]
+    private GameSaveInfo _gameInfo = null;
+
     [Header("Debug Options"), Space(8)]
     [SerializeField]
     private bool _skipTransitions = false;
@@ -91,6 +100,7 @@ public class LevelManager : MonoBehaviour
     public static LevelManager Instance { get { return _instance; } }
 
     private Level _currentLevel = null;
+    private Level CurrentLevel {  get { return _currentLevel ?? (_currentLevel = _levels[0]); } }
     #endregion Fields, Properties (end)
 
     #region Methods
@@ -110,6 +120,7 @@ public class LevelManager : MonoBehaviour
         SetMainCanvasState(true);
         SetOverlayState(false);
         SetPlayScreenState(true);
+        SetLevelSelectState(false);
     }
 
     private void Start()
@@ -165,6 +176,12 @@ public class LevelManager : MonoBehaviour
     {
         SetOverlayState(false);
         _levels.Find(l => l.IsActive).PlayTutorial();        
+    }
+
+    internal void LevelSelect_LevelClicked(int levelNumber)
+    {
+        _currentLevel = _levels.Find(l => l.LevelNumber == levelNumber);
+        TriggerLevelAnimation(LevelSelectClickedCallback);
     }
 
     public void ResetVictoryState()
@@ -231,9 +248,17 @@ public class LevelManager : MonoBehaviour
     
     private void PlayClickedCallback()
     {
+        SetLevelSelectState(true);
+        SetOverlayState(false);
         SetPlayScreenState(false);
+        InitializeLevelSelectScreen();
+    }
+
+    private void LevelSelectClickedCallback()
+    {
+        SetLevelSelectState(false);
         SetOverlayState(true);
-        InitializeLevel(0);
+        InitializeLevel(_currentLevel.LevelNumber - 1);
         BatteryOptionsManager.Initialize();
     }
 
@@ -318,6 +343,13 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void InitializeLevelSelectScreen()
+    {
+        foreach(var level in _selectableLevels)
+        {
+            level.Setup(this, _gameInfo.HighestLevelUnlocked);
+        }
+    }
 
     private void SetMainCanvasState(bool enabled)
     {
@@ -337,6 +369,13 @@ public class LevelManager : MonoBehaviour
         _levelOverlay.alpha = enabled ? 1 : 0;
         _levelOverlay.blocksRaycasts = enabled;
         _levelOverlay.interactable = enabled;
+    }
+
+    private void SetLevelSelectState(bool enabled)
+    {
+        _levelSelect.alpha = enabled ? 1 : 0;
+        _levelSelect.blocksRaycasts = enabled;
+        _levelSelect.interactable = enabled;
     }
 
     private void SetActionMenuActive()
