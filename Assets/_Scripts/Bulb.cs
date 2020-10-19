@@ -217,7 +217,8 @@ public class Bulb : PowerableBase
         _isBroken = false;
         _animatedSprites = GetLitMaterials();
         _originalSprites = new List<Material>(_animatedSprites);
-        _bulbAudioSource.PlayOneShot(_increasePowerClip);
+        AudioManager.PlayOneShot(_increasePowerClip);
+        //_bulbAudioSource.PlayOneShot(_increasePowerClip);
         //UpdateColorDisplay();
     }
 
@@ -240,7 +241,8 @@ public class Bulb : PowerableBase
     public void OnBulbBreaksAnimation()
     {
         //Play broken bulb sound.
-        _bulbAudioSource.PlayOneShot(_glassBreakClip);
+        AudioManager.PlayOneShot(_glassBreakClip);
+        //_bulbAudioSource.PlayOneShot(_glassBreakClip);
         //Disable the bulb colors
         BreakBulb();
         UpdateUI();

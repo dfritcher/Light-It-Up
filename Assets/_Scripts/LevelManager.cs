@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System;
 public class LevelManager : MonoBehaviour
 {
     #region Fields, Properties
+    [Header("Scene References")]
     [SerializeField]
     private GameObject _victoryDisplay = null;
     [SerializeField]
@@ -25,6 +27,24 @@ public class LevelManager : MonoBehaviour
     private List<Level> _levels = null;
     [SerializeField]
     private Transform _levelsParent = null;
+
+    [SerializeField]
+    private Animator _levelTransition = null;
+    [SerializeField]
+    private GameObject _transitionObject = null;
+
+    [SerializeField]
+    private CanvasGroup _mainCanvas = null;
+    [SerializeField]
+    private CanvasGroup _playScreen = null;
+    [SerializeField]
+    private CanvasGroup _levelOverlay = null;
+
+    [SerializeField]
+    private Camera _mainCamera;
+    public Camera MainCamera { get { return _mainCamera; } }
+
+    [Header("Managers"), Space(8)]
     [SerializeField]
     private BatteryOptionsManager _batteryOptionsManager = null;
     public BatteryOptionsManager BatteryOptionsManager { get { return _batteryOptionsManager; } }
@@ -41,28 +61,13 @@ public class LevelManager : MonoBehaviour
     private BrokenBulbAnimationManager _brokenBulbAnimManager = null;
 
     [SerializeField]
+    private AudioManager _audioManager = null;
+
+    [Header("Action Menu"), Space(8)]
+    [SerializeField]
     private GameObject _actionsMenu = null;
-
-    [SerializeField]
-    private Animator _levelTransition = null;
-    [SerializeField]
-    private GameObject _transitionObject = null;
-
-    [SerializeField]
-    private CanvasGroup _mainCanvas = null;
-    [SerializeField]
-    private CanvasGroup _playScreen = null;
-    [SerializeField]
-    private CanvasGroup _levelOverlay = null;
-    
-
-    [SerializeField]
-    private Camera _mainCamera;
-    public Camera MainCamera { get { return _mainCamera; } }
-
-    [Space(10), Header("Action Menu")]
-    [SerializeField]
-    private RectTransform _actionMenu = null;
+    [SerializeField, FormerlySerializedAs("_actionMenu")]
+    private RectTransform _actionMenuTransform = null;
 
     private float _originalWidth = 0f;
     private float _originalHeight = 0f;
@@ -77,7 +82,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private Button _tutorialButton = null;
 
-    [Space(10), Header("Debug Options")]
+    [Header("Debug Options"), Space(8)]
     [SerializeField]
     private bool _skipTransitions = false;
 
@@ -97,9 +102,9 @@ public class LevelManager : MonoBehaviour
             Destroy(_instance.gameObject);
 
         _victoryDisplay.SetActive(false);
-        _originalWidth = _actionMenu.rect.width;
-        _originalHeight = _actionMenu.rect.height;
-        _actionMenu.sizeDelta = new Vector2(0f, 0f);
+        _originalWidth = _actionMenuTransform.rect.width;
+        _originalHeight = _actionMenuTransform.rect.height;
+        _actionMenuTransform.sizeDelta = new Vector2(0f, 0f);
 
         SetActionMenuInactive();
         SetMainCanvasState(true);
@@ -169,6 +174,11 @@ public class LevelManager : MonoBehaviour
         _defeatMessage.text = string.Empty;
     }
 
+    internal void SetLevelMusic(AudioClip levelMusic)
+    {
+        AudioManager.SetMusic(levelMusic, true);
+    }
+
     public void SetVictoryState(bool hasWon, Level level)
     {
         _currentLevel = level;
@@ -214,8 +224,8 @@ public class LevelManager : MonoBehaviour
         else
         {
             _textItems.ForEach(t => t.gameObject.SetActive(false));
-            AnimationController.Instance.AnimateWidth(_actionMenu.rect.width, 0f, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, SetActionMenuInactive);
-            AnimationController.Instance.AnimateHeight(_actionMenu.rect.height, 0f, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, null);
+            AnimationController.Instance.AnimateWidth(_actionMenuTransform.rect.width, 0f, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, SetActionMenuInactive);
+            AnimationController.Instance.AnimateHeight(_actionMenuTransform.rect.height, 0f, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, null);
         }        
     }
     

@@ -227,11 +227,13 @@ public class Battery : PowerableBase
     {
         if(_power.ColorTypes.Any(c => c != ColorType.None))
         {
-            _audioSource.PlayOneShot(_powerUpClip);
+            AudioManager.PlayOneShot(_powerUpClip);
+            //_audioSource.PlayOneShot(_powerUpClip);
         }
         else
         {
-            _audioSource.PlayOneShot(_powerDownClip);
+            AudioManager.PlayOneShot(_powerDownClip);
+            //_audioSource.PlayOneShot(_powerDownClip);
         }
     }
 

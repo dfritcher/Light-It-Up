@@ -45,6 +45,8 @@ public class Level : MonoBehaviour
     private string _defeatMessage = string.Empty;
     public string DefeatMessage { get { return _defeatMessage; } }
 
+    [SerializeField]
+    private AudioClip _levelMusic = null;
 
     private bool _isActive = false;
     public bool IsActive { get { return _isActive; } }
@@ -146,7 +148,8 @@ public class Level : MonoBehaviour
             //_tutorialObjectsParent.SetActive(true);
             //_gameObjectsParent.SetActive(false);
             //InitializeTutorial(0);
-        }        
+        }
+        _levelManger.SetLevelMusic(_levelMusic);
     }
 
     private void LateUpdate()
