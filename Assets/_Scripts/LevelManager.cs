@@ -73,6 +73,10 @@ public class LevelManager : MonoBehaviour
     private GameObject _actionsMenu = null;
     [SerializeField, FormerlySerializedAs("_actionMenu")]
     private RectTransform _actionMenuTransform = null;
+    [SerializeField]
+    private Button _previousLevelButton = null;
+    [SerializeField]
+    private Button _nextLevelButton = null;
 
     private float _originalWidth = 0f;
     private float _originalHeight = 0f;
@@ -91,6 +95,15 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private GameSaveInfo _gameInfo = null;
 
+    [Header("Level Select"), Space(8)]
+    [SerializeField]
+    private Button _previousLevelPageButton = null;
+    [SerializeField]
+    private Button _nextLevelPageButton = null;
+    [SerializeField]
+    private List<GameObject> _levelPages = new List<GameObject>();
+    
+
     [Header("Debug Options"), Space(8)]
     [SerializeField]
     private bool _skipTransitions = false;
@@ -104,6 +117,7 @@ public class LevelManager : MonoBehaviour
     #endregion Fields, Properties (end)
 
     #region Methods
+    #region Unity Engine Hooks
     private void Awake()
     {
         if (_instance == null)
@@ -127,61 +141,35 @@ public class LevelManager : MonoBehaviour
     {
         InitializeAllLevels();        
     }
-        
+    #endregion Unity Engine Hooks (en)
+    
     public void PlayClicked()
     {
         TriggerLevelAnimation(PlayClickedCallback);        
     }
 
-    public void NextLevelClicked()
+    private void PlayClickedCallback()
     {
-        if (_skipTransitions)
-        {
-            InitializeNextLevel();
-            ResetVictoryState();
-        }
-        else
-        {
-            TriggerLevelAnimation(InitializeNextLevel);
-            ResetVictoryState();
-        }        
-    }
-    
-    public void PreviousLevelClicked()
-    {
-        if (_skipTransitions)
-        {
-            InitializePreviousLevel();
-            ResetVictoryState();
-        }
-        else
-        {
-            TriggerLevelAnimation(InitializePreviousLevel);
-            ResetVictoryState();
-        }
-    }
-    
-    public void ResetLevel()
-    {
-        _levels.Find(l => l.IsActive).RestartLevel();
-        ResetVictoryState();
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
-
-    public void PlayTutorialClicked()
-    {
+        SetLevelSelectState(true);
         SetOverlayState(false);
-        _levels.Find(l => l.IsActive).PlayTutorial();        
+        SetPlayScreenState(false);
+        InitializeLevelSelectScreen();
+        SetActionMenuButtonsState();
+        SetPageLevelButtonState(0);
     }
 
-    internal void LevelSelect_LevelClicked(int levelNumber)
+    #region Audio
+    internal void SetLevelMusic(AudioClip levelMusic)
     {
-        _currentLevel = _levels.Find(l => l.LevelNumber == levelNumber);
-        TriggerLevelAnimation(LevelSelectClickedCallback);
+        AudioManager.SetMusic(levelMusic, true);
+    }
+    #endregion Audio (end)
+
+    #region Victory Defeat State
+    public void OnBrokenBulbAnimationEnd()
+    {
+        SetOverlayState(true);
+        _currentLevel.gameObject.SetActive(true);
     }
 
     public void ResetVictoryState()
@@ -189,11 +177,6 @@ public class LevelManager : MonoBehaviour
         _victoryDisplay.SetActive(false);
         _victoryMessage.text = string.Empty;
         _defeatMessage.text = string.Empty;
-    }
-
-    internal void SetLevelMusic(AudioClip levelMusic)
-    {
-        AudioManager.SetMusic(levelMusic, true);
     }
 
     public void SetVictoryState(bool hasWon, Level level)
@@ -205,6 +188,7 @@ public class LevelManager : MonoBehaviour
             _victoryParent.SetActive(true);
             _victoryMessage.text = _currentLevel.VictoryMessage != string.Empty ? _currentLevel.VictoryMessage : "YOU WIN!";
             _defeatParent.SetActive(false);
+            _gameInfo.HighestLevelUnlocked = _currentLevel.LevelNumber + 1;
         }            
         else 
         {
@@ -217,41 +201,52 @@ public class LevelManager : MonoBehaviour
             _victoryParent.SetActive(false);
         }
     }
-
-    public void OnBrokenBulbAnimationEnd()
-    {
-        SetOverlayState(true);
-        _currentLevel.gameObject.SetActive(true);
-    }
-
-    public void SetLevelDisplay(int levelNumber)
-    {
-        _levelDisplay.text = $"<size=60%>Level</size> {levelNumber}";
-    }
+    #endregion Victory Defeat State (end)
     
-    public void ToggleActionMenu()
+    #region Level Select 
+    internal void LevelSelect_LevelClicked(int levelNumber)
     {
-        if (!_actionsMenu.activeSelf)
-        {
-            _actionsMenu.SetActive(true);
-            AnimationController.Instance.AnimateWidth(0f, _originalWidth, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, SetActionMenuActive);
-            AnimationController.Instance.AnimateHeight(0f, _originalHeight, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, null);
+        _currentLevel = _levels.Find(l => l.LevelNumber == levelNumber);
+        TriggerLevelAnimation(LevelSelectClickedCallback);
+    }
 
+    public void NextPageLevelClicked()
+    {
+        var index = _levelPages.IndexOf(_levelPages.Find(l => l.activeSelf));
+        _levelPages[index].SetActive(false);
+        index++;
+        SetPageLevelButtonState(index);
+        if (index > _levelPages.Count - 1)
+        {
+            index = _levelPages.Count - 1;
         }
-        else
-        {
-            _textItems.ForEach(t => t.gameObject.SetActive(false));
-            AnimationController.Instance.AnimateWidth(_actionMenuTransform.rect.width, 0f, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, SetActionMenuInactive);
-            AnimationController.Instance.AnimateHeight(_actionMenuTransform.rect.height, 0f, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, null);
-        }        
+        else if (index < 0)
+            index = 0;
+
+        _levelPages[index].SetActive(true);        
     }
-    
-    private void PlayClickedCallback()
+
+    public void PreviousPageLevelClicked()
     {
-        SetLevelSelectState(true);
-        SetOverlayState(false);
-        SetPlayScreenState(false);
-        InitializeLevelSelectScreen();
+        var index = _levelPages.IndexOf(_levelPages.Find(l => l.activeSelf));
+        _levelPages[index].SetActive(false);
+        index--;
+        SetPageLevelButtonState(index);
+
+        if (index > _levelPages.Count - 1)
+        {
+            index = _levelPages.Count - 1;
+        }
+        else if (index < 0)
+            index = 0;
+
+        _levelPages[index].SetActive(true);        
+    }
+
+    private void SetPageLevelButtonState(int index)
+    {
+        _nextLevelPageButton.interactable = index < _levelPages.Count - 1;
+        _previousLevelPageButton.interactable = index > 0;
     }
 
     private void LevelSelectClickedCallback()
@@ -261,7 +256,9 @@ public class LevelManager : MonoBehaviour
         InitializeLevel(_currentLevel.LevelNumber - 1);
         BatteryOptionsManager.Initialize();
     }
+    #endregion Level Select (end)
 
+    #region Animation
     private void TriggerLevelAnimation(Action callback)
     {
         StartCoroutine(LevelAnimationRoutine(callback));
@@ -277,7 +274,13 @@ public class LevelManager : MonoBehaviour
         
         callback?.Invoke();
     }
+    #endregion Animation (end)
 
+    #region Initialization 
+    public void SetLevelDisplay(int levelNumber)
+    {
+        _levelDisplay.text = $"<size=60%>Level</size> {levelNumber}";
+    }
     private void InitializeAllLevels()
     {
         _levels = _levelsParent.GetComponentsInChildren<Level>(true).ToList();
@@ -357,6 +360,7 @@ public class LevelManager : MonoBehaviour
         _mainCanvas.blocksRaycasts = enabled;
         _mainCanvas.interactable = enabled;
     }
+    
     private void SetPlayScreenState(bool enabled)
     {
         _playScreen.alpha = enabled ? 1 : 0;
@@ -377,6 +381,72 @@ public class LevelManager : MonoBehaviour
         _levelSelect.blocksRaycasts = enabled;
         _levelSelect.interactable = enabled;
     }
+    #endregion Initialization (end)
+
+    #region Action Menu
+    public void ResetLevel()
+    {
+        _levels.Find(l => l.IsActive).RestartLevel();
+        ResetVictoryState();
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void NextLevelClicked()
+    {
+        if (_skipTransitions)
+        {
+            InitializeNextLevel();
+            ResetVictoryState();
+        }
+        else
+        {
+            TriggerLevelAnimation(InitializeNextLevel);
+            ResetVictoryState();
+        }
+        SetActionMenuButtonsState();
+    }
+
+    public void PreviousLevelClicked()
+    {
+        if (_skipTransitions)
+        {
+            InitializePreviousLevel();
+            ResetVictoryState();
+        }
+        else
+        {
+            TriggerLevelAnimation(InitializePreviousLevel);
+            ResetVictoryState();
+        }
+        SetActionMenuButtonsState();
+    }
+
+    public void LevelSelectClicked()
+    {
+        InitializeLevelSelectScreen();
+        SetLevelSelectState(true);
+    }
+
+    public void ToggleActionMenu()
+    {
+        if (!_actionsMenu.activeSelf)
+        {
+            _actionsMenu.SetActive(true);
+            AnimationController.Instance.AnimateWidth(0f, _originalWidth, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, SetActionMenuActive);
+            AnimationController.Instance.AnimateHeight(0f, _originalHeight, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, null);
+
+        }
+        else
+        {
+            _textItems.ForEach(t => t.gameObject.SetActive(false));
+            AnimationController.Instance.AnimateWidth(_actionMenuTransform.rect.width, 0f, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, SetActionMenuInactive);
+            AnimationController.Instance.AnimateHeight(_actionMenuTransform.rect.height, 0f, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, null);
+        }
+    }
 
     private void SetActionMenuActive()
     {
@@ -389,7 +459,27 @@ public class LevelManager : MonoBehaviour
         _actionsMenu.SetActive(false);
     }
 
+    private void SetActionMenuButtonsState()
+    {
+        if(_currentLevel!= null)
+        {
+            _previousLevelButton.interactable = _currentLevel.LevelNumber > 1;
+            _nextLevelButton.interactable = _currentLevel.LevelNumber < _levels.Count - 1;
+        }
+        else
+        {
+            _nextLevelButton.interactable = true;
+            _previousLevelButton.interactable = false;
+        }
+    }
+    #endregion Action Menu (end)
+
     #region Tutorial
+    public void PlayTutorialClicked()
+    {
+        SetOverlayState(false);
+        _levels.Find(l => l.IsActive).PlayTutorial();
+    }
     internal void TriggerAnimation(int levelNumber, int tutorialIndex)
     {
         
@@ -403,5 +493,27 @@ public class LevelManager : MonoBehaviour
         _inhibitorOptionsManager.gameObject.SetActive(level.HasInhibitors);
     }
     #endregion Tutorial (end)
+
+    #region Saving/Loading
+    private void SaveGameInfo()
+    {
+
+    }
+
+    private IEnumerator SaveGameInfoCoroutine()
+    {
+        yield return null;
+    }
+
+    private void LoadGameInfo()
+    {
+
+    }
+
+    private IEnumerator LoadGameInfoCoroutine()
+    {
+        yield return null;
+    }
+    #endregion Saving/Loading (end)
     #endregion Methods (end)
 }
