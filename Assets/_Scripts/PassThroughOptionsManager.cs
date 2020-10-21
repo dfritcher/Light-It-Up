@@ -85,7 +85,7 @@ public class PassThroughOptionsManager : MonoBehaviour
 
     public void ResetOptions()
     {
-        transform.position = _startPosition;
+        ((RectTransform)transform).anchoredPosition = _startPosition;
         SetInactive();
     }
 

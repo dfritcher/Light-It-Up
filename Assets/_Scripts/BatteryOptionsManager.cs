@@ -93,7 +93,7 @@ public class BatteryOptionsManager : MonoBehaviour
 
     public void ResetOptions()
     {
-        transform.position = _startPosition;
+        ((RectTransform)transform).anchoredPosition = _startPosition;
         SetInActive();
     }
 

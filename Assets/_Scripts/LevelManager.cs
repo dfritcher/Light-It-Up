@@ -68,6 +68,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private AudioManager _audioManager = null;
 
+    [SerializeField]
+    private SaveDataManager _saveDataManager = null;
+
     [Header("Action Menu"), Space(8)]
     [SerializeField]
     private GameObject _actionsMenu = null;
@@ -120,6 +123,8 @@ public class LevelManager : MonoBehaviour
     #region Unity Engine Hooks
     private void Awake()
     {
+        LoadGameInfo();
+
         if (_instance == null)
             _instance = this;
         else
@@ -144,7 +149,7 @@ public class LevelManager : MonoBehaviour
     #endregion Unity Engine Hooks (en)
     
     public void PlayClicked()
-    {
+    {        
         TriggerLevelAnimation(PlayClickedCallback);        
     }
 
@@ -189,6 +194,7 @@ public class LevelManager : MonoBehaviour
             _victoryMessage.text = _currentLevel.VictoryMessage != string.Empty ? _currentLevel.VictoryMessage : "YOU WIN!";
             _defeatParent.SetActive(false);
             _gameInfo.HighestLevelUnlocked = _currentLevel.LevelNumber + 1;
+            SaveGameInfo();
         }            
         else 
         {
@@ -281,6 +287,7 @@ public class LevelManager : MonoBehaviour
     {
         _levelDisplay.text = $"<size=60%>Level</size> {levelNumber}";
     }
+    
     private void InitializeAllLevels()
     {
         _levels = _levelsParent.GetComponentsInChildren<Level>(true).ToList();
@@ -497,23 +504,28 @@ public class LevelManager : MonoBehaviour
     #region Saving/Loading
     private void SaveGameInfo()
     {
-
+        Debug.Log("Save Game Started.");
+        _saveDataManager.SaveGame(SaveGameCallback);
     }
 
-    private IEnumerator SaveGameInfoCoroutine()
+    
+    private void SaveGameCallback()
     {
-        yield return null;
+        Debug.Log("Save Game Completed.");
     }
 
     private void LoadGameInfo()
     {
-
+        Debug.Log("Load Game Started.");
+        _saveDataManager.LoadGame(LoadGameCallback);
     }
 
-    private IEnumerator LoadGameInfoCoroutine()
+    private void LoadGameCallback()
     {
-        yield return null;
+        Debug.Log("Load Game Completed.");
     }
+
+    
     #endregion Saving/Loading (end)
     #endregion Methods (end)
 }
