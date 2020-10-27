@@ -203,7 +203,7 @@ public class LevelManager : MonoBehaviour
             _currentLevel.gameObject.SetActive(false);
             SetOverlayState(false);
             _defeatParent.SetActive(true);
-            _defeatMessage.text = _currentLevel.DefeatMessage != string.Empty ? _currentLevel.DefeatMessage : "SORRY YOU LOSE! \n TRY AGAIN!";
+            _defeatMessage.text = _currentLevel.DefeatMessage != string.Empty ? _currentLevel.DefeatMessage : "SORRY YOU LOSE! TRY AGAIN!";
             _victoryParent.SetActive(false);
         }
     }
@@ -259,6 +259,11 @@ public class LevelManager : MonoBehaviour
     {
         SetLevelSelectState(false);
         SetOverlayState(true);
+        var index = _levels.IndexOf(_levels.Find(l => l.IsActive));
+        if (index == -1)
+            index = 0;
+
+        DisableLevel(index);
         InitializeLevel(_currentLevel.LevelNumber - 1);
         BatteryOptionsManager.Initialize();
     }
@@ -436,6 +441,11 @@ public class LevelManager : MonoBehaviour
     {
         InitializeLevelSelectScreen();
         SetLevelSelectState(true);
+    }
+
+    public void SettingsClicked()
+    {
+        
     }
 
     public void ToggleActionMenu()

@@ -23,7 +23,7 @@ public class BrokenBulbAnimationManager : MonoBehaviour
     #region Methods
     private void Awake()
     {
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
     public void Setup(LevelManager levelManager, Bulb bulbBeingBroken)
     {

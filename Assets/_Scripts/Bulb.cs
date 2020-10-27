@@ -212,11 +212,12 @@ public class Bulb : PowerableBase
         _isBroken = false;
         _animator.SetTrigger("ExitBroken");
     }
+    
     public void OnBrokenBulbAnimationStart()
     {
         _isBroken = false;
         _animatedSprites = GetLitMaterials();
-        _originalSprites = new List<Material>(_animatedSprites);
+        _originalSprites = _animatedSprites.Select(t => new Material(t)).ToList();
         AudioManager.PlayOneShot(_increasePowerClip);
         //_bulbAudioSource.PlayOneShot(_increasePowerClip);
         //UpdateColorDisplay();
@@ -228,7 +229,43 @@ public class Bulb : PowerableBase
         {
             if (_animatedSprites[i].color == null)
                 continue;
-            _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r + .05f, _animatedSprites[i].color.b + .05f, _animatedSprites[i].color.b + .05f));
+
+            if (CurrentColorTypes.Contains(ColorType.Red) && !(CurrentColorTypes.Contains(ColorType.Green) || CurrentColorTypes.Contains(ColorType.Blue)))
+            {
+                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r + .05f, _animatedSprites[i].color.g, _animatedSprites[i].color.b));
+            }
+            //Green Bulb
+            else if (CurrentColorTypes.Contains(ColorType.Green) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Blue)))
+            {
+                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r, _animatedSprites[i].color.g + .05f, _animatedSprites[i].color.b));
+            }
+            //Blue Bulb
+            else if (CurrentColorTypes.Contains(ColorType.Blue) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Green)))
+            {
+                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r, _animatedSprites[i].color.g, _animatedSprites[i].color.b + .05f));
+            }
+            // Red Green Bulb
+            else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && !CurrentColorTypes.Contains(ColorType.Blue))
+            {
+                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r + .05f, _animatedSprites[i].color.g + .05f, _animatedSprites[i].color.b));
+            }
+            // Red Blue Bulb
+            else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Green))
+            {
+                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r + .05f, _animatedSprites[i].color.g, _animatedSprites[i].color.b + .05f));
+            }
+            // Green Blue Bulb
+            else if (CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Red))
+            {
+                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r, _animatedSprites[i].color.g + .05f, _animatedSprites[i].color.b + .05f));
+            }
+            // All Three Colors
+            else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue))
+            {
+                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r + .05f, _animatedSprites[i].color.g + .05f, _animatedSprites[i].color.b + .05f));
+            }
+
+            
             //var materials = _animatedSprites[i].materials;
             //var newColor = new Color(materials.color.r * 1.75f, _animatedSprites[i].color.b * 1.75f, _animatedSprites[i].color.b * 1.75f);
             //foreach (var material in materials)
@@ -255,8 +292,8 @@ public class Bulb : PowerableBase
             if (_animatedSprites[i].color == null)
                 continue;
 
-            _animatedSprites[i].color = new Color(0f,0f,0f);
-            
+            _animatedSprites[i].color = _originalSprites[i].color;
+
             //var newColor = new Color(materials.color.r * 1.75f, _animatedSprites[i].color.b * 1.75f, _animatedSprites[i].color.b * 1.75f);
             //foreach (var material in materials)
             //{
@@ -452,33 +489,40 @@ public class Bulb : PowerableBase
     private List<Material> GetLitMaterials()
     {
         List<Material> materials = null;
+        // Red Bulb
         if (CurrentColorTypes.Contains(ColorType.Red) && !(CurrentColorTypes.Contains(ColorType.Green) || CurrentColorTypes.Contains(ColorType.Blue)))
         {
             return new List<Material>((Material[])_redFullLit?.GetComponent<SpriteRenderer>().materials.Clone());
         }
+        //Green Bulb
         else if (CurrentColorTypes.Contains(ColorType.Green) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Blue)))
         {
             return new List<Material>((Material[])_greenFullLit?.GetComponent<SpriteRenderer>().materials.Clone());
         }
+        //Blue Bulb
         else if (CurrentColorTypes.Contains(ColorType.Blue) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Green)))
         {
             return new List<Material>((Material[])_blueFullLit?.GetComponent<SpriteRenderer>().materials.Clone());
         }
+        // Red Green Bulb
         else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && !CurrentColorTypes.Contains(ColorType.Blue))
         {
             materials = new List<Material>((Material[])_redTopLit?.GetComponent<SpriteRenderer>().materials.Clone());
             materials.AddRange((Material[])_greenBottomLit?.GetComponent<SpriteRenderer>().materials.Clone());
         }
+        // Red Blue Bulb
         else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Green))
         {
             materials = new List<Material>((Material[])_redTopLit?.GetComponent<SpriteRenderer>().materials.Clone());
             materials.AddRange((Material[])_blueBottomLit?.GetComponent<SpriteRenderer>().materials.Clone());            
         }
+        // Green Blue Bulb
         else if (CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Red))
         {
             materials = new List<Material>((Material[])_greenTopLit?.GetComponent<SpriteRenderer>().materials.Clone());
             materials.AddRange((Material[])_blueBottomLit?.GetComponent<SpriteRenderer>().materials.Clone());            
         }
+        // All Three Colors
         else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue))
         {
             materials = new List<Material>((Material[])_redSmallTopLit?.GetComponent<SpriteRenderer>().materials.Clone());
