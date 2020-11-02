@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Game Settings
   m_EditorClassIdentifier: 
   _isMusicOn: 1
-  _isSfxOn: 0
+  _isSfxOn: 1

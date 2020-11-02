@@ -98,7 +98,7 @@ public class LevelSixTutorialResolver : TutorialResolverBase
                 break;
             case 4:                
                 _nextButton.interactable = false;
-                _fingerAnimator.SetTrigger("Lvl6_Finger4");
+                _fingerAnimator.SetTrigger("Lvl6_Finger4");                
                 break;
             default:
                 _nextButton.interactable = true;
@@ -130,10 +130,10 @@ public class LevelSixTutorialResolver : TutorialResolverBase
                 _nextButton.interactable = true;
                 break;
             case 4:
+                _doubleColorBulbAnimator.SetTrigger("SetBrokenImage");
                 _battery2Animator.SetTrigger("BlueOn");
                 _doubleColorBulb.IncreasePower(1, true);
                 _battery2WireAnimator.SetTrigger("BlueOn");
-                _doubleColorBulbAnimator.SetTrigger("RedBlueOff");
                 _nextButton.gameObject.SetActive(false);
                 _closeButton.gameObject.SetActive(true);
                 break;            

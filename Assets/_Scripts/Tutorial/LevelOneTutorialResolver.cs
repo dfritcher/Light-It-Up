@@ -85,6 +85,10 @@ public class LevelOneTutorialResolver : TutorialResolverBase
                 _bulbAnimator.SetTrigger("RedOn");
                 _wireAnimator.SetTrigger("RedOn");
                 _redBulb.IncreasePower(1, true);
+                _nextButton.interactable = true;
+                break;
+            case 6:
+                _closeButton.gameObject.SetActive(true);
                 break;
         }
     }
@@ -112,13 +116,12 @@ public class LevelOneTutorialResolver : TutorialResolverBase
                 break;
             case 3:
                 _fingerAnimator.SetTrigger("Lvl1_Finger1");
-                _nextButton.interactable = true;
+                _nextButton.interactable = false;
                 break;
             case 4:
                 _nextButton.interactable = true;
                 break;
-            case 5:
-                
+            case 5:                
                 _nextButton.interactable = true;
                 break;
             case 6:

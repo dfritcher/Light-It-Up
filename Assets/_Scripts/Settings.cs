@@ -9,7 +9,7 @@ public class Settings : ScriptableObject
     /// </summary>
     [SerializeField]
     private bool _isMusicOn = false;
-    public bool IsMusicOn { get { return _isMusicOn; } }
+    public bool IsMusicOn { get { return _isMusicOn; } set { _isMusicOn = value; } }
 
 
     /// <summary>
@@ -17,6 +17,6 @@ public class Settings : ScriptableObject
     /// </summary>
     [SerializeField]
     private bool _isSfxOn = false;
-    public bool IsSfxOn { get { return _isSfxOn; } }
-
+    public bool IsSfxOn { get { return _isSfxOn; } set { _isSfxOn = value; } }
+    
 }
