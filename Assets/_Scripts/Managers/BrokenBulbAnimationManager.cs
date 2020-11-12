@@ -15,7 +15,7 @@ public class BrokenBulbAnimationManager : MonoBehaviour
     [SerializeField]
     private Bulb _bulb4 = null;
 
-    private BulbType _bulbType;
+    //private BulbType _bulbType;
     private bool _animationStarted = false;
     private LevelManager _levelManager = null;
     #endregion Fields, Properties (end)
@@ -31,9 +31,9 @@ public class BrokenBulbAnimationManager : MonoBehaviour
         //    return;
         gameObject.SetActive(true);
         _levelManager = levelManager;
-        _bulbType = bulbBeingBroken.BulbType;
+        //_bulbType = bulbBeingBroken.BulbType;
         //Set the bulb colors
-        switch (_bulbType)
+        switch (bulbBeingBroken.BulbType)
         {
             case BulbType.Bulb1:
                 _bulb1.BrokenBulbAnimationEnd += Bulb_BrokenBulbAnimationEnd;

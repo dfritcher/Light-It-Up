@@ -278,7 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _originalColorTypes: 
   _power:
-    Amount: 1
+    Amount: 0
     ColorTypes: 00000000
   _userSetColorTypes: 
   _powerSources: []

@@ -46,6 +46,7 @@ public class LevelSixTutorialResolver : TutorialResolverBase
     {
         _battery1Animator.SetTrigger("Reset");
         _battery2Animator.SetTrigger("Reset");
+        _doubleColorBulbAnimator.SetTrigger("ExitBroken");
         ResetTriggers();
         base.OnCloseClicked();
     }
@@ -130,6 +131,7 @@ public class LevelSixTutorialResolver : TutorialResolverBase
                 _nextButton.interactable = true;
                 break;
             case 4:
+                _doubleColorBulbAnimator.SetTrigger("RedBlueOff");
                 _doubleColorBulbAnimator.SetTrigger("SetBrokenImage");
                 _battery2Animator.SetTrigger("BlueOn");
                 _doubleColorBulb.IncreasePower(1, true);
@@ -150,7 +152,9 @@ public class LevelSixTutorialResolver : TutorialResolverBase
         _battery2Animator.ResetTrigger("RedOff");
         _battery2Animator.ResetTrigger("HighlightOn");
         _battery2Animator.ResetTrigger("HighlightOff");
-        _batteryOptionsAnimator.ResetTrigger("MoveUp");        
+        _batteryOptionsAnimator.ResetTrigger("MoveUp");
+        _doubleColorBulbAnimator.ResetTrigger("SetBrokenImage");
+        _doubleColorBulbAnimator.ResetTrigger("RedBlueOn");
         _battery1Animator.Rebind();
         _battery2Animator.Rebind();
     }

@@ -206,6 +206,12 @@ public class Bulb : PowerableBase
         _isBroken = true;
     }
 
+    public void UpdateUI()
+    {
+        UpdatePowerDisplay();
+        UpdateColorDisplay();
+    }
+
     #region Broken Bulb Animation 
     public void ResetBrokenAnimation()
     {
@@ -219,59 +225,50 @@ public class Bulb : PowerableBase
         _animatedSprites = GetLitMaterials();
         _originalSprites = _animatedSprites.Select(t => new Material(t)).ToList();
         AudioManager.PlayOneShot(_increasePowerClip);
-        //_bulbAudioSource.PlayOneShot(_increasePowerClip);
         //UpdateColorDisplay();
     }
 
     public void OnIncreaseIntensity()
     {
-        for (int i = 0; i < _animatedSprites.Count; i++)
+        //Red Bulb
+        if (CurrentColorTypes.Contains(ColorType.Red) && !(CurrentColorTypes.Contains(ColorType.Green) || CurrentColorTypes.Contains(ColorType.Blue)))
         {
-            if (_animatedSprites[i].color == null)
-                continue;
-
-            if (CurrentColorTypes.Contains(ColorType.Red) && !(CurrentColorTypes.Contains(ColorType.Green) || CurrentColorTypes.Contains(ColorType.Blue)))
-            {
-                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r + .05f, _animatedSprites[i].color.g, _animatedSprites[i].color.b));
-            }
-            //Green Bulb
-            else if (CurrentColorTypes.Contains(ColorType.Green) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Blue)))
-            {
-                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r, _animatedSprites[i].color.g + .05f, _animatedSprites[i].color.b));
-            }
-            //Blue Bulb
-            else if (CurrentColorTypes.Contains(ColorType.Blue) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Green)))
-            {
-                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r, _animatedSprites[i].color.g, _animatedSprites[i].color.b + .05f));
-            }
-            // Red Green Bulb
-            else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && !CurrentColorTypes.Contains(ColorType.Blue))
-            {
-                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r + .05f, _animatedSprites[i].color.g + .05f, _animatedSprites[i].color.b));
-            }
-            // Red Blue Bulb
-            else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Green))
-            {
-                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r + .05f, _animatedSprites[i].color.g, _animatedSprites[i].color.b + .05f));
-            }
-            // Green Blue Bulb
-            else if (CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Red))
-            {
-                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r, _animatedSprites[i].color.g + .05f, _animatedSprites[i].color.b + .05f));
-            }
-            // All Three Colors
-            else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue))
-            {
-                _animatedSprites[i].SetColor("_Color", new Color(_animatedSprites[i].color.r + .05f, _animatedSprites[i].color.g + .05f, _animatedSprites[i].color.b + .05f));
-            }
-
-            
-            //var materials = _animatedSprites[i].materials;
-            //var newColor = new Color(materials.color.r * 1.75f, _animatedSprites[i].color.b * 1.75f, _animatedSprites[i].color.b * 1.75f);
-            //foreach (var material in materials)
-            //{
-            //    material.SetColor("_Color", new Color(material.color.r + .05f, material.color.b + .05f, material.color.b + .05f));
-            //}
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r + .05f, _animatedSprites[0].color.g, _animatedSprites[0].color.b));
+        }
+        //Green Bulb
+        else if (CurrentColorTypes.Contains(ColorType.Green) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Blue)))
+        {
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r, _animatedSprites[0].color.g + .05f, _animatedSprites[0].color.b));
+        }
+        //Blue Bulb
+        else if (CurrentColorTypes.Contains(ColorType.Blue) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Green)))
+        {
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r, _animatedSprites[0].color.g, _animatedSprites[0].color.b + .05f));
+        }
+        // Red Green Bulb
+        else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && !CurrentColorTypes.Contains(ColorType.Blue))
+        {
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r + .05f, _animatedSprites[0].color.g, _animatedSprites[0].color.b));
+            //_animatedSprites[1].SetColor("_Color", new Color(_animatedSprites[1].color.r, _animatedSprites[1].color.g + .05f, _animatedSprites[1].color.b));
+        }
+        // Red Blue Bulb
+        else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Green))
+        {
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r + .05f, _animatedSprites[0].color.g, _animatedSprites[0].color.b));
+            //_animatedSprites[1].SetColor("_Color", new Color(_animatedSprites[1].color.r, _animatedSprites[1].color.g, _animatedSprites[1].color.b + .05f));
+        }
+        // Green Blue Bulb
+        else if (CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Red))
+        {
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r, _animatedSprites[0].color.g + .05f, _animatedSprites[0].color.b));
+            //_animatedSprites[1].SetColor("_Color", new Color(_animatedSprites[1].color.r, _animatedSprites[1].color.g, _animatedSprites[1].color.b));
+        }
+        // All Three Colors
+        else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue))
+        {
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r + .05f, _animatedSprites[0].color.g, _animatedSprites[0].color.b));
+            _animatedSprites[1].SetColor("_Color", new Color(_animatedSprites[1].color.r, _animatedSprites[1].color.g + .05f, _animatedSprites[1].color.b));
+            _animatedSprites[2].SetColor("_Color", new Color(_animatedSprites[2].color.r, _animatedSprites[2].color.g, _animatedSprites[2].color.b + .05f));
         }
     }
 
@@ -304,6 +301,8 @@ public class Bulb : PowerableBase
         BrokenBulbAnimationEnd?.Invoke(this);
     }
     #endregion Broken Bulb Animation (end)
+
+    #region Private Methods
     private void ResetPowerLevel()
     {
         _powerLevel = 0;
@@ -337,12 +336,6 @@ public class Bulb : PowerableBase
         _isBroken = _powerLevel > _maxPower;
 
         _isOn = _powerLevel == _maxPower && !_isBroken;
-    }
-
-    public void UpdateUI()
-    {
-        UpdatePowerDisplay();
-        UpdateColorDisplay();
     }
 
     private void UpdatePowerDisplay()
@@ -398,23 +391,32 @@ public class Bulb : PowerableBase
             else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && !CurrentColorTypes.Contains(ColorType.Blue))
             {
                 _redTopLit?.SetActive(true);
+                _redTopUnLit?.SetActive(false);
                 _greenBottomLit?.SetActive(true);
+                _greenBottomUnLit?.SetActive(false);
             }
             else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Green))
             {
                 _redTopLit?.SetActive(true);
+                _redTopUnLit?.SetActive(false);
                 _blueBottomLit?.SetActive(true);
+                _blueBottomUnLit?.SetActive(false);
             }
             else if (CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Red))
             {
                 _greenTopLit?.SetActive(true);
+                _greenTopUnLit?.SetActive(false);
                 _blueBottomLit?.SetActive(true);
+                _blueBottomUnLit?.SetActive(false);
             }
             else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue))
             {
                 _redSmallTopLit?.SetActive(true);
+                _redSmallTopUnLit?.SetActive(false);
                 _greenSmallMiddleLit?.SetActive(true);
+                _greenSmallMiddleUnLit?.SetActive(false);
                 _blueSmallBottomLit?.SetActive(true);
+                _blueSmallBottomUnLit?.SetActive(false);
             }
         }
         else
@@ -533,6 +535,6 @@ public class Bulb : PowerableBase
         return materials;
         
     }
-
+    #endregion Private Methods (end)
     #endregion Methods (end)
 }
