@@ -233,42 +233,42 @@ public class Bulb : PowerableBase
         //Red Bulb
         if (CurrentColorTypes.Contains(ColorType.Red) && !(CurrentColorTypes.Contains(ColorType.Green) || CurrentColorTypes.Contains(ColorType.Blue)))
         {
-            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r + .05f, _animatedSprites[0].color.g, _animatedSprites[0].color.b));
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r + 1f, _animatedSprites[0].color.g, _animatedSprites[0].color.b, _animatedSprites[0].color.a));
         }
         //Green Bulb
         else if (CurrentColorTypes.Contains(ColorType.Green) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Blue)))
         {
-            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r, _animatedSprites[0].color.g + .05f, _animatedSprites[0].color.b));
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r, _animatedSprites[0].color.g + 1f, _animatedSprites[0].color.b, _animatedSprites[0].color.a));
         }
         //Blue Bulb
         else if (CurrentColorTypes.Contains(ColorType.Blue) && !(CurrentColorTypes.Contains(ColorType.Red) || CurrentColorTypes.Contains(ColorType.Green)))
         {
-            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r, _animatedSprites[0].color.g, _animatedSprites[0].color.b + .05f));
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r, _animatedSprites[0].color.g, _animatedSprites[0].color.b + 1f, _animatedSprites[0].color.a));
         }
         // Red Green Bulb
         else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && !CurrentColorTypes.Contains(ColorType.Blue))
         {
-            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r + .05f, _animatedSprites[0].color.g, _animatedSprites[0].color.b));
-            //_animatedSprites[1].SetColor("_Color", new Color(_animatedSprites[1].color.r, _animatedSprites[1].color.g + .05f, _animatedSprites[1].color.b));
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r + 1f, _animatedSprites[0].color.g, _animatedSprites[0].color.b, _animatedSprites[0].color.a));
+            _animatedSprites[1].SetColor("_Color", new Color(_animatedSprites[1].color.r, _animatedSprites[1].color.g + 1f, _animatedSprites[1].color.b, _animatedSprites[1].color.a));
         }
         // Red Blue Bulb
         else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Green))
         {
-            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r + .05f, _animatedSprites[0].color.g, _animatedSprites[0].color.b));
-            //_animatedSprites[1].SetColor("_Color", new Color(_animatedSprites[1].color.r, _animatedSprites[1].color.g, _animatedSprites[1].color.b + .05f));
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r + 1f, _animatedSprites[0].color.g, _animatedSprites[0].color.b, _animatedSprites[0].color.a));
+            _animatedSprites[1].SetColor("_Color", new Color(_animatedSprites[1].color.r, _animatedSprites[1].color.g, _animatedSprites[1].color.b + 1f, _animatedSprites[1].color.a));
         }
         // Green Blue Bulb
         else if (CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue) && !CurrentColorTypes.Contains(ColorType.Red))
         {
-            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r, _animatedSprites[0].color.g + .05f, _animatedSprites[0].color.b));
-            //_animatedSprites[1].SetColor("_Color", new Color(_animatedSprites[1].color.r, _animatedSprites[1].color.g, _animatedSprites[1].color.b));
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r, _animatedSprites[0].color.g + 1f, _animatedSprites[0].color.b, _animatedSprites[0].color.a));
+            _animatedSprites[1].SetColor("_Color", new Color(_animatedSprites[1].color.r, _animatedSprites[1].color.g, _animatedSprites[1].color.b + 1f, _animatedSprites[1].color.a));
         }
         // All Three Colors
         else if (CurrentColorTypes.Contains(ColorType.Red) && CurrentColorTypes.Contains(ColorType.Green) && CurrentColorTypes.Contains(ColorType.Blue))
         {
-            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r + .05f, _animatedSprites[0].color.g, _animatedSprites[0].color.b));
-            _animatedSprites[1].SetColor("_Color", new Color(_animatedSprites[1].color.r, _animatedSprites[1].color.g + .05f, _animatedSprites[1].color.b));
-            _animatedSprites[2].SetColor("_Color", new Color(_animatedSprites[2].color.r, _animatedSprites[2].color.g, _animatedSprites[2].color.b + .05f));
+            _animatedSprites[0].SetColor("_Color", new Color(_animatedSprites[0].color.r + 1f, _animatedSprites[0].color.g, _animatedSprites[0].color.b, _animatedSprites[0].color.a));
+            _animatedSprites[1].SetColor("_Color", new Color(_animatedSprites[1].color.r, _animatedSprites[1].color.g + 1f, _animatedSprites[1].color.b, _animatedSprites[1].color.a));
+            _animatedSprites[2].SetColor("_Color", new Color(_animatedSprites[2].color.r, _animatedSprites[2].color.g, _animatedSprites[2].color.b + 1f, _animatedSprites[2].color.a));
         }
     }
 

@@ -196,8 +196,11 @@ public class LevelManager : MonoBehaviour
             _victoryParent.SetActive(true);
             _victoryMessage.text = _currentLevel.VictoryMessage != string.Empty ? _currentLevel.VictoryMessage : "YOU WIN!";
             _defeatParent.SetActive(false);
-            _gameInfo.HighestLevelUnlocked = _currentLevel.LevelNumber + 1;
-            SaveGameInfo();
+            if(_gameInfo.HighestLevelUnlocked < _currentLevel.LevelNumber + 1)
+            {
+                _gameInfo.HighestLevelUnlocked = _currentLevel.LevelNumber + 1;
+                SaveGameInfo();
+            }            
         }            
         else 
         {
@@ -260,6 +263,8 @@ public class LevelManager : MonoBehaviour
 
     private void LevelSelectClickedCallback()
     {
+        SetActionMenuButtonsState();
+        ResetLevel();
         SetLevelSelectState(false);
         SetOverlayState(true);
         var index = _levels.IndexOf(_levels.Find(l => l.IsActive));
@@ -401,6 +406,9 @@ public class LevelManager : MonoBehaviour
     #region Action Menu
     public void ResetLevel()
     {
+        if (!_levels.Any(l => l.IsActive))
+            return;
+
         _levels.Find(l => l.IsActive).RestartLevel();
         ResetVictoryState();
     }
@@ -414,12 +422,17 @@ public class LevelManager : MonoBehaviour
     {
         if (_skipTransitions)
         {
+            ResetLevel();
             InitializeNextLevel();
-            ResetVictoryState();
+            ResetVictoryState();            
         }
         else
         {
-            TriggerLevelAnimation(InitializeNextLevel);
+            TriggerLevelAnimation(() => 
+            {
+                ResetLevel();
+                InitializeNextLevel(); 
+            });
             ResetVictoryState();
         }
         SetActionMenuButtonsState();
@@ -429,12 +442,17 @@ public class LevelManager : MonoBehaviour
     {
         if (_skipTransitions)
         {
+            ResetLevel();
             InitializePreviousLevel();
             ResetVictoryState();
         }
         else
         {
-            TriggerLevelAnimation(InitializePreviousLevel);
+            TriggerLevelAnimation(() =>
+            {
+                ResetLevel();
+                InitializePreviousLevel();
+            });
             ResetVictoryState();
         }
         SetActionMenuButtonsState();
