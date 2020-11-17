@@ -29,9 +29,9 @@ public class SaveDataManager : MonoBehaviour
     {
         return new SaveData
         {
-            HighestLevelUnlocked = _gameSaveInfo.HighestLevelUnlocked,
-            MusicOn = _gameSaveInfo.IsMusicOn,
-            SoundEffectsOn = _gameSaveInfo.IsSfxOn
+            HighestLevelUnlocked = 1,
+            MusicOn = true,
+            SoundEffectsOn = true
         };
     }
 

@@ -154,7 +154,7 @@ public class Level : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_canPlay)
+        if (_canPlay && IsActive)
         {
             CheckWinCondition();
         }        

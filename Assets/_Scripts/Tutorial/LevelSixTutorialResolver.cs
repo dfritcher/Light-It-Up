@@ -68,6 +68,7 @@ public class LevelSixTutorialResolver : TutorialResolverBase
         _closeButton.gameObject.SetActive(false);
         _singleColorBulb.ResetPowerable();
         _doubleColorBulb.ResetPowerable();
+        _doubleColorBulbAnimator.SetTrigger("SetNormalImage1");
         index = ValidateIndexValue(index);
         SetTutorialTextState(index);
         HandleTutorialStateByIndex(index);
@@ -132,7 +133,7 @@ public class LevelSixTutorialResolver : TutorialResolverBase
                 break;
             case 4:
                 _doubleColorBulbAnimator.SetTrigger("RedBlueOff");
-                _doubleColorBulbAnimator.SetTrigger("SetBrokenImage");
+                _doubleColorBulbAnimator.SetTrigger("SetBrokenImage1");
                 _battery2Animator.SetTrigger("BlueOn");
                 _doubleColorBulb.IncreasePower(1, true);
                 _battery2WireAnimator.SetTrigger("BlueOn");

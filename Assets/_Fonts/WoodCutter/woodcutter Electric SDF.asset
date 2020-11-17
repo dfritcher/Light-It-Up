@@ -41,11 +41,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _Ambient: 0.5
-    - _Bevel: 0.276
+    - _Bevel: 0.142
     - _BevelClamp: 0
-    - _BevelOffset: 0.155
+    - _BevelOffset: 0.008
     - _BevelRoundness: 0
-    - _BevelWidth: 0
+    - _BevelWidth: 0.173
     - _BumpFace: 0.083
     - _BumpOutline: 0.072
     - _ColorMask: 15
@@ -72,7 +72,7 @@ Material:
     - _ScaleRatioC: 0.6770833
     - _ScaleX: 1
     - _ScaleY: 1
-    - _ShaderFlags: 0
+    - _ShaderFlags: 1
     - _Sharpness: 0
     - _SpecularPower: 2
     - _Stencil: 0
@@ -94,13 +94,13 @@ Material:
     - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
     - _EnvMatrixRotation: {r: 0, g: 0, b: 0, a: 0}
     - _FaceColor: {r: 1, g: 1, b: 1, a: 1}
-    - _GlowColor: {r: 1, g: 1, b: 1, a: 0.6666667}
+    - _GlowColor: {r: 1, g: 1, b: 1, a: 0.6117647}
     - _MaskCoord: {r: 0, g: 0, b: 32767, a: 32767}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectFaceColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectOutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SpecularColor: {r: 1, g: 0, b: 0.09470558, a: 1}
-    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
+    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!28 &-5939792819703231933
 Texture2D:
   m_ObjectHideFlags: 0

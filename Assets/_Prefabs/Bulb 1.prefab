@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 684034148948680033}
   - component: {fileID: 684034148948680035}
   m_Layer: 0
-  m_Name: Green Bulb Lit
+  m_Name: Green Lit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -591,7 +591,7 @@ GameObject:
   - component: {fileID: 684034149401789550}
   - component: {fileID: 684034149401789551}
   m_Layer: 0
-  m_Name: Red Bulb Lit
+  m_Name: Red Lit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -672,7 +672,7 @@ GameObject:
   - component: {fileID: 684034149410614492}
   - component: {fileID: 684034149410614494}
   m_Layer: 0
-  m_Name: Blue Bulb Lit
+  m_Name: Blue Lit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1093,7 +1093,7 @@ GameObject:
   - component: {fileID: 7111567398097805567}
   - component: {fileID: 8613663732586932370}
   m_Layer: 0
-  m_Name: Green Bulb UnLit
+  m_Name: Green UnLit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1255,7 +1255,7 @@ GameObject:
   - component: {fileID: 1996325384515074885}
   - component: {fileID: 31052121764088714}
   m_Layer: 0
-  m_Name: Red Bulb Unlit
+  m_Name: Red Unlit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2065,7 +2065,7 @@ GameObject:
   - component: {fileID: 2829134190273643465}
   - component: {fileID: 2864451872596616413}
   m_Layer: 0
-  m_Name: Blue Bulb UnLit
+  m_Name: Blue UnLit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

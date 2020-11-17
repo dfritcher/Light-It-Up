@@ -35,6 +35,10 @@ public class Bulb : PowerableBase
 
     [SerializeField]
     private bool _isPlayable = true;
+
+    [Header("Animation")]
+    [SerializeField]
+    private Animator _animator = null;
     #endregion Populated in Scene (end)
 
     #region Populated by Code
@@ -65,10 +69,7 @@ public class Bulb : PowerableBase
 
     #region Populated By Prefab
     [Header("Populated by Prefab")]
-    [Header("Animation")]
-    [SerializeField]
-    private Animator _animator = null;
-
+    
     [Header("Lit References")]
     [SerializeField]
     private GameObject _redFullLit = null;
@@ -152,7 +153,7 @@ public class Bulb : PowerableBase
     
     public void IncreasePower(int amount, bool updateDisplay = false)
     {
-        _powerLevel = _powerLevel + amount;
+        _powerLevel += amount;
         if (updateDisplay)
             UpdatePowerDisplay();
     }

@@ -196,7 +196,7 @@ public class LevelManager : MonoBehaviour
             _victoryParent.SetActive(true);
             _victoryMessage.text = _currentLevel.VictoryMessage != string.Empty ? _currentLevel.VictoryMessage : "YOU WIN!";
             _defeatParent.SetActive(false);
-            if(_gameInfo.HighestLevelUnlocked < _currentLevel.LevelNumber + 1)
+            if(level.IsActive && _gameInfo.HighestLevelUnlocked < _currentLevel.LevelNumber + 1)
             {
                 _gameInfo.HighestLevelUnlocked = _currentLevel.LevelNumber + 1;
                 SaveGameInfo();
