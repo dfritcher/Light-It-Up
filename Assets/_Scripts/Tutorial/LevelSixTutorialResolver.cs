@@ -67,6 +67,8 @@ public class LevelSixTutorialResolver : TutorialResolverBase
         _nextButton.gameObject.SetActive(true);
         _closeButton.gameObject.SetActive(false);
         _singleColorBulb.ResetPowerable();
+        _singleColorBulbAnimator.SetTrigger("RedOff");
+        _singleColorBulbAnimator.SetTrigger("SetNormalImage1");
         _doubleColorBulb.ResetPowerable();
         _doubleColorBulbAnimator.SetTrigger("SetNormalImage1");
         index = ValidateIndexValue(index);

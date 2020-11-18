@@ -60,6 +60,8 @@ public class LevelOneTutorialResolver : TutorialResolverBase
         _tutorialObjectsParent.SetActive(true);
         _gameObjectsParent.SetActive(false);
         _redBulb.ResetPowerable();
+        _bulbAnimator.SetTrigger("RedOff");
+        _bulbAnimator.SetTrigger("SetNormalImage1");
         _batteryRedSection.SetActive(false);
         index = ValidateIndexValue(index);
         yield return null;
@@ -70,7 +72,7 @@ public class LevelOneTutorialResolver : TutorialResolverBase
 
     public override void OnFingerAnimationEnd(int index)
     {
-        Debug.Log($"OnFinger INDEX: {index}");
+        //Debug.Log($"OnFinger INDEX: {index}");
         switch (index)
         {
             case 1:
@@ -143,6 +145,7 @@ public class LevelOneTutorialResolver : TutorialResolverBase
         _batteryAnimator.ResetTrigger("HighlightOff");
         _batteryOptionsAnimator.ResetTrigger("MoveUp");
         _bulbAnimator.ResetTrigger("RedOn");
+        _bulbAnimator.SetTrigger("RedOff");
         _wireAnimator.ResetTrigger("RedOn");
         _batteryAnimator.Rebind();
     }

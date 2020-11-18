@@ -77,6 +77,9 @@ public class LevelElevenTutorialResolver : TutorialResolverBase
         _nextButton.gameObject.SetActive(true);
         _closeButton.gameObject.SetActive(false);
         _singleColorBulb.ResetPowerable();
+        _singleColorBulbAnimator.SetTrigger("SetNormalImage1");
+        _doubleColorBulbAnimator.SetTrigger("RedBlueOff");
+        _doubleColorBulbAnimator.SetTrigger("SetNormalImage1");
         _doubleColorBulb.ResetPowerable();
         index = ValidateIndexValue(index);
         SetTutorialTextState(index);

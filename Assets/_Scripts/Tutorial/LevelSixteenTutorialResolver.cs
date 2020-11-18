@@ -56,6 +56,7 @@ public class LevelSixteenTutorialResolver : TutorialResolverBase
         _battery1Animator.SetTrigger("Reset");
         _passthrough1Animator.SetTrigger("Reset");
         _passthrough2Animator.SetTrigger("Reset");
+        _singleColorBulbAnimator.SetTrigger("RedOff");
         ResetTriggers();
         base.OnCloseClicked();
     }
@@ -65,6 +66,7 @@ public class LevelSixteenTutorialResolver : TutorialResolverBase
         _battery1Animator.SetTrigger("Reset");
         _passthrough1Animator.SetTrigger("Reset");
         _passthrough2Animator.SetTrigger("Reset");
+        _singleColorBulbAnimator.SetTrigger("RedOff");
         ResetTriggers();
         base.OnSkipClicked();
     }
@@ -77,7 +79,11 @@ public class LevelSixteenTutorialResolver : TutorialResolverBase
         _nextButton.gameObject.SetActive(true);
         _closeButton.gameObject.SetActive(false);
         _singleColorBulb.ResetPowerable();
+        _singleColorBulbAnimator.SetTrigger("RedOff");
+        _singleColorBulbAnimator.SetTrigger("SetNormalImage1");
         _doubleColorBulb.ResetPowerable();
+        _doubleColorBulbAnimator.SetTrigger("RedBlueOff");
+        _doubleColorBulbAnimator.SetTrigger("SetNormalImage1");
         index = ValidateIndexValue(index);
         SetTutorialTextState(index);
         HandleTutorialStateByIndex(index);

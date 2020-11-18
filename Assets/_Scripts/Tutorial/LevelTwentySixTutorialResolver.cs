@@ -49,7 +49,8 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
     public override void OnCloseClicked()
     {
         _battery1Animator.SetTrigger("Reset");
-        
+        _singlePowerBulbAnimator.SetTrigger("SetNormalImage1");
+        _doublePowerBulbAnimator.SetTrigger("SetNormalImage2");
         ResetTriggers();
         base.OnCloseClicked();
     }
@@ -70,8 +71,11 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
         _nextButton.gameObject.SetActive(true);
         _closeButton.gameObject.SetActive(false);
         _singlePowerBulb.ResetPowerable();
+        _singlePowerBulbAnimator.SetTrigger("RedOff");
         _singlePowerBulbAnimator.SetTrigger("SetNormalImage1");
         _doublePowerBulb.ResetPowerable();
+        _doublePowerBulbAnimator.SetTrigger("RedOff");
+        _doublePowerBulbAnimator.SetTrigger("SetNormalImage2");
         _battery1.ResetPowerable();
         index = ValidateIndexValue(index);
         SetTutorialTextState(index);
