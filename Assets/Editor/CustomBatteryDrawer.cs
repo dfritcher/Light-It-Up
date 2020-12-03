@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using TMPro;
+
 
 [CustomEditor(typeof(Battery)), CanEditMultipleObjects]
 public class CustomBatteryDrawer : Editor
@@ -13,10 +15,12 @@ public class CustomBatteryDrawer : Editor
     Image _lockedIcon = null;
     Button _increasePower = null;
     Button _decreasePower = null;
+    TextMeshProUGUI _powerDisplay = null;
+    Power _power = null;
 
     bool _hasVariablePower = false;
     bool _isClickable = false;
-
+    
     SerializedProperty _colorTypesProperty = null;
     ColorType[] _colorTypes = new ColorType[4];
     ColorType[] ColorTypes { get { return _colorTypes; } }
@@ -24,6 +28,7 @@ public class CustomBatteryDrawer : Editor
     private bool IsPowered { get { return ColorTypes.Any(c => c != ColorType.None); } }
     private void OnEnable()
     {
+#if UNITY_EDITOR
         _colorTypesProperty = serializedObject.FindProperty("_originalColorTypes");
         _red = serializedObject.FindProperty("_redSection").objectReferenceValue as GameObject;
         _green = serializedObject.FindProperty("_greenSection").objectReferenceValue as GameObject;
@@ -32,6 +37,8 @@ public class CustomBatteryDrawer : Editor
         _lockedIcon = serializedObject.FindProperty("_lockedIcon").objectReferenceValue as Image;
         _increasePower = serializedObject.FindProperty("_increasePowerButton").objectReferenceValue as Button;
         _decreasePower = serializedObject.FindProperty("_decreasePowerButton").objectReferenceValue as Button;
+        //_power = serializedObject.FindProperty("_power").serializedObject as Power;
+        _powerDisplay = serializedObject.FindProperty("_powerDisplay").objectReferenceValue as TextMeshProUGUI;
 
         _isClickable = serializedObject.FindProperty("_isClickable").boolValue;
         _hasVariablePower = serializedObject.FindProperty("_hasVariablePower").boolValue;
@@ -42,14 +49,16 @@ public class CustomBatteryDrawer : Editor
                 var color = (ColorType)_colorTypesProperty.GetArrayElementAtIndex(i).enumValueIndex;
                 _colorTypes[i] = color;
             }
-        }
-
+        }        
+#endif
     }
 
     public override void OnInspectorGUI()
     {
+#if UNITY_EDITOR
         base.OnInspectorGUI();
         UpdateEditorDisplay();
+#endif
     }
 
 
@@ -62,6 +71,6 @@ public class CustomBatteryDrawer : Editor
         _red?.SetActive(ColorTypes.Contains(ColorType.Red));
         _green?.SetActive(ColorTypes.Contains(ColorType.Green));
         _blue?.SetActive(ColorTypes.Contains(ColorType.Blue));
-
+        //_powerDisplay.text = _power.Amount.ToString();
     }
 }

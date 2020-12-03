@@ -1722,6 +1722,8 @@ MonoBehaviour:
   _maxPower: 4
   _powerables: []
   _bulbType: 4
+  _isPlayable: 1
+  _animator: {fileID: 0}
   _powerLevel: 0
   _currentColorTypes: 
   _isBroken: 0
@@ -1743,12 +1745,15 @@ MonoBehaviour:
   _greenTopUnLit: {fileID: 699466199859414598}
   _greenSmallMiddleUnLit: {fileID: 5405597862628719309}
   _greenBottomUnLit: {fileID: 3627281308811670928}
-  _blueFullUnLit: {fileID: 5386273929789216239}
+  _blueFullUnLit: {fileID: 4605217433852666871}
   _blueBottomUnLit: {fileID: 8909855581755669412}
   _blueSmallBottomUnLit: {fileID: 5842811370347630794}
   _bulbImage: {fileID: 314362579581816042}
   _brokenSprite: {fileID: 21300000, guid: 5840f4b5f8e35e748801e9d3494963d3, type: 3}
   _normalSprite: {fileID: 21300000, guid: cb5153760eda6234bbfe5cb032e3e4c9, type: 3}
+  _bulbAudioSource: {fileID: 0}
+  _glassBreakClip: {fileID: 0}
+  _increasePowerClip: {fileID: 0}
 --- !u!1 &7278061692299875901
 GameObject:
   m_ObjectHideFlags: 0
@@ -2201,14 +2206,14 @@ RectTransform:
   m_GameObject: {fileID: 9064476988275333512}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.59999996, y: 0.59999996, z: 0.59999996}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5040425398775050167}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -0.2, y: 18.38}
+  m_AnchoredPosition: {x: -0.31, y: 29.94}
   m_SizeDelta: {x: 135, y: 59}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1267637503394140404
@@ -2266,8 +2271,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 1.26
-  m_fontSizeBase: 1.26
+  m_fontSize: 1
+  m_fontSizeBase: 1
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

@@ -218,6 +218,7 @@ public class Bulb : PowerableBase
     {
         _isBroken = false;
         _animator.SetTrigger("ExitBroken");
+        _bulbImage.sprite = _normalSprite;
     }
     
     public void OnBrokenBulbAnimationStart()
@@ -350,7 +351,7 @@ public class Bulb : PowerableBase
         }
         if (_bulbImage)
         {
-            if (_powerLevel > _maxPower)
+            if (_isBroken)
             {
                 _bulbImage.sprite = _brokenSprite;
                 DisableLitImages();

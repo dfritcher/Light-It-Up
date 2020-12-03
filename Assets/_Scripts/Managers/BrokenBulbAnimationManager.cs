@@ -29,6 +29,7 @@ public class BrokenBulbAnimationManager : MonoBehaviour
     {
         //if (_animationStarted)
         //    return;
+        DisableBulbs();
         gameObject.SetActive(true);
         _levelManager = levelManager;
         //_bulbType = bulbBeingBroken.BulbType;
@@ -36,28 +37,32 @@ public class BrokenBulbAnimationManager : MonoBehaviour
         switch (bulbBeingBroken.BulbType)
         {
             case BulbType.Bulb1:
+                _bulb1.gameObject.SetActive(true);
                 _bulb1.BrokenBulbAnimationEnd += Bulb_BrokenBulbAnimationEnd;
                 _bulb1.SetColorTypes(bulbBeingBroken.OriginalColorTypes);
                 _bulb1.UpdateUI();
-                _bulb1.GetComponent<Animator>().SetTrigger("IsBroken");
+                _bulb1.GetComponent<Animator>().SetTrigger("IsBroken");                
                 break;
             case BulbType.Bulb2:
+                _bulb2.gameObject.SetActive(true);
                 _bulb2.BrokenBulbAnimationEnd += Bulb_BrokenBulbAnimationEnd;
                 _bulb2.SetColorTypes(bulbBeingBroken.OriginalColorTypes);
                 _bulb2.UpdatePowerState(null);
-                _bulb2.GetComponent<Animator>().SetTrigger("IsBroken");
+                _bulb2.GetComponent<Animator>().SetTrigger("IsBroken");                
                 break;
             case BulbType.Bulb3:
+                _bulb3.gameObject.SetActive(true);
                 _bulb3.BrokenBulbAnimationEnd += Bulb_BrokenBulbAnimationEnd;
                 _bulb3.SetColorTypes(bulbBeingBroken.OriginalColorTypes);
                 _bulb3.UpdatePowerState(null);
-                _bulb3.GetComponent<Animator>().SetTrigger("IsBroken");
+                _bulb3.GetComponent<Animator>().SetTrigger("IsBroken");                
                 break;
             case BulbType.Bulb4:
+                _bulb4.gameObject.SetActive(true);
                 _bulb4.BrokenBulbAnimationEnd += Bulb_BrokenBulbAnimationEnd;
                 _bulb4.SetColorTypes(bulbBeingBroken.OriginalColorTypes);
                 _bulb4.UpdatePowerState(null);
-                _bulb4.GetComponent<Animator>().SetTrigger("IsBroken");
+                _bulb4.GetComponent<Animator>().SetTrigger("IsBroken");                
                 break;
         }
     }
@@ -81,6 +86,15 @@ public class BrokenBulbAnimationManager : MonoBehaviour
     {
         gameObject.SetActive(false);
         _levelManager.OnBrokenBulbAnimationEnd();
+        DisableBulbs();
+    }
+
+    private void DisableBulbs()
+    {
+        _bulb1.gameObject.SetActive(false);
+        _bulb2.gameObject.SetActive(false);
+        _bulb3.gameObject.SetActive(false);
+        _bulb4.gameObject.SetActive(false);
     }
     #endregion Methods (end)
 }

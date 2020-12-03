@@ -812,6 +812,8 @@ MonoBehaviour:
   _maxPower: 2
   _powerables: []
   _bulbType: 2
+  _isPlayable: 1
+  _animator: {fileID: 0}
   _powerLevel: 0
   _currentColorTypes: 
   _isBroken: 0
@@ -839,6 +841,9 @@ MonoBehaviour:
   _bulbImage: {fileID: 2867348638959958426}
   _brokenSprite: {fileID: 21300000, guid: 251eb248774e10e4e8fdde4dc3587191, type: 3}
   _normalSprite: {fileID: 21300000, guid: f1be856b650e62f4bb3ca5f9ec4fc627, type: 3}
+  _bulbAudioSource: {fileID: 0}
+  _glassBreakClip: {fileID: 0}
+  _increasePowerClip: {fileID: 0}
 --- !u!1 &2867348639174032548
 GameObject:
   m_ObjectHideFlags: 0
@@ -1510,7 +1515,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.34, y: 29.48}
+  m_AnchoredPosition: {x: 0.34, y: 29.5}
   m_SizeDelta: {x: 135, y: 59}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3336709776729906817

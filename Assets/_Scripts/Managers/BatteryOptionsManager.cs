@@ -25,6 +25,8 @@ public class BatteryOptionsManager : MonoBehaviour
     private Battery _activeBattery = null;
 
     private bool _extended = false;
+
+    private BatteryOption _redBlueGreenOption = null;
     private void Awake()
     {
         var resetOption = Instantiate(_batteryOptionPrefab, _batteryOptionParent, false).GetComponent<BatteryOption>();
@@ -55,9 +57,9 @@ public class BatteryOptionsManager : MonoBehaviour
         redBlueOption.Setup(new List<ColorType>() { ColorType.Red, ColorType.Blue });
         redBlueOption.OnClick += BatteryOption_OnClick;
 
-        var redBlueGreenOption = Instantiate(_batteryOptionPrefab, _batteryOptionParent, false).GetComponent<BatteryOption>();
-        redBlueGreenOption.Setup(new List<ColorType>() { ColorType.Red, ColorType.Green, ColorType.Blue });
-        redBlueGreenOption.OnClick += BatteryOption_OnClick;
+        _redBlueGreenOption = Instantiate(_batteryOptionPrefab, _batteryOptionParent, false).GetComponent<BatteryOption>();
+        _redBlueGreenOption.Setup(new List<ColorType>() { ColorType.Red, ColorType.Green, ColorType.Blue });
+        _redBlueGreenOption.OnClick += BatteryOption_OnClick;
 
         gameObject.SetActive(false);
         ((RectTransform)transform).anchoredPosition = _startPosition;
@@ -69,7 +71,7 @@ public class BatteryOptionsManager : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void Setup(Battery battery)
+    public void Setup(Battery battery, bool allColorsAavaliable = true)
     {
         _activeBattery = battery;
         if (!_extended)
@@ -81,7 +83,8 @@ public class BatteryOptionsManager : MonoBehaviour
         {
             AnimationController.Instance.StopAllCoroutines();
             ((RectTransform)transform).anchoredPosition = _endPosition;
-        }        
+        }
+        _redBlueGreenOption.gameObject.SetActive(allColorsAavaliable);
     }
 
     private void BatteryOption_OnClick(BatteryOption batteryOption)

@@ -291,11 +291,11 @@ MonoBehaviour:
   _powerables: []
   _bulbType: 1
   _isPlayable: 1
+  _animator: {fileID: 0}
   _powerLevel: 0
   _currentColorTypes: 
   _isBroken: 0
   _isOn: 0
-  _animator: {fileID: 0}
   _redFullLit: {fileID: 684034149401789549}
   _redTopLit: {fileID: 684034149027150722}
   _redSmallTopLit: {fileID: 8952801622251789482}
@@ -758,7 +758,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &684034150305218441
 Transform:
   m_ObjectHideFlags: 0

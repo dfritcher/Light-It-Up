@@ -27,6 +27,7 @@ public class CustomPassThroughDrawer : Editor
     private bool IsPowered { get { return ColorTypes.Any(c => c != ColorType.None); } }
     private void OnEnable()
     {
+#if UNITY_EDITOR
         _colorTypesProperty = serializedObject.FindProperty("_originalColorTypes");
         _redFull = serializedObject.FindProperty("_redFullUnLit").objectReferenceValue as GameObject;
         _greenFull = serializedObject.FindProperty("_greenFullUnLit").objectReferenceValue as GameObject;
@@ -46,13 +47,15 @@ public class CustomPassThroughDrawer : Editor
                 _colorTypes[i] = color;
             }
         }
-
+#endif
     }
 
     public override void OnInspectorGUI()
     {
+#if UNITY_EDITOR
         base.OnInspectorGUI();
         UpdateEditorDisplay();
+#endif
     }
     
     private void UpdateEditorDisplay()

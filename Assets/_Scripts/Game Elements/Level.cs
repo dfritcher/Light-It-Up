@@ -48,6 +48,10 @@ public class Level : MonoBehaviour
     [SerializeField]
     private AudioClip _levelMusic = null;
 
+    [SerializeField]
+    private bool _allBatteryColorsAvailable = false;
+    public bool AllBatteryColorsAvailable { get { return _allBatteryColorsAvailable; } }
+
     private bool _isActive = false;
     public bool IsActive { get { return _isActive; } }
 
@@ -195,7 +199,7 @@ public class Level : MonoBehaviour
                 b.SetSelectedState(false);
             }
         });
-        _levelManger.BatteryOptionsManager.Setup(battery);
+        _levelManger.BatteryOptionsManager.Setup(battery, _allBatteryColorsAvailable);
         _levelManger.InhibitorOptionsManager.AnimateOptionPanel(true);
         _levelManger.PassThroughOptionsManager.AnimateOptionPanel(true);
     }
