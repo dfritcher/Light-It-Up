@@ -37,7 +37,7 @@ public class SaveDataManager : MonoBehaviour
 
     private IEnumerator SaveGameCoroutine(SaveGameCallback callback)
     {
-        Debug.Log("Save Game Coroutine Started.");
+        //Debug.Log("Save Game Coroutine Started.");
         var save = CreateSaveGameData();
         yield return null;
 
@@ -56,10 +56,10 @@ public class SaveDataManager : MonoBehaviour
 
     private IEnumerator LoadGameCouroutine(LoadGameCallback callback)
     {
-        Debug.Log("Load Game Coroutine Started");
+        //Debug.Log("Load Game Coroutine Started");
         if (File.Exists(Application.persistentDataPath + "/gamesave.save"))
         {
-            Debug.Log("Load File Found.");
+            //Debug.Log("Load File Found.");
             var bf = new BinaryFormatter();
             var file = File.Open(Application.persistentDataPath + "/gamesave.save", FileMode.Open);
 
@@ -74,7 +74,7 @@ public class SaveDataManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("NO Load File Found.");
+            //Debug.Log("NO Load File Found.");
         }
     }
 

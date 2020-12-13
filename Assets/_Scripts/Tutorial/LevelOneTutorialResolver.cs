@@ -61,6 +61,7 @@ public class LevelOneTutorialResolver : TutorialResolverBase
         _gameObjectsParent.SetActive(false);
         _redBulb.ResetPowerable();
         _bulbAnimator.SetTrigger("RedOff");
+        _bulbAnimator.SetTrigger("RedUnlitOn");
         _bulbAnimator.SetTrigger("SetNormalImage1");
         _batteryRedSection.SetActive(false);
         index = ValidateIndexValue(index);
@@ -84,6 +85,7 @@ public class LevelOneTutorialResolver : TutorialResolverBase
             case 2:
                 //_batteryAnimator.SetTrigger("HighlightOff");
                 _batteryAnimator.SetTrigger("RedOn");
+                _bulbAnimator.SetTrigger("RedUnlitOff");
                 _bulbAnimator.SetTrigger("RedOn");
                 _wireAnimator.SetTrigger("RedOn");
                 _redBulb.IncreasePower(1, true);

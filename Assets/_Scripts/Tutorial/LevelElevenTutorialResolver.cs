@@ -78,6 +78,7 @@ public class LevelElevenTutorialResolver : TutorialResolverBase
         _closeButton.gameObject.SetActive(false);
         _singleColorBulb.ResetPowerable();
         _singleColorBulbAnimator.SetTrigger("SetNormalImage1");
+        _singleColorBulbAnimator.SetTrigger("RedUnlitOn");
         _doubleColorBulbAnimator.SetTrigger("RedBlueOff");
         _doubleColorBulbAnimator.SetTrigger("SetNormalImage1");
         _doubleColorBulb.ResetPowerable();
@@ -150,6 +151,7 @@ public class LevelElevenTutorialResolver : TutorialResolverBase
                 _battery1Animator.SetTrigger("HighlightOff");
                 _battery1Animator.SetTrigger("AllOn");
                 _singleColorBulbAnimator.SetTrigger("RedOn");
+                _singleColorBulbAnimator.SetTrigger("RedUnlitOff");
                 _singleColorBulb.IncreasePower(1, true);
                 _doubleColorBulbAnimator.SetTrigger("RedBlueOn");
                 _doubleColorBulb.IncreasePower(1, true);
@@ -166,6 +168,7 @@ public class LevelElevenTutorialResolver : TutorialResolverBase
             case 4:                
                 _inhibitor1Animator.SetTrigger("RedOn");
                 _singleColorBulbAnimator.SetTrigger("RedOff");
+                _singleColorBulbAnimator.SetTrigger("RedUnlitOn");
                 _wire1Animators[1].SetTrigger("GreenBlueOn");
                 _singleColorBulb.DecreasePower(1);
                 _nextButton.interactable = true;
@@ -174,6 +177,7 @@ public class LevelElevenTutorialResolver : TutorialResolverBase
                 _inhibitor1Animator.SetTrigger("GreenBlueOn");
                 _wire1Animators[1].SetTrigger("RedOn");
                 _singleColorBulbAnimator.SetTrigger("RedOn");
+                _singleColorBulbAnimator.SetTrigger("RedUnlitOff");
                 _singleColorBulb.IncreasePower(1, true);
                 _nextButton.interactable = true;
                 break;

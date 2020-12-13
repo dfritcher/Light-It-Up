@@ -113,6 +113,8 @@ public class LevelManager : MonoBehaviour
     [Header("Debug Options"), Space(8)]
     [SerializeField]
     private bool _skipTransitions = false;
+    [SerializeField]
+    private bool _unlockAllLevels = false;
 
 
     private static LevelManager _instance = null;
@@ -540,25 +542,27 @@ public class LevelManager : MonoBehaviour
     #region Saving/Loading
     private void SaveGameInfo()
     {
-        Debug.Log("Save Game Started.");
+        //Debug.Log("Save Game Started.");
         _saveDataManager.SaveGame(SaveGameCallback);
     }
 
     
     private void SaveGameCallback()
     {
-        Debug.Log("Save Game Completed.");
+       // Debug.Log("Save Game Completed.");
     }
 
     private void LoadGameInfo()
     {
-        Debug.Log("Load Game Started.");
+        //Debug.Log("Load Game Started.");
         _saveDataManager.LoadGame(LoadGameCallback);
     }
 
     private void LoadGameCallback()
     {
-        Debug.Log("Load Game Completed.");
+        //Debug.Log("Load Game Completed.");
+        if(_unlockAllLevels)
+            _gameInfo.HighestLevelUnlocked = 30;
     }
 
     

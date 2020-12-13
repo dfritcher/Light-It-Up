@@ -70,6 +70,7 @@ public class LevelSixTutorialResolver : TutorialResolverBase
         _singleColorBulb.ResetPowerable();
         _doubleColorBulb.ResetPowerable(); //Used mainly to reset the text display;
         _singleColorBulbAnimator.SetTrigger("RedOff");
+        _singleColorBulbAnimator.SetTrigger("RedUnlitOn");
         _singleColorBulbAnimator.SetTrigger("SetNormalImage1");
         _doubleColorBulbAnimator.SetTrigger("RedBlueUnlitOn");
         _doubleColorBulbAnimator.SetTrigger("SetNormalImage1");
@@ -126,6 +127,7 @@ public class LevelSixTutorialResolver : TutorialResolverBase
                 _battery1Animator.SetTrigger("HighlightOff");
                 _battery1Animator.SetTrigger("RedOn");
                 _singleColorBulbAnimator.SetTrigger("RedOn");
+                _singleColorBulbAnimator.SetTrigger("RedUnlitOff");
                 _singleColorBulb.IncreasePower(1, true);
                 _doubleColorBulbAnimator.SetTrigger("RedBlueOn");
                 _doubleColorBulb.IncreasePower(1, true);

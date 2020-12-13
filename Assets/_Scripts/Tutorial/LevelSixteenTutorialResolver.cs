@@ -80,6 +80,7 @@ public class LevelSixteenTutorialResolver : TutorialResolverBase
         _closeButton.gameObject.SetActive(false);
         _singleColorBulb.ResetPowerable();
         _singleColorBulbAnimator.SetTrigger("RedOff");
+        _singleColorBulbAnimator.SetTrigger("RedUnlitOn");
         _singleColorBulbAnimator.SetTrigger("SetNormalImage1");
         _doubleColorBulb.ResetPowerable();
         _doubleColorBulbAnimator.SetTrigger("RedBlueOff");
@@ -171,6 +172,7 @@ public class LevelSixteenTutorialResolver : TutorialResolverBase
                 _passthrough1Animator.SetTrigger("RedOn");
                 _wire1Animators[1].SetTrigger("RedOn");
                 _singleColorBulbAnimator.SetTrigger("RedOn");
+                _singleColorBulbAnimator.SetTrigger("RedUnlitOff");
                 _singleColorBulb.IncreasePower(1, true);
                 _nextButton.interactable = true;
                 break;

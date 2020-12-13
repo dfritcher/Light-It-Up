@@ -149,6 +149,7 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
                 _wire1Animators[0].SetTrigger("AllOn");
                 _wire2Animators[0].SetTrigger("AllOn");
                 _singlePowerBulbAnimator.SetTrigger("RedOn");
+                _singlePowerBulbAnimator.SetTrigger("RedUnlitOff");
                 _singlePowerBulb.IncreasePower(1, true);
                 _doublePowerBulb.IncreasePower(1, true);
                 _nextButton.interactable = true;
@@ -158,8 +159,7 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
                 _battery1.IncreasePower();
                 _singlePowerBulb.IncreasePower(1, true);
                 _doublePowerBulb.IncreasePower(1, true);
-                _singlePowerBulbAnimator.SetTrigger("RedOff");
-                _singlePowerBulbAnimator.SetTrigger("RedUnlitOff");
+                _singlePowerBulbAnimator.SetTrigger("RedOff");                
                 _singlePowerBulbAnimator.SetTrigger("SetBrokenImage1");
                 _doublePowerBulbAnimator.SetTrigger("RedOn");
                 _closeButton.gameObject.SetActive(true);
