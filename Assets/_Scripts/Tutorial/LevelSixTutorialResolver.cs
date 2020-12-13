@@ -42,11 +42,12 @@ public class LevelSixTutorialResolver : TutorialResolverBase
     {
         _level = level;
     }
+    
     public override void OnCloseClicked()
     {
         _battery1Animator.SetTrigger("Reset");
         _battery2Animator.SetTrigger("Reset");
-        _doubleColorBulbAnimator.SetTrigger("ExitBroken");
+        _doubleColorBulbAnimator.SetTrigger("ExitBroken");        
         ResetTriggers();
         base.OnCloseClicked();
     }
@@ -67,10 +68,12 @@ public class LevelSixTutorialResolver : TutorialResolverBase
         _nextButton.gameObject.SetActive(true);
         _closeButton.gameObject.SetActive(false);
         _singleColorBulb.ResetPowerable();
+        _doubleColorBulb.ResetPowerable(); //Used mainly to reset the text display;
         _singleColorBulbAnimator.SetTrigger("RedOff");
         _singleColorBulbAnimator.SetTrigger("SetNormalImage1");
-        _doubleColorBulb.ResetPowerable();
+        _doubleColorBulbAnimator.SetTrigger("RedBlueUnlitOn");
         _doubleColorBulbAnimator.SetTrigger("SetNormalImage1");
+        
         index = ValidateIndexValue(index);
         SetTutorialTextState(index);
         HandleTutorialStateByIndex(index);

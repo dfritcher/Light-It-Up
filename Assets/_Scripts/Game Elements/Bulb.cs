@@ -174,8 +174,6 @@ public class Bulb : PowerableBase
 
     public override void ResetPowerable()
     {
-        if (!_isPlayable)
-            return;
         _currentColorTypes = new List<ColorType>(_originalColorTypes);
         _isBroken = false;
         _isOn = false;
@@ -364,6 +362,8 @@ public class Bulb : PowerableBase
 
     private void UpdateColorDisplay()
     {
+        if (!_isPlayable)
+            return;
         DisableLitImages();
         DisableUnLitImages();
         SetImagesByPowerLevel();

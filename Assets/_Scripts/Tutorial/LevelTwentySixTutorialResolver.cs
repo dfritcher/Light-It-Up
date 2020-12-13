@@ -71,6 +71,7 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
         _nextButton.gameObject.SetActive(true);
         _closeButton.gameObject.SetActive(false);
         _singlePowerBulb.ResetPowerable();
+        _singlePowerBulbAnimator.SetTrigger("RedUnlitOn");
         _singlePowerBulbAnimator.SetTrigger("RedOff");
         _singlePowerBulbAnimator.SetTrigger("SetNormalImage1");
         _doublePowerBulb.ResetPowerable();
@@ -131,7 +132,7 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
 
     public override void OnFingerAnimationEnd(int index)
     {
-        Debug.Log($"OnFingerAnimationEnd Index: {index}");
+        //Debug.Log($"OnFingerAnimationEnd Index: {index}");
         switch (index)
         {
             case 0:
@@ -158,6 +159,7 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
                 _singlePowerBulb.IncreasePower(1, true);
                 _doublePowerBulb.IncreasePower(1, true);
                 _singlePowerBulbAnimator.SetTrigger("RedOff");
+                _singlePowerBulbAnimator.SetTrigger("RedUnlitOff");
                 _singlePowerBulbAnimator.SetTrigger("SetBrokenImage1");
                 _doublePowerBulbAnimator.SetTrigger("RedOn");
                 _closeButton.gameObject.SetActive(true);
