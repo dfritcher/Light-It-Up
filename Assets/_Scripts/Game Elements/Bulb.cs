@@ -34,7 +34,9 @@ public class Bulb : PowerableBase
     public BulbType BulbType { get { return _bulbType; } }
 
     [SerializeField]
-    private bool _isPlayable = true;
+    private bool _shouldUpdateVisuals = true;
+    [SerializeField]
+    private bool _shouldResetState = true;
 
     [Header("Animation")]
     [SerializeField]
@@ -174,6 +176,8 @@ public class Bulb : PowerableBase
 
     public override void ResetPowerable()
     {
+        if (!_shouldResetState)
+            return;
         _currentColorTypes = new List<ColorType>(_originalColorTypes);
         _isBroken = false;
         _isOn = false;
@@ -362,11 +366,12 @@ public class Bulb : PowerableBase
 
     private void UpdateColorDisplay()
     {
-        if (!_isPlayable)
-            return;
-        DisableLitImages();
-        DisableUnLitImages();
-        SetImagesByPowerLevel();
+        if (_shouldUpdateVisuals)
+        {
+            DisableLitImages();
+            DisableUnLitImages();
+            SetImagesByPowerLevel();
+        }        
     }
 
     private void SetImagesByPowerLevel()

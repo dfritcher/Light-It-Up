@@ -47,21 +47,21 @@ public class BrokenBulbAnimationManager : MonoBehaviour
                 _bulb2.gameObject.SetActive(true);
                 _bulb2.BrokenBulbAnimationEnd += Bulb_BrokenBulbAnimationEnd;
                 _bulb2.SetColorTypes(bulbBeingBroken.OriginalColorTypes);
-                _bulb2.UpdatePowerState(null);
+                _bulb2.UpdateUI();
                 _bulb2.GetComponent<Animator>().SetTrigger("IsBroken");                
                 break;
             case BulbType.Bulb3:
                 _bulb3.gameObject.SetActive(true);
                 _bulb3.BrokenBulbAnimationEnd += Bulb_BrokenBulbAnimationEnd;
                 _bulb3.SetColorTypes(bulbBeingBroken.OriginalColorTypes);
-                _bulb3.UpdatePowerState(null);
+                _bulb3.UpdateUI();
                 _bulb3.GetComponent<Animator>().SetTrigger("IsBroken");                
                 break;
             case BulbType.Bulb4:
                 _bulb4.gameObject.SetActive(true);
                 _bulb4.BrokenBulbAnimationEnd += Bulb_BrokenBulbAnimationEnd;
                 _bulb4.SetColorTypes(bulbBeingBroken.OriginalColorTypes);
-                _bulb4.UpdatePowerState(null);
+                _bulb4.UpdateUI();
                 _bulb4.GetComponent<Animator>().SetTrigger("IsBroken");                
                 break;
         }
