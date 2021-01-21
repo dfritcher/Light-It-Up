@@ -378,7 +378,7 @@ public class Bulb : PowerableBase
     {
         if (_isBroken)
             return;
-        if (CurrentPowerLevel > 0)
+        if (CurrentPowerLevel == _maxPower)
         {
             if (CurrentColorTypes.Contains(ColorType.Red) && !(CurrentColorTypes.Contains(ColorType.Green) || CurrentColorTypes.Contains(ColorType.Blue)))
             {

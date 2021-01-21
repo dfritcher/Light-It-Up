@@ -11,9 +11,13 @@ public class AudioManager : MonoBehaviour
     private Settings Settings { get { return _settings; } }
 
     [SerializeField]
-    private AudioSource _audioSource = null;
-    private AudioSource AudioSource { get { return _audioSource; } }
-    
+    private AudioSource _musicSource = null;
+    private AudioSource MusicSource { get { return _musicSource; } }
+
+    [SerializeField]
+    private AudioSource _sfxSource = null;
+    private AudioSource SFXSource { get { return _sfxSource; } }
+
     [SerializeField]
     private static AudioManager _instance = null;
     private static AudioManager Instance { get { return _instance; } }
@@ -29,13 +33,15 @@ public class AudioManager : MonoBehaviour
     {
         if (Instance.Settings.IsSfxOn)
         {
-            Instance.AudioSource.PlayOneShot(clip);
+            Instance.SFXSource.PlayOneShot(clip);
         }
     }
 
     public static void SetMusic(AudioClip music, bool startPlaying = false)
     {
-        Instance.AudioSource.clip = music;
+        if (Instance.MusicSource.clip.name == music.name)
+            return;
+        Instance.MusicSource.clip = music;
         if (startPlaying)
             PlayMusic();
     }
@@ -44,17 +50,17 @@ public class AudioManager : MonoBehaviour
     {
         if (Instance.Settings.IsMusicOn)
         {
-            Instance.AudioSource.Play();
+            Instance.MusicSource.Play();
         }
     }
 
     public static void StopMusic()
     {
-        Instance.AudioSource.Stop();
+        Instance.MusicSource.Stop();
     }
 
     public static void StartMusic()
     {
-        Instance.AudioSource.Play();
+        Instance.MusicSource.Play();
     }
 }

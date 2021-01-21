@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using System.Linq;
 
 public class Inhibitor : PowerableBase
 {
@@ -24,9 +24,6 @@ public class Inhibitor : PowerableBase
     [SerializeField]
     private bool _isClickable = true;
     public override bool IsClickable { get { return _isClickable; } }
-
-    [Space(8),SerializeField, ReadOnly(true)] //DEPRECATED, place bulbs in _powerSources.
-    private List<PowerSource> _poweredBulbs = null;
 
     #endregion Populated in Scene (end)
 
@@ -78,6 +75,14 @@ public class Inhibitor : PowerableBase
 
     [SerializeField]
     private SpriteRenderer _selectedSprite = null;
+
+    [Header("Audio References"), Space(8)]
+    [SerializeField]
+    private AudioSource _audioSource = null;
+    [SerializeField]
+    private AudioClip _powerDownClip = null;
+    [SerializeField]
+    private AudioClip _powerUpClip = null;
     #endregion Populated by Prefab (end)
 
     #endregion Fields, Properties (end)
@@ -115,7 +120,7 @@ public class Inhibitor : PowerableBase
         }
 #endif
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             var response = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.touches[0].position), Vector2.zero, 100f);
@@ -149,11 +154,13 @@ public class Inhibitor : PowerableBase
         }            
     }
 
-    public void SetUserSelectedPower(List<ColorType> colorTypes)
+    public void SetUserSelectedPower(List<ColorType> colorTypes, bool playAudio = true)
     {
         _userSetColorTypes = colorTypes;
         UpdateColorDisplay();
-        UpdatePowerState(this);        
+        UpdatePowerState(this);
+        if (playAudio)
+            PlayAudio();
     }
 
     private void UpdateColorDisplay()
@@ -356,6 +363,18 @@ public class Inhibitor : PowerableBase
         }
 
         return _isPowered;
+    }
+
+    private void PlayAudio()
+    {
+        if (_userSetColorTypes.Any(c => c != ColorType.None))
+        {
+            AudioManager.PlayOneShot(_powerUpClip);
+        }
+        else
+        {
+            AudioManager.PlayOneShot(_powerDownClip);
+        }
     }
     #endregion Methods (end)
 }

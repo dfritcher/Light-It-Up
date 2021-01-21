@@ -124,7 +124,7 @@ public class Battery : PowerableBase
         }
 #endif
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             var response = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.touches[0].position), Vector2.zero, 100f);
@@ -169,7 +169,7 @@ public class Battery : PowerableBase
 
     public void ResetPower()
     {
-        SetBatteryTypes(_originalColorTypes);
+        SetBatteryTypes(_originalColorTypes, false);
     }
 
 #region Unity Called Methods
@@ -215,25 +215,24 @@ public class Battery : PowerableBase
     /// Sets our current colors.
     /// </summary>
     /// <param name="colorTypes"></param>
-    public void SetBatteryTypes(List<ColorType> colorTypes)
+    public void SetBatteryTypes(List<ColorType> colorTypes, bool playAudio = true)
     {
         _power.ColorTypes = colorTypes;
         UpdateColorDisplay();
         UpdatePoweredObjects();
-        PlayAudio();
+        if(playAudio)
+            PlayAudio();
     }
 
     private void PlayAudio()
     {
         if(_power.ColorTypes.Any(c => c != ColorType.None))
         {
-            AudioManager.PlayOneShot(_powerUpClip);
-            //_audioSource.PlayOneShot(_powerUpClip);
+            AudioManager.PlayOneShot(_powerUpClip);            
         }
         else
         {
             AudioManager.PlayOneShot(_powerDownClip);
-            //_audioSource.PlayOneShot(_powerDownClip);
         }
     }
 

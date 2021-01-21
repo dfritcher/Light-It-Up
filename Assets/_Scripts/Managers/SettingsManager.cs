@@ -15,6 +15,9 @@ public class SettingsManager : MonoBehaviour
 
     [SerializeField]
     private CanvasGroup _canvas = null;
+
+    [SerializeField]
+    private AudioClip _music = null;
     #endregion Fields, Properties (end)
 
     #region Methods 
@@ -23,6 +26,8 @@ public class SettingsManager : MonoBehaviour
         _musicToggle.isOn = _settings.IsMusicOn;
         _sfxToggle.isOn = _settings.IsSfxOn;
         SetCanvasState(true);
+        //AudioManager.SetMusic(_music);
+        //AudioManager.PlayMusic();
     }
 
     public void CloseClicked()

@@ -30,14 +30,18 @@ public class LevelManager : MonoBehaviour
     private Transform _levelsParent = null;
     [SerializeField]
     private List<LevelSelect> _selectableLevels = null;
-
     [SerializeField]
     private Animator _levelTransition = null;
     [SerializeField]
     private GameObject _transitionObject = null;
+    [SerializeField]
+    private AudioClip _menuMusic = null;
+    
     [Header("Screens")]
     [SerializeField]
     private CanvasGroup _mainCanvas = null;
+    [SerializeField]
+    private CanvasScaler _mainCanvasScaler = null;
     [SerializeField]
     private CanvasGroup _playScreen = null;
     [SerializeField]
@@ -74,6 +78,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private SettingsManager _settingsManager = null;
 
+    [SerializeField]
+    private CreditsManager _creditsManager = null;
+
     [Header("Action Menu"), Space(8)]
     [SerializeField]
     private GameObject _actionsMenu = null;
@@ -91,7 +98,7 @@ public class LevelManager : MonoBehaviour
     private float _actionMenuAnimateTime = 0f;
 
     [SerializeField]
-    private List<TextMeshProUGUI> _textItems = null;
+    private List<GameObject> _textItems = null;
 
     [Header("Tutorial References"), Space(8)]
     [SerializeField]
@@ -108,7 +115,6 @@ public class LevelManager : MonoBehaviour
     private Button _nextLevelPageButton = null;
     [SerializeField]
     private List<GameObject> _levelPages = new List<GameObject>();
-    
 
     [Header("Debug Options"), Space(8)]
     [SerializeField]
@@ -139,7 +145,7 @@ public class LevelManager : MonoBehaviour
         _originalWidth = _actionMenuTransform.rect.width;
         _originalHeight = _actionMenuTransform.rect.height;
         _actionMenuTransform.sizeDelta = new Vector2(0f, 0f);
-
+        SetScreenResolution();
         SetActionMenuInactive();
         SetMainCanvasState(true);
         SetOverlayState(false);
@@ -149,6 +155,7 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        AudioManager.PlayMusic();
         InitializeAllLevels();        
     }
     #endregion Unity Engine Hooks (en)
@@ -168,9 +175,14 @@ public class LevelManager : MonoBehaviour
         SetPageLevelButtonState(0);
     }
 
+    private void SetScreenResolution()
+    {
+        _mainCanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
+    }
+
     #region Audio
     internal void SetLevelMusic(AudioClip levelMusic)
-    {
+    {        
         AudioManager.SetMusic(levelMusic, true);
     }
     #endregion Audio (end)
@@ -374,6 +386,7 @@ public class LevelManager : MonoBehaviour
         {
             level.Setup(this, _gameInfo.HighestLevelUnlocked);
         }
+        //AudioManager.SetMusic(_menuMusic, true);
     }
 
     private void SetMainCanvasState(bool enabled)
@@ -401,7 +414,7 @@ public class LevelManager : MonoBehaviour
     {
         _levelSelect.alpha = enabled ? 1 : 0;
         _levelSelect.blocksRaycasts = enabled;
-        _levelSelect.interactable = enabled;
+        _levelSelect.interactable = enabled;        
     }
     #endregion Initialization (end)
 
@@ -476,6 +489,16 @@ public class LevelManager : MonoBehaviour
         _settingsManager.Setup();
     }
 
+    public void CreditsClicked()
+    {
+        TriggerLevelAnimation(InitializeCredits);
+    }
+
+    private void InitializeCredits()
+    {
+        _creditsManager.Setup();
+    }
+
     public void ToggleActionMenu()
     {
         if (!_actionsMenu.activeSelf)
@@ -487,7 +510,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            _textItems.ForEach(t => t.gameObject.SetActive(false));
+            _textItems.ForEach(t => t.SetActive(false));
             AnimationController.Instance.AnimateWidth(_actionMenuTransform.rect.width, 0f, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, SetActionMenuInactive);
             AnimationController.Instance.AnimateHeight(_actionMenuTransform.rect.height, 0f, 0f, _actionMenuAnimateTime, (RectTransform)_actionsMenu.transform, null);
         }
@@ -495,12 +518,12 @@ public class LevelManager : MonoBehaviour
 
     private void SetActionMenuActive()
     {
-        _textItems.ForEach(t => t.gameObject.SetActive(true));
+        _textItems.ForEach(t => t.SetActive(true));
     }
 
     private void SetActionMenuInactive()
     {
-        _textItems.ForEach(t => t.gameObject.SetActive(false));
+        _textItems.ForEach(t => t.SetActive(false));
         _actionsMenu.SetActive(false);
     }
 

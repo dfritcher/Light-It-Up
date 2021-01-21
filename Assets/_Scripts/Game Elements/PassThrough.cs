@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Serialization;
@@ -89,6 +90,14 @@ public class PassThrough : PowerableBase
 
     [SerializeField]
     private SpriteRenderer _selectedSprite = null;
+
+    [Header("Audio References"), Space(8)]
+    [SerializeField]
+    private AudioSource _audioSource = null;
+    [SerializeField]
+    private AudioClip _powerDownClip = null;
+    [SerializeField]
+    private AudioClip _powerUpClip = null;
     #endregion Populated By Prefab (end)
     #endregion Fields, Properties (end)
 
@@ -162,11 +171,13 @@ public class PassThrough : PowerableBase
         }            
     }
 
-    public void SetUserSelectedPower(List<ColorType> colorTypes)
+    public void SetUserSelectedPower(List<ColorType> colorTypes, bool playAudio = true)
     {
         _userSetColorTypes = colorTypes;
         UpdateColorDisplay();
-        UpdatePowerState(this);        
+        UpdatePowerState(this);
+        if (playAudio)
+            PlayAudio();
     }
     
     private void UpdateColorDisplay()
@@ -381,6 +392,18 @@ public class PassThrough : PowerableBase
         }
 
         return _isPowered;
+    }
+
+    private void PlayAudio()
+    {
+        if (_userSetColorTypes.Any(c => c != ColorType.None))
+        {
+            AudioManager.PlayOneShot(_powerUpClip);
+        }
+        else
+        {
+            AudioManager.PlayOneShot(_powerDownClip);
+        }
     }
     #endregion Methods (end)
 }

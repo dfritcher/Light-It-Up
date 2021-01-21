@@ -812,7 +812,8 @@ MonoBehaviour:
   _maxPower: 2
   _powerables: []
   _bulbType: 2
-  _isPlayable: 1
+  _shouldUpdateVisuals: 1
+  _shouldResetState: 1
   _animator: {fileID: 0}
   _powerLevel: 0
   _currentColorTypes: 
@@ -826,7 +827,7 @@ MonoBehaviour:
   _greenSmallMiddleLit: {fileID: 1999975244383625525}
   _greenBottomLit: {fileID: 2867348639174032548}
   _blueFullLit: {fileID: 2867348640048321028}
-  _blueBottomLit: {fileID: 5784027542529038039}
+  _blueBottomLit: {fileID: 2867348638925932226}
   _blueSmallBottomLit: {fileID: 7001431815637265044}
   _redFullUnLit: {fileID: 4347390392077745647}
   _redTopUnLit: {fileID: 6158006676445258406}
