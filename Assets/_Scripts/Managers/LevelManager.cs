@@ -36,12 +36,16 @@ public class LevelManager : MonoBehaviour
     private GameObject _transitionObject = null;
     [SerializeField]
     private AudioClip _menuMusic = null;
-    
+    [SerializeField]
+    private GameObject _skipLevelButton = null;
+
     [Header("Screens")]
     [SerializeField]
     private CanvasGroup _mainCanvas = null;
     [SerializeField]
     private CanvasScaler _mainCanvasScaler = null;
+    public CanvasScaler MainCanvasScaler { get { return _mainCanvasScaler; } }
+
     [SerializeField]
     private CanvasGroup _playScreen = null;
     [SerializeField]
@@ -122,12 +126,13 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private bool _unlockAllLevels = false;
 
-
     private static LevelManager _instance = null;
     public static LevelManager Instance { get { return _instance; } }
 
     private Level _currentLevel = null;
     private Level CurrentLevel {  get { return _currentLevel ?? (_currentLevel = _levels[0]); } }
+
+    private int _failCount = 0;
     #endregion Fields, Properties (end)
 
     #region Methods
@@ -173,11 +178,17 @@ public class LevelManager : MonoBehaviour
         InitializeLevelSelectScreen();
         SetActionMenuButtonsState();
         SetPageLevelButtonState(0);
+        SetSkipLevelButtonState(false);
+    }
+
+    public void SkipLevelClicked()
+    {
+        NextLevelClicked();
     }
 
     private void SetScreenResolution()
     {
-        _mainCanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
+        _mainCanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);        
     }
 
     #region Audio
@@ -214,10 +225,13 @@ public class LevelManager : MonoBehaviour
             {
                 _gameInfo.HighestLevelUnlocked = _currentLevel.LevelNumber + 1;
                 SaveGameInfo();
-            }            
+            }
+            SetSkipLevelButtonState(false);
+            _failCount = 0;
         }            
         else 
         {
+            _failCount++;
             // Show broken bulb animation
             _brokenBulbAnimManager.Setup(this, _currentLevel.Bulbs.First(b => b.IsBroken));
             _currentLevel.gameObject.SetActive(false);
@@ -226,6 +240,16 @@ public class LevelManager : MonoBehaviour
             _defeatMessage.text = _currentLevel.DefeatMessage != string.Empty ? _currentLevel.DefeatMessage : "SORRY YOU LOSE! TRY AGAIN!";
             _victoryParent.SetActive(false);
         }
+
+        if(_failCount > 2)
+        {
+            SetSkipLevelButtonState(true);
+        }
+    }
+
+    public void SetSkipLevelButtonState(bool active)
+    {
+        _skipLevelButton.SetActive(active);
     }
     #endregion Victory Defeat State (end)
     
@@ -281,6 +305,7 @@ public class LevelManager : MonoBehaviour
         ResetLevel();
         SetLevelSelectState(false);
         SetOverlayState(true);
+        SetSkipLevelButtonState(false);
         var index = _levels.IndexOf(_levels.Find(l => l.IsActive));
         if (index == -1)
             index = 0;

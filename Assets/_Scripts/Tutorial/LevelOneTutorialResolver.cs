@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 [Serializable]
@@ -7,6 +8,9 @@ public class LevelOneTutorialResolver : TutorialResolverBase
 {
 
     #region Fields, Properties
+    [SerializeField]
+    private Transform _batteryLocation = null;
+
     [SerializeField]
     private Animator _batteryAnimator = null;
 
@@ -24,12 +28,15 @@ public class LevelOneTutorialResolver : TutorialResolverBase
 
     [SerializeField]
     private GameObject _batteryRedSection = null;
+
     #endregion Fields, Properties (end)
 
     #region Methods
-    public override void Setup(Level level)
+    
+    public override void Setup(Level level, CanvasScaler canvasScaler)
     {
-        _level = level;                
+        _level = level;
+        _fingerLocations[1] = _level.LevelManager.MainCamera.WorldToScreenPoint(_batteryLocation.position);        
     }
 
     public override void OnCloseClicked()
@@ -45,6 +52,7 @@ public class LevelOneTutorialResolver : TutorialResolverBase
         ResetTriggers();
         base.OnSkipClicked();
     }
+    
     public override void InitializeTutorial(int index)
     {
         StartCoroutine(InitialezeTutorialCoroutine(index));
@@ -54,6 +62,7 @@ public class LevelOneTutorialResolver : TutorialResolverBase
     {
         _batteryAnimator.SetTrigger("Reset");
         ResetTriggers();
+        ResetFingerLocation();
         yield return new WaitForEndOfFrame();
 
         _tutorialIndex = index;
@@ -67,23 +76,19 @@ public class LevelOneTutorialResolver : TutorialResolverBase
         index = ValidateIndexValue(index);
         yield return null;
         SetTutorialTextState(index);
-        HandleTutorialStateByIndex(index);
-        
+        HandleTutorialStateByIndex(index);        
     }
 
     public override void OnFingerAnimationEnd(int index)
     {
-        //Debug.Log($"OnFinger INDEX: {index}");
         switch (index)
         {
             case 1:
-                //_batteryAnimator.SetTrigger("RedOff");
                 _batteryAnimator.SetTrigger("HighlightOn");
                 _batteryOptionsAnimator.SetTrigger("MoveUp");
                 _nextButton.interactable = true;
                 break;
             case 2:
-                //_batteryAnimator.SetTrigger("HighlightOff");
                 _batteryAnimator.SetTrigger("RedOn");
                 _bulbAnimator.SetTrigger("RedUnlitOff");
                 _bulbAnimator.SetTrigger("RedOn");
@@ -99,27 +104,23 @@ public class LevelOneTutorialResolver : TutorialResolverBase
 
     public override void TutorialAnimationEnd(int index)
     {
-        //_nextButton.interactable = true;
-        //_tutorialIndex++;
-        //InitializeTutorial(_tutorialIndex);
-        //_levelManger.TriggerAnimation(_levelNumber, _tutorialIndex);
         _level.TutorialAnimationEnd(index);
     }
 
     internal override void HandleTutorialStateByIndex(int index)
     {
-        Debug.Log($"Handle INDEX: {index}");
         switch (index)
         {
-            case 0:
+            case 0:                
             case 1:
             case 2:
+                ResetFingerLocation();
                 _nextButton.gameObject.SetActive(true);
                 _closeButton.gameObject.SetActive(false);
                 _nextButton.interactable = true;
                 break;
             case 3:
-                _fingerAnimator.SetTrigger("Lvl1_Finger1");
+                MoveFinger(1, _fingerTransform.position, _fingerLocations[1], false);
                 _nextButton.interactable = false;
                 break;
             case 4:
@@ -129,7 +130,7 @@ public class LevelOneTutorialResolver : TutorialResolverBase
                 _nextButton.interactable = true;
                 break;
             case 6:
-                _fingerAnimator.SetTrigger("Lvl1_Finger2");
+                MoveFinger(2, _fingerTransform.localPosition, _fingerLocations[2],  true);
                 _nextButton.gameObject.SetActive(false);
                 _closeButton.gameObject.SetActive(true);
                 break;           
@@ -137,6 +138,19 @@ public class LevelOneTutorialResolver : TutorialResolverBase
                 _nextButton.interactable = true;
                 break;
         }
+    }
+
+    internal override void MoveFingerEnd()
+    {
+        switch (_animationIndex)
+        {
+            case 1:
+                _fingerAnimator.SetTrigger("Lvl1_Finger1");
+                break;
+            case 2:
+                _fingerAnimator.SetTrigger("Lvl1_Finger2");
+                break;
+        }        
     }
 
     private void ResetTriggers()
@@ -150,6 +164,8 @@ public class LevelOneTutorialResolver : TutorialResolverBase
         _bulbAnimator.SetTrigger("RedOff");
         _wireAnimator.ResetTrigger("RedOn");
         _batteryAnimator.Rebind();
+        _animationIndex = 0;
     }
+
     #endregion Methods (end)
 }

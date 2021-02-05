@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public abstract class TutorialResolverBase : MonoBehaviour
 {
@@ -19,9 +20,18 @@ public abstract class TutorialResolverBase : MonoBehaviour
 
     [SerializeField]
     internal List<TextMeshProUGUI> _tutorialTexts;
-    
+
+    [SerializeField]
+    internal RectTransform _fingerTransform = null;
+
     [SerializeField]
     internal Animator _fingerAnimator = null;
+
+    [SerializeField]
+    internal Vector2[] _fingerLocations = null;
+
+    [SerializeField]
+    internal int _speed = 0;
 
     [SerializeField]
     internal GameObject _tutorialObjectsParent = null;
@@ -29,15 +39,21 @@ public abstract class TutorialResolverBase : MonoBehaviour
     [SerializeField]
     internal GameObject _gameObjectsParent = null;
 
+    [SerializeField]
+    internal CanvasScaler _canvasScaler = null;
+
+    internal int _animationIndex = 0;
     internal int _tutorialIndex = 0;
     internal Level _level;
     #endregion Fields, Properties (end)
 
     #region Methods
-    public abstract void Setup(Level level);
+    public abstract void Setup(Level level, CanvasScaler canvasScaler);
     public abstract void InitializeTutorial(int index);
     public abstract void OnFingerAnimationEnd(int index);
     public abstract void TutorialAnimationEnd(int index);
+
+    internal abstract void MoveFingerEnd();
 
     internal abstract void HandleTutorialStateByIndex(int index);
     virtual public void OnCloseClicked()
@@ -94,6 +110,34 @@ public abstract class TutorialResolverBase : MonoBehaviour
         if (index > _tutorialTexts.Count() - 1)
             index = _tutorialTexts.Count() - 1;
         return index;
+    }
+
+    internal IEnumerator AnimateObject(RectTransform objectToMove, Vector3 startLocation, Vector3 endlocation, Action callback, bool useLocalPosition = false)
+    {
+        var reached = false;
+        while (!reached)
+        {
+            startLocation = Vector2.Lerp(startLocation, endlocation, _speed * Time.deltaTime);
+            if (useLocalPosition)
+                objectToMove.localPosition = startLocation;
+            else
+                objectToMove.position = startLocation;
+            reached = (Mathf.Round(startLocation.x) == Mathf.Round(endlocation.x)) && (Mathf.Round(startLocation.y) == Mathf.Round(endlocation.y));
+            yield return reached;
+        }
+
+        callback?.Invoke();
+    }
+
+    internal void MoveFinger(int index, Vector3 startPosition, Vector3 endPosition, bool useLocalPosition)
+    {
+        _animationIndex = index;
+        StartCoroutine(AnimateObject(_fingerTransform, startPosition, endPosition, MoveFingerEnd, useLocalPosition));
+    }
+
+    internal void ResetFingerLocation()
+    {
+        _fingerTransform.position = _fingerLocations[0];
     }
     #endregion Methods (end)
 }

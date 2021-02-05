@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 public class PassThrough : PowerableBase
 {
     #region Fields, Properties
@@ -21,21 +20,12 @@ public class PassThrough : PowerableBase
     [SerializeField]
     private List<PowerSource> _powerSources = null;
     
-    [SerializeField] //DEPRECATED - Used for prototype visuals. Displayed colors the user chose.
-    private List<Image> _passThroughColors = null;
-
     [SerializeField]
     private List<Wire> _wires = null;
 
     [SerializeField]
-    private List<Junction> _junctions = null;
-
-    [SerializeField]
     private bool _isClickable = true;
     public override bool IsClickable { get { return _isClickable; } }
-
-    [Space(8),SerializeField, ReadOnly(true)]//DEPRECATED, place bulbs in _powerSources.
-    private List<PowerSource> _poweredBulbs = null;
 
     #endregion Populated in Scene (end)
 
@@ -262,8 +252,8 @@ public class PassThrough : PowerableBase
 
     public override List<Power> GetPowers(PowerableBase requestor)
     {
-        CheckPoweredState(requestor);
-        if (_isPowered)
+        //CheckPoweredState(requestor);
+        if (GetPoweredState(requestor))
             return GetPoweredColors(requestor);
         else
             return _emptyPower;
@@ -292,7 +282,7 @@ public class PassThrough : PowerableBase
             foreach (var color in power.ColorTypes)
             {
                 //Pass all colors that we don't block
-                if (_userSetColorTypes.Contains(color))
+                if (UserSetColorTypes.Contains(color))
                 {
                     passingColors.Add(color);
                 }
@@ -310,7 +300,8 @@ public class PassThrough : PowerableBase
     /// <param name="powerableBase"></param>
     public override void UpdatePowerState(PowerableBase powerableBase)
     {
-        CheckPoweredState(powerableBase);
+        //CheckPoweredState(powerableBase);
+        
         _currentColorTypes.Clear();
         foreach(var source in _powerSources)
         {
@@ -318,7 +309,7 @@ public class PassThrough : PowerableBase
                 continue;
             foreach(var color in source.Powerable.CurrentColorTypes)
             {
-                if (_userSetColorTypes.Contains(color))
+                if (source.Powerable.IsPowered && UserSetColorTypes.Contains(color))
                 {
                     _currentColorTypes.Add(color);
                 }
@@ -326,12 +317,12 @@ public class PassThrough : PowerableBase
         }
 
         UpdateColorDisplay();
-
+        var direction = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
         //Some source has updated we need to update all the sources that we power
         // We don't need to update the source that is telling us to update.
         foreach (var source in _powerSources)
         {
-            if (source.Powerable == powerableBase) //skip the guy who is telling us to update
+            if (source.Powerable == powerableBase || source.InputDirection == direction) //skip the guy who is telling us to update
                 continue;            
             source.Powerable.UpdatePowerState(this);
         }
@@ -339,20 +330,7 @@ public class PassThrough : PowerableBase
         foreach (var wire in _wires)
         {
             wire.UpdatePowerState(this);
-        }
-
-        //foreach (var junction in _junctions)
-        //{
-        //    junction.UpdatePowerState(this);
-        //}
-
-        //var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
-
-        //foreach (var bulb in _poweredBulbs)
-        //{
-        //    if(inputDirection != bulb.InputDirection)
-        //        bulb.Powerable.UpdatePowerState(this);
-        //}
+        }        
     }
 
     public void SetSelectedState(bool selected)
@@ -362,7 +340,7 @@ public class PassThrough : PowerableBase
 
     private void CheckPoweredState(PowerableBase powerableBase)
     {
-        var isPowered = (powerableBase != null && powerableBase.GetType() == typeof(Battery)) ? powerableBase.GetPoweredState(this) : false;
+        var isPowered = (powerableBase != null && powerableBase.GetType() == typeof(Battery)) && powerableBase.GetPoweredState(this);
         var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
         foreach (var source in _powerSources)
         {

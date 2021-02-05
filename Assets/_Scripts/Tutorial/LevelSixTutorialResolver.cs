@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelSixTutorialResolver : TutorialResolverBase
 {
     #region Fields, Properties
     [SerializeField]
+    private Transform _battery1Location = null;
+
+    [SerializeField]
     private Animator _battery1Animator = null;
-    
+
+    [SerializeField]
+    private Transform _battery2Location = null;
+
     [SerializeField]
     private Animator _battery2Animator = null;
 
@@ -38,11 +45,13 @@ public class LevelSixTutorialResolver : TutorialResolverBase
     #endregion Fields, Properties (end)
 
     #region Methods
-    public override void Setup(Level level)
+    public override void Setup(Level level, CanvasScaler canvasScaler)
     {
         _level = level;
+        _fingerLocations[1] = _level.LevelManager.MainCamera.WorldToScreenPoint(_battery1Location.position);
+        _fingerLocations[3] = _level.LevelManager.MainCamera.WorldToScreenPoint(_battery2Location.position);
     }
-    
+
     public override void OnCloseClicked()
     {
         _battery1Animator.SetTrigger("Reset");
@@ -78,6 +87,7 @@ public class LevelSixTutorialResolver : TutorialResolverBase
         index = ValidateIndexValue(index);
         SetTutorialTextState(index);
         HandleTutorialStateByIndex(index);
+        ResetFingerLocation();
     }
     
     public override void TutorialAnimationEnd(int index)
@@ -90,27 +100,51 @@ public class LevelSixTutorialResolver : TutorialResolverBase
         switch (index)
         {
             case 0:
+                ResetFingerLocation();
                 _nextButton.interactable = true;
                 break;
             case 1:
                 _nextButton.interactable = false;
-                _fingerAnimator.SetTrigger("Lvl6_Finger1");
+                MoveFinger(1, _fingerTransform.position, _fingerLocations[1], false);
+                //_fingerAnimator.SetTrigger("Lvl6_Finger1");
                 break;
             case 2:
                 _nextButton.interactable = false;
-                _fingerAnimator.SetTrigger("Lvl6_Finger2");                
+                MoveFinger(2, _fingerTransform.localPosition, _fingerLocations[2], true);
+                //_fingerAnimator.SetTrigger("Lvl6_Finger2");                
                 break;
             case 3:                
                 _nextButton.interactable = false;
-                _fingerAnimator.SetTrigger("Lvl6_Finger3");
+                MoveFinger(3, _fingerTransform.position, _fingerLocations[3], false);
+                //_fingerAnimator.SetTrigger("Lvl6_Finger3");
                 break;
             case 4:                
                 _nextButton.interactable = false;
-                _fingerAnimator.SetTrigger("Lvl6_Finger4");                
+                MoveFinger(4, _fingerTransform.localPosition, _fingerLocations[4], true);
+                //_fingerAnimator.SetTrigger("Lvl6_Finger4");                
                 break;
             default:
                 _nextButton.interactable = true;
                 break;
+        }
+    }
+
+    internal override void MoveFingerEnd()
+    {
+        switch (_animationIndex)
+        {
+            case 1:
+                _fingerAnimator.SetTrigger("Lvl6_Finger1");
+                break;
+            case 2:
+                _fingerAnimator.SetTrigger("Lvl6_Finger2");
+                break;
+            case 3:
+                _fingerAnimator.SetTrigger("Lvl6_Finger3");
+                break;
+            case 4:
+                _fingerAnimator.SetTrigger("Lvl6_Finger4");
+                break;            
         }
     }
 
@@ -165,6 +199,7 @@ public class LevelSixTutorialResolver : TutorialResolverBase
         _doubleColorBulbAnimator.ResetTrigger("RedBlueOn");
         _battery1Animator.Rebind();
         _battery2Animator.Rebind();
+        _animationIndex = 0;
     }
     #endregion Methods (end)
 }

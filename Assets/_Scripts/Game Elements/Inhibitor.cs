@@ -246,9 +246,8 @@ public class Inhibitor : PowerableBase
 
     public override List<Power> GetPowers(PowerableBase requestor)
     {
-        //return GetPoweredColors(requestor);
-        CheckPoweredState(requestor);
-        if (_isPowered)
+        //CheckPoweredState(requestor);
+        if (GetPoweredState(requestor))
             return GetPoweredColors(requestor);
         else
             return _emptyPower;
@@ -263,7 +262,7 @@ public class Inhibitor : PowerableBase
 
         foreach (var source in _powerSources)
         {
-            if (source.Powerable == requestor)
+            if (source == null || source.Powerable == null || source.Powerable == requestor)
                 continue;
             if (source.Powerable.GetPoweredState(this) && source.InputDirection != direction)
             {
@@ -291,14 +290,16 @@ public class Inhibitor : PowerableBase
     
     public override void UpdatePowerState(PowerableBase powerableBase)
     {
-        CheckPoweredState(powerableBase);
+        //CheckPoweredState(powerableBase);
         //Update our current Color types
         _power.ColorTypes.Clear();
         foreach (var source in _powerSources)
         {
+            if (source.Powerable == null)
+                continue;
             foreach (var color in source.Powerable.CurrentColorTypes)
             {
-                if (!UserSetColorTypes.Contains(color))
+                if (source.Powerable.IsPowered && !UserSetColorTypes.Contains(color))
                 {
                     _power.ColorTypes.Add(color);
                 }
@@ -306,12 +307,12 @@ public class Inhibitor : PowerableBase
         }
 
         UpdateColorDisplay();
-
+        var direction = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
         //Some source has updated we need to update all the sources that we power
         // We don't need to update the source that is telling us to update.
         foreach (var source in _powerSources)
         {
-            if (source.Powerable == powerableBase) //skip the guy who is telling us to update
+            if (source.Powerable == powerableBase || source.InputDirection == direction) //skip the guy who is telling us to update
                 continue;
             source.Powerable.UpdatePowerState(this);
         }
@@ -320,20 +321,16 @@ public class Inhibitor : PowerableBase
         {
             wire.UpdatePowerState(this);
         }
-
-        //May use these for sparking particle effects
-        //foreach (var junction in _junctions)
-        //{
-        //    junction.UpdatePowerState(this);
-        //}
-
-        //var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
-        
     }
     
+    /// <summary>
+    /// DEPRECATED - This code is very similar to the GetPoweredState method. 
+    /// It seems to have a flaw so should be removed.
+    /// </summary>
+    /// <param name="powerableBase"></param>
     private void CheckPoweredState(PowerableBase powerableBase)
     {
-        var isPowered = powerableBase.GetType() == typeof(Battery) ? powerableBase.GetPoweredState(this):  false;
+        var isPowered = powerableBase.GetType() == typeof(Battery) ? powerableBase.GetPoweredState(this): false;
         var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
         foreach (var source in _powerSources)
         {

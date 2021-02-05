@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Red Glow Material - Pass Through
+  m_Name: Yellow Glow Material - Pass Through
   m_Shader: {fileID: -6465566751694194690, guid: ece2955a232540a43a8c271cf644a238,
     type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
@@ -31,3 +31,4 @@ Material:
     m_Floats: []
     m_Colors:
     - Color_1B3E6E2A: {r: 0.6759569, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []

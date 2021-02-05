@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelTwentySixTutorialResolver : TutorialResolverBase
 {
@@ -41,9 +42,10 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
     #endregion Fields, Properties (end)
 
     #region Methods
-    public override void Setup(Level level)
+    public override void Setup(Level level, CanvasScaler canvasScaler)
     {
         _level = level;
+        //_canvasScaler.referenceResolution = canvasScaler.referenceResolution;
     }
 
     public override void OnCloseClicked()
@@ -167,6 +169,19 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
                 _nextButton.gameObject.SetActive(false);
                 break;            
         }        
+    }
+
+    internal override void MoveFingerEnd()
+    {
+        switch (_animationIndex)
+        {
+            case 1:
+                _fingerAnimator.SetTrigger("Lvl1_Finger1");
+                break;
+            case 2:
+                _fingerAnimator.SetTrigger("Lvl1_Finger2");
+                break;
+        }
     }
 
     private void ResetTriggers()

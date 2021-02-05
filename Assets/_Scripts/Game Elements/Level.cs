@@ -55,7 +55,8 @@ public class Level : MonoBehaviour
     private bool _isActive = false;
     public bool IsActive { get { return _isActive; } }
 
-    private LevelManager _levelManger = null;
+    private LevelManager _levelManager = null;
+    public LevelManager LevelManager { get { return _levelManager; } }
 
     private bool _canPlay = false;
     private bool _hasWon = false;
@@ -148,12 +149,12 @@ public class Level : MonoBehaviour
 
         if (_hasTutorial)
         {
-            _tutorialResolver.Setup(this);
+            _tutorialResolver.Setup(this, _levelManager.MainCanvasScaler);
             //_tutorialObjectsParent.SetActive(true);
             //_gameObjectsParent.SetActive(false);
             //InitializeTutorial(0);
         }
-        _levelManger.SetLevelMusic(_levelMusic);
+        _levelManager.SetLevelMusic(_levelMusic);
     }
 
     private void LateUpdate()
@@ -166,7 +167,7 @@ public class Level : MonoBehaviour
 
     public void Setup(LevelManager levelManager)
     {
-        _levelManger = levelManager;        
+        _levelManager = levelManager;        
     }
 
     public void RestartLevel()
@@ -178,7 +179,7 @@ public class Level : MonoBehaviour
         _passThroughs.ForEach(p => p.ResetPowerable());
         _batteries.ForEach(p => p.ResetPowerable());
         _batteries.ForEach(p => p.ResetPower());
-        _levelManger.ResetVictoryState();
+        _levelManager.ResetVictoryState();
         _canPlay = true;
         _hasWon = false;
     }
@@ -188,7 +189,7 @@ public class Level : MonoBehaviour
         _isActive = isActive;
         gameObject.SetActive(_isActive);
         if(_isActive)
-            _levelManger?.SetLevelDisplay(_levelNumber);
+            _levelManager?.SetLevelDisplay(_levelNumber);
     }
 
     private void Battery_OnClick(Battery battery)
@@ -199,9 +200,9 @@ public class Level : MonoBehaviour
                 b.SetSelectedState(false);
             }
         });
-        _levelManger.BatteryOptionsManager.Setup(battery, _allBatteryColorsAvailable);
-        _levelManger.InhibitorOptionsManager.AnimateOptionPanel(true);
-        _levelManger.PassThroughOptionsManager.AnimateOptionPanel(true);
+        _levelManager.BatteryOptionsManager.Setup(battery, _allBatteryColorsAvailable);
+        _levelManager.InhibitorOptionsManager.AnimateOptionPanel(true);
+        _levelManager.PassThroughOptionsManager.AnimateOptionPanel(true);
     }
 
     private void PassThrough_OnClick(PassThrough passThrough)
@@ -212,9 +213,9 @@ public class Level : MonoBehaviour
                 p.SetSelectedState(false);
             }
         });
-        _levelManger.PassThroughOptionsManager.Setup(passThrough);
-        _levelManger.BatteryOptionsManager.AnimateOptionPanel(true);
-        _levelManger.InhibitorOptionsManager.AnimateOptionPanel(true);
+        _levelManager.PassThroughOptionsManager.Setup(passThrough);
+        _levelManager.BatteryOptionsManager.AnimateOptionPanel(true);
+        _levelManager.InhibitorOptionsManager.AnimateOptionPanel(true);
     }
 
     private void Inhibitor_OnClick(Inhibitor inhibitor)
@@ -225,29 +226,29 @@ public class Level : MonoBehaviour
                 i.SetSelectedState(false);
             }
         });
-        _levelManger.InhibitorOptionsManager.Setup(inhibitor);
-        _levelManger.BatteryOptionsManager.AnimateOptionPanel(true);
-        _levelManger.PassThroughOptionsManager.AnimateOptionPanel(true);
+        _levelManager.InhibitorOptionsManager.Setup(inhibitor);
+        _levelManager.BatteryOptionsManager.AnimateOptionPanel(true);
+        _levelManager.PassThroughOptionsManager.AnimateOptionPanel(true);
     }
 
     private void CheckWinCondition()
     {
-        if (_bulbs == null || _levelManger == null)
+        if (_bulbs == null || _levelManager == null)
             return;
         if(_bulbs.All(b => b.IsOn))
         {
-            _levelManger.SetVictoryState(true, this);
-            _levelManger.InhibitorOptionsManager.ResetOptions();
-            _levelManger.BatteryOptionsManager.ResetOptions();
-            _levelManger.PassThroughOptionsManager.ResetOptions();
+            _levelManager.SetVictoryState(true, this);
+            _levelManager.InhibitorOptionsManager.ResetOptions();
+            _levelManager.BatteryOptionsManager.ResetOptions();
+            _levelManager.PassThroughOptionsManager.ResetOptions();
             _canPlay = false;
         }
         else if(_bulbs.Any(b => b.IsBroken))
         {
-            _levelManger.SetVictoryState(false, this);
-            _levelManger.InhibitorOptionsManager.ResetOptions();
-            _levelManger.BatteryOptionsManager.ResetOptions();
-            _levelManger.PassThroughOptionsManager.ResetOptions();
+            _levelManager.SetVictoryState(false, this);
+            _levelManager.InhibitorOptionsManager.ResetOptions();
+            _levelManager.BatteryOptionsManager.ResetOptions();
+            _levelManager.PassThroughOptionsManager.ResetOptions();
             _hasWon = false;
             _canPlay = false;
         }
@@ -334,17 +335,17 @@ public class Level : MonoBehaviour
         //_nextButton.interactable = true;
         //_tutorialIndex++;
         //InitializeTutorial(_tutorialIndex);
-        _levelManger.TriggerAnimation(_levelNumber, index);
+        _levelManager.TriggerAnimation(_levelNumber, index);
     }
 
     internal void OnTutorialResolverCloseClicked()
     {
-        _levelManger.OnTutorialComplete(this);
+        _levelManager.OnTutorialComplete(this);
     }
 
     internal void OnTutorialResolvedSkipClosed()
     {
-        _levelManger.OnTutorialComplete(this);
+        _levelManager.OnTutorialComplete(this);
     }
     #endregion Tutorial (end)
     #endregion Methods (end)
