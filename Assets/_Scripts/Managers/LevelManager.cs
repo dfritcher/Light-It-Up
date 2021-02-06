@@ -570,6 +570,9 @@ public class LevelManager : MonoBehaviour
     #region Tutorial
     public void PlayTutorialClicked()
     {
+        _batteryOptionsManager.ResetOptions();
+        _inhibitorOptionsManager.ResetOptions();
+        _passThroughOptionsManager.ResetOptions();
         SetOverlayState(false);
         _levels.Find(l => l.IsActive).PlayTutorial();
     }

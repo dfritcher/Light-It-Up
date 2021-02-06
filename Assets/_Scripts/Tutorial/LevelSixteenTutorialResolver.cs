@@ -208,25 +208,25 @@ public class LevelSixteenTutorialResolver : TutorialResolverBase
         switch (_animationIndex)
         {
             case 1:
-                _fingerAnimator.SetTrigger("Lvl11_Finger1");
+                _fingerAnimator.SetTrigger("Lvl16_Finger1");
                 break;
             case 2:
-                _fingerAnimator.SetTrigger("Lvl11_Finger2");
+                _fingerAnimator.SetTrigger("Lvl16_Finger2");
                 break;
             case 3:
-                _fingerAnimator.SetTrigger("Lvl11_Finger3");
+                _fingerAnimator.SetTrigger("Lvl16_Finger3");
                 break;
             case 4:
-                _fingerAnimator.SetTrigger("Lvl11_Finger4");
+                _fingerAnimator.SetTrigger("Lvl16_Finger4");
                 break;
             case 5:
-                _fingerAnimator.SetTrigger("Lvl11_Finger5");
+                _fingerAnimator.SetTrigger("Lvl16_Finger5");
                 break;
             case 6:
-                _fingerAnimator.SetTrigger("Lvl11_Finger6");
+                _fingerAnimator.SetTrigger("Lvl16_Finger6");
                 break;
             case 7:
-                _fingerAnimator.SetTrigger("Lvl11_Finger7");
+                _fingerAnimator.SetTrigger("Lvl16_Finger7");
                 break;
         }
     }

@@ -1,11 +1,12 @@
-﻿using System;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelTwentySixTutorialResolver : TutorialResolverBase
 {
     #region Fields, Properties
+    [SerializeField]
+    private Transform _battery1Location = null;
+
     [SerializeField]
     private Battery _battery1 = null;
 
@@ -45,7 +46,8 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
     public override void Setup(Level level, CanvasScaler canvasScaler)
     {
         _level = level;
-        //_canvasScaler.referenceResolution = canvasScaler.referenceResolution;
+        _fingerLocations[1] = _level.LevelManager.MainCamera.WorldToScreenPoint(_battery1Location.position);
+        _fingerLocations[3] = _level.LevelManager.MainCamera.WorldToScreenPoint(new Vector3(_battery1Location.position.x + .8f, _battery1Location.position.y, _battery1Location.position.z));
     }
 
     public override void OnCloseClicked()
@@ -100,15 +102,15 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
                 break;
             case 1:
                 _nextButton.interactable = false;
-                _fingerAnimator.SetTrigger("Lvl26_Finger1");
+                MoveFinger(1, _fingerTransform.position, _fingerLocations[1], false);
                 break;
             case 2:
                 _nextButton.interactable = false;
-                _fingerAnimator.SetTrigger("Lvl26_Finger2");                
+                MoveFinger(2, _fingerTransform.localPosition, _fingerLocations[2], true);
                 break;
             case 3:                
                 _nextButton.interactable = false;
-                _fingerAnimator.SetTrigger("Lvl26_Finger3");
+                MoveFinger(3, _fingerTransform.position, _fingerLocations[3], false);
                 break;
             //case 4:                
             //    _nextButton.interactable = false;
@@ -176,10 +178,25 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
         switch (_animationIndex)
         {
             case 1:
-                _fingerAnimator.SetTrigger("Lvl1_Finger1");
+                _fingerAnimator.SetTrigger("Lvl26_Finger1");
                 break;
             case 2:
-                _fingerAnimator.SetTrigger("Lvl1_Finger2");
+                _fingerAnimator.SetTrigger("Lvl26_Finger2");
+                break;
+            case 3:
+                _fingerAnimator.SetTrigger("Lvl26_Finger3");
+                break;
+            case 4:
+                _fingerAnimator.SetTrigger("Lvl26_Finger4");
+                break;
+            case 5:
+                _fingerAnimator.SetTrigger("Lvl26_Finger5");
+                break;
+            case 6:
+                _fingerAnimator.SetTrigger("Lvl26_Finger6");
+                break;
+            case 7:
+                _fingerAnimator.SetTrigger("Lvl26_Finger7");
                 break;
         }
     }
