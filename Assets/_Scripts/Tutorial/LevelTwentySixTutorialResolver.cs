@@ -94,7 +94,6 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
 
     internal override void HandleTutorialStateByIndex(int index)
     {
-        Debug.Log($"Handle Tutorial Index :{index}");
         switch (index)
         {
             case 0:

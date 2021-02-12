@@ -309,7 +309,7 @@ public class LevelManager : MonoBehaviour
         var index = _levels.IndexOf(_levels.Find(l => l.IsActive));
         if (index == -1)
             index = 0;
-
+        SetActionMenuButtonsState();
         DisableLevel(index);
         InitializeLevel(_currentLevel.LevelNumber - 1);
         BatteryOptionsManager.Initialize();
@@ -370,6 +370,7 @@ public class LevelManager : MonoBehaviour
 
         DisableLevel(index);
         InitializeLevel(index + 1);
+        
     }
 
     private void DisableLevel(int index)
@@ -385,8 +386,9 @@ public class LevelManager : MonoBehaviour
             index = 0;
         else
         {
-            _levels[index].SetActiveState(true);
-            _levels[index].Setup(this);
+            _currentLevel = _levels[index];
+            _currentLevel.SetActiveState(true);
+            _currentLevel.Setup(this);
         }
 
         if (_levels[index].HasTutorial)
@@ -402,7 +404,7 @@ public class LevelManager : MonoBehaviour
         {
             _tutorialButton.gameObject.SetActive(false);
             SetOverlayState(true);
-        }
+        }        
     }
 
     private void InitializeLevelSelectScreen()
