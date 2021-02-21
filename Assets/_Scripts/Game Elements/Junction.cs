@@ -107,7 +107,7 @@ public class Junction : PowerableBase
         UpdateColorDisplay();
     }
 
-    public override void UpdatePowerState(PowerableBase powerableBase)
+    public override void GetBatteryPowerState(PowerableBase powerableBase)
     {
         ResetPowerable();
         SetCurrentPower();
@@ -138,5 +138,15 @@ public class Junction : PowerableBase
     public override bool GetPoweredState(PowerableBase requestor)
     {
         return _currentColorTypes.Count > 0;
+    }
+
+    public override void SetPowerStateOff(PowerableBase requestor)
+    {
+        
+    }
+
+    public override void DetermineNewPowerState(PowerableBase powerableBase)
+    {
+        
     }
 }

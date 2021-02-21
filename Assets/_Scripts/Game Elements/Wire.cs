@@ -42,40 +42,6 @@ public class Wire : PowerableBase
         
     }
 
-    //private void GetCurrentPower()
-    //{
-    //    foreach (var powerable in _powerables)
-    //    {
-    //        var currentPower = powerable.GetPowers(null);
-    //        foreach (var power in currentPower)
-    //        {
-    //            if (CurrentColorTypes.Contains(power))
-    //            {
-    //                _wireColors[GetIndexFromPower(power)].gameObject.SetActive(true);
-    //            }
-    //        }
-    //    }
-
-    //    _wireColors[0].gameObject.SetActive(!_wireColors[1].IsActive() && !_wireColors[2].IsActive() && !_wireColors[3].IsActive());
-    //}
-
-    //private int GetIndexFromPower(ColorType power)
-    //{
-    //    switch (power)
-    //    {
-    //        case ColorType.None:
-    //            return 0;
-    //        case ColorType.Red:
-    //            return 1;
-    //        case ColorType.Green:
-    //            return 2;            
-    //        case ColorType.Blue:
-    //            return 3;
-    //        default:
-    //            return 0;
-    //    }
-    //}
-
     private void UpdateColorDisplay()
     {
         _red.SetActive(CurrentColorTypes.Contains(ColorType.Red));
@@ -98,7 +64,7 @@ public class Wire : PowerableBase
         UpdateColorDisplay();
     }
 
-    public override void UpdatePowerState(PowerableBase powerableBase)
+    public override void GetBatteryPowerState(PowerableBase powerableBase)
     {
         ResetPowerable();
         SetCurrentPower();
@@ -143,6 +109,16 @@ public class Wire : PowerableBase
     public override bool GetPoweredState(PowerableBase requestor)
     {
         return _currentColorTypes.Count > 0;
+    }
+
+    public override void SetPowerStateOff(PowerableBase requestor)
+    {
+        //Do Nothing
+    }
+
+    public override void DetermineNewPowerState(PowerableBase powerableBase)
+    {
+        
     }
     #endregion Methods (end)
 }

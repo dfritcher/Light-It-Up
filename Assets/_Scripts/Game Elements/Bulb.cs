@@ -186,7 +186,7 @@ public class Bulb : PowerableBase
         UpdateUI();
     }
 
-    public override void UpdatePowerState(PowerableBase powerableBase)
+    public override void GetBatteryPowerState(PowerableBase powerableBase)
     {
         ResetPowerable();
         SetCurrentPower();
@@ -540,6 +540,16 @@ public class Bulb : PowerableBase
         }
         
         return materials;
+        
+    }
+
+    public override void SetPowerStateOff(PowerableBase requestor)
+    {
+        //Do Nothing
+    }
+
+    public override void DetermineNewPowerState(PowerableBase powerableBase)
+    {
         
     }
     #endregion Private Methods (end)

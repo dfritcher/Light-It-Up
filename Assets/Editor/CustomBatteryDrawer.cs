@@ -64,6 +64,8 @@ public class CustomBatteryDrawer : Editor
 
     private void UpdateEditorDisplay()
     {
+        if (Application.isPlaying)
+            return;
         _lockedIcon.gameObject?.SetActive(!_isClickable);
         _increasePower?.gameObject?.SetActive(_hasVariablePower);
         _decreasePower?.gameObject?.SetActive(_hasVariablePower);

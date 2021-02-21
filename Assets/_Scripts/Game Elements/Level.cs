@@ -21,9 +21,6 @@ public class Level : MonoBehaviour
     private List<Wire> _wires = null;
 
     [SerializeField]
-    private List<Junction> _junctions = null;
-
-    [SerializeField]
     private List<Inhibitor> _inhibitors = null;
     public bool HasInhibitors { get { return _inhibitors.Count > 0; } }
 
@@ -113,7 +110,6 @@ public class Level : MonoBehaviour
         _batteries = _gameObjectsParent.transform.GetComponentsInChildren<Battery>(true).ToList();
         _bulbs = _gameObjectsParent.transform.GetComponentsInChildren<Bulb>(true).ToList();
         _wires = _gameObjectsParent.transform.GetComponentsInChildren<Wire>(true).ToList();
-        _junctions = _gameObjectsParent.transform.GetComponentsInChildren<Junction>(true).ToList();
         _inhibitors = _gameObjectsParent.transform.GetComponentsInChildren<Inhibitor>(true).ToList();
         _passThroughs = _gameObjectsParent.transform.GetComponentsInChildren<PassThrough>(true).ToList();
     }
@@ -126,10 +122,6 @@ public class Level : MonoBehaviour
         foreach (var wire in _wires)
         {
             wire.Setup();
-        }
-        foreach(var junction in _junctions)
-        {
-            junction.Setup();
         }
         foreach(var inhibitor in _inhibitors)
         {
@@ -174,7 +166,6 @@ public class Level : MonoBehaviour
     {
         _bulbs.ForEach(b => b.ResetPowerable());
         _wires.ForEach(w => w.ResetPowerable());
-        _junctions.ForEach(j => j.ResetPowerable());
         _inhibitors.ForEach(i => i.ResetPowerable());
         _passThroughs.ForEach(p => p.ResetPowerable());
         _batteries.ForEach(p => p.ResetPowerable());

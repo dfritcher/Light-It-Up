@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -18,9 +19,6 @@ public class Battery : PowerableBase
 
     [SerializeField]
     private List<Wire> _wires = null;
-
-    [SerializeField]
-    private List<Junction> _junctions = null;
 
     [SerializeField]
     private List<Bulb> _bulbs = null;
@@ -217,10 +215,20 @@ public class Battery : PowerableBase
     /// <param name="colorTypes"></param>
     public void SetBatteryTypes(List<ColorType> colorTypes, bool playAudio = true)
     {
+        StopAllCoroutines();
+        StartCoroutine(SetBatteryTypesCoroutine(colorTypes, playAudio));
+    }
+
+    private IEnumerator SetBatteryTypesCoroutine(List<ColorType> colorTypes, bool playAudio = true)
+    {
         _power.ColorTypes = colorTypes;
+        yield return null;
         UpdateColorDisplay();
+        yield return null;
+        
         UpdatePoweredObjects();
-        if(playAudio)
+        yield return null;
+        if (playAudio)
             PlayAudio();
     }
 
@@ -238,35 +246,18 @@ public class Battery : PowerableBase
 
     private void UpdatePoweredObjects()
     {
-        foreach (var powerable in _objectsWePower)
-        {
-            powerable.UpdatePowerState(this);
-        }
-
-        foreach (var wire in _wires)
-        {
-            wire.UpdatePowerState(this);
-        }
-
-        foreach (var junction in _junctions)
-        {
-            junction.UpdatePowerState(this);
-        }
-
-        foreach (var bulb in _bulbs)
-        {
-            bulb.UpdatePowerState(this);
-        }
+        _objectsWePower.ForEach(p => p.SetPowerStateOff(this));
+        _objectsWePower.ForEach(p => p.GetBatteryPowerState(this));
+        _objectsWePower.ForEach(p => p.DetermineNewPowerState(this));
+        _wires.ForEach(w => w.GetBatteryPowerState(this));
+        _bulbs.ForEach(b => b.GetBatteryPowerState(this));        
     }
 
     private void UpdateColorDisplay()
     {
         _redSection.SetActive(CurrentColorTypes.Contains(ColorType.Red));
         _greenSection.SetActive(CurrentColorTypes.Contains(ColorType.Green));
-        _blueSection.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
-        //_batteryColors[0].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Red));
-        //_batteryColors[1].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Green));
-        //_batteryColors[2].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
+        _blueSection.SetActive(CurrentColorTypes.Contains(ColorType.Blue));        
     }
 
     /// <summary>
@@ -280,19 +271,29 @@ public class Battery : PowerableBase
         return new List<Power>() { _power };
     }
 
-    public override void UpdatePowerState(PowerableBase powerableBase)
+    public override void GetBatteryPowerState(PowerableBase powerableBase)
     {
         //Do nothing
     }
    
     public override bool GetPoweredState(PowerableBase requestor)
-    {
+    {        
         return _power.ColorTypes.Any(c => c != ColorType.None);
     }
 
+    public override void SetPowerStateOff(PowerableBase requestor)
+    {
+        //Do Nothing.
+    }
     public void SetSelectedState(bool selected)
     {
         _selectedSprite.gameObject.SetActive(selected);
     }
-#endregion Methods (end)
+
+    public override void DetermineNewPowerState(PowerableBase powerableBase)
+    {
+        
+    }
+
+    #endregion Methods (end)
 }
