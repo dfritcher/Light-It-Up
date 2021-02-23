@@ -47,7 +47,11 @@ public class Inhibitor : PowerableBase
 
     private List<Power> _emptyPower = new List<Power>();
 
-    private bool _poweredByBattery = false;
+    private bool _poweredBySource = false;
+    private bool _previousPowerState = false;
+    private bool _currentPowerState = false;    
+
+    private PowerableBase _triggeringComponent = null;
     #endregion Populated by Code (end)
 
     #region Populated By Prefab
@@ -117,7 +121,7 @@ public class Inhibitor : PowerableBase
 
     private void Start()
     {
-        GetPoweredState(null);
+        //GetPoweredState(null);
         UpdateColorDisplay();
     }
     private void Update()
@@ -153,7 +157,6 @@ public class Inhibitor : PowerableBase
     {
         var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
         GetPeerPower(powerableBase, inputDirection);
-        //RetrievePowerColorInfo(powerableBase);
         UpdateBulbs();
         UpdateColorDisplay();
         UpdateWires();
@@ -161,7 +164,6 @@ public class Inhibitor : PowerableBase
 
     public override List<Power> GetPowers(PowerableBase requestor)
     {
-        //if (GetPoweredState(requestor))
         if(IsPowered)
             return GetPoweredColors(requestor);
         else
@@ -170,16 +172,17 @@ public class Inhibitor : PowerableBase
 
     public override bool GetPoweredState(PowerableBase requestor)
     {
-        var inputDirection = _powerSources.Find(ps => ps.Powerable == requestor)?.InputDirection;
-        var newPoweredState = false;        
-        foreach (var source in _powerSources)
-        {
-            if (source.InputDirection != inputDirection && !(source.Powerable is Bulb))
-                newPoweredState = source.Powerable.GetPoweredState(this);
-            if (newPoweredState)
-                break;
-        }
-        return newPoweredState;        
+        //var inputDirection = _powerSources.Find(ps => ps.Powerable == requestor)?.InputDirection;
+        //var newPoweredState = false;        
+        //foreach (var source in _powerSources)
+        //{
+        //    if (source.InputDirection != inputDirection && !(source.Powerable is Bulb))
+        //        newPoweredState = source.Powerable.GetPoweredState(this);
+        //    if (newPoweredState)
+        //        break;
+        //}
+        //return newPoweredState;        
+        return _isPowered;
     }
 
     public override void ResetPowerable()
@@ -203,13 +206,13 @@ public class Inhibitor : PowerableBase
 
     public override void GetBatteryPowerState(PowerableBase powerableBase)
     {
+        _triggeringComponent = powerableBase;
         StartCoroutine(GetBatteryPowerStateCoroutine(powerableBase));
     }
 
     private IEnumerator GetBatteryPowerStateCoroutine(PowerableBase powerableBase)
     {
-        _power.ColorTypes.Clear();
-        var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
+        var inputDirection = _powerSources.Find(ps => ps.Powerable == _triggeringComponent)?.InputDirection;
         // First wave through
         GetBatteryPowerAndPropagate(powerableBase, inputDirection);
         yield return null;       
@@ -230,37 +233,6 @@ public class Inhibitor : PowerableBase
         }            
     }
 
-    public void PowerStateOLD(PowerableBase powerableBase)
-    {
-        //if (powerableBase is Battery)
-        //{
-        //    var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
-        //    SetNewPoweredState(inputDirection);
-        //    yield return null;
-        //    UpdatePowerSources(powerableBase, inputDirection);
-        //    yield return null;
-        //    RetrievePowerColorInfo(powerableBase);
-        //    yield return null;
-        //}
-        //else if (powerableBase is Inhibitor || powerableBase is PassThrough)
-        //{
-        //    var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
-        //    SetNewPoweredState(inputDirection);
-        //    yield return null;
-        //    UpdatePowerSources(powerableBase, inputDirection);
-        //    yield return null;
-        //    RetrievePowerColorInfo(powerableBase);
-        //}
-        //else if (powerableBase is Bulb)
-        //{
-        //    yield break;
-        //    //var inputDirection = _powerSources.Find(ps => ps.Powerable == powerableBase)?.InputDirection;
-        //    //UpdatePowerSources(powerableBase, inputDirection);
-        //    //SetNewPoweredState();
-        //    //RetrievePowerColorInfo(inputDirection);
-        //}
-    }
-
     public void SetUserSelectedPower(List<ColorType> colorTypes, bool playAudio = true)
     {
         StopAllCoroutines();
@@ -270,7 +242,6 @@ public class Inhibitor : PowerableBase
     private IEnumerator SetUserSelectedPowerCoroutine(List<ColorType> colorTypes, bool playAudio = true)
     {
         _userSetColorTypes = colorTypes;
-        _powerSources.ForEach(ps => ps.Powerable.SetPowerStateOff(this));
         yield return null;
         GetBatteryPowerState(this);
         yield return null;
@@ -299,7 +270,7 @@ public class Inhibitor : PowerableBase
         {
             if (source == null || source.Powerable == null || source.Powerable == requestor || source.Powerable is Bulb)
                 continue;
-            if (source.Powerable.GetPoweredState(this) && source.InputDirection != direction)
+            if (source.Powerable.IsPowered && source.InputDirection != direction)
             {
                 poweredColors.AddRange(source.Powerable.GetPowers(this));
             }
@@ -325,133 +296,125 @@ public class Inhibitor : PowerableBase
 
     private void GetPeerPower(PowerableBase powerableBase, Direction? inputDirection)
     {
-        var initiallyPowered = _poweredByBattery;
-        var secondPowerCheck = false;
-        // Get our powred state from other Inhibitors
+        var newColors = new List<ColorType>();
+        //Get our powered colors from batteries
+        for (int i = 0; i < Batteries.Length; i++)
+        {
+            if (Batteries[i].Powerable.IsPowered && Batteries[i].Powerable.CurrentColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
+            {
+                foreach (var color in Batteries[i].Powerable.CurrentColorTypes)
+                {
+                    if (!UserSetColorTypes.Contains(color))
+                    {
+                        newColors.Add(color);
+                    }
+                }
+            }
+        }
+        // Get our powered colors from other Inhibitors
         for (int i = Inhibitors.Length - 1; i >= 0; i--)
         {
             if (Inhibitors[i].Powerable.IsPowered && Inhibitors[i].Powerable.CurrentColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
             {
-                initiallyPowered = true;
-
                 foreach (var color in Inhibitors[i].Powerable.CurrentColorTypes)
                 {
                     if (!UserSetColorTypes.Contains(color))
                     {
-                        _power.ColorTypes.Add(color);
+                        newColors.Add(color);
                     }
                 }
             }
         }
 
-        // Get our powered state from other Passthroughs
+        // Get our powered colors from other Passthroughs
         for (int i = PassThroughs.Length - 1; i >= 0; i--)
         {
             if (PassThroughs[i].Powerable.IsPowered && PassThroughs[i].Powerable.CurrentColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
             {
-                initiallyPowered = true;
                 foreach (var color in PassThroughs[i].Powerable.CurrentColorTypes)
                 {
                     if (!UserSetColorTypes.Contains(color))
                     {
-                        _power.ColorTypes.Add(color);
+                        newColors.Add(color);
                     }
                 }
             }
         }
 
-        // Tell all Inhibitors to get their power state from peers
-        for (int i = 0; i < Inhibitors.Length; i++)
+        if (_previousPowerState != _currentPowerState || newColors.Except(_power.ColorTypes).Any())
         {
-            if (Inhibitors[i].Powerable == powerableBase || Inhibitors[i].InputDirection == inputDirection) //skip the guy who is telling us to update
-                continue;
-            Inhibitors[i].Powerable.DetermineNewPowerState(this);
-        }
-
-        // Tell all PassThroughs to get their power state from peers
-        for (int i = 0; i < PassThroughs.Length; i++)
-        {
-            if (PassThroughs[i].Powerable == powerableBase || PassThroughs[i].InputDirection == inputDirection) //skip the guy who is telling us to update
-                continue;
-            PassThroughs[i].Powerable.DetermineNewPowerState(this);
-        }
-        // Get our powred state from other Inhibitors
-        for (int i = Inhibitors.Length - 1; i >= 0; i--)
-        {
-            if (Inhibitors[i].Powerable.IsPowered && Inhibitors[i].Powerable.CurrentColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
+            _power.ColorTypes.Clear();
+            _power.ColorTypes.AddRange(newColors);
+            // if our power state changed after initial check, tell everyone to check again.
+            GetBatteryPowerState(this);
+            // Tell all Inhibitors to get their power state from peers
+            for (int i = 0; i < Inhibitors.Length; i++)
             {
-                secondPowerCheck = true;
-
-                foreach (var color in Inhibitors[i].Powerable.CurrentColorTypes)
-                {
-                    if (!UserSetColorTypes.Contains(color))
-                    {
-                        _power.ColorTypes.Add(color);
-                    }
-                }
+                if (Inhibitors[i].Powerable == powerableBase || Inhibitors[i].InputDirection == inputDirection) //skip the guy who is telling us to update
+                    continue;
+                Inhibitors[i].Powerable.DetermineNewPowerState(this);
             }
-        }
 
-        // Get our powered state from other Passthroughs
-        for (int i = PassThroughs.Length - 1; i >= 0; i--)
-        {
-            if (PassThroughs[i].Powerable.IsPowered && PassThroughs[i].Powerable.CurrentColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
+            // Tell all PassThroughs to get their power state from peers
+            for (int i = 0; i < PassThroughs.Length; i++)
             {
-                secondPowerCheck = true;
-                foreach (var color in PassThroughs[i].Powerable.CurrentColorTypes)
-                {
-                    if (!UserSetColorTypes.Contains(color))
-                    {
-                        _power.ColorTypes.Add(color);
-                    }
-                }
+                if (PassThroughs[i].Powerable == powerableBase || PassThroughs[i].InputDirection == inputDirection) //skip the guy who is telling us to update
+                    continue;
+                PassThroughs[i].Powerable.DetermineNewPowerState(this);
             }
-        }
-        if(initiallyPowered)
-        {
-            _isPowered = secondPowerCheck;
-        }
-        else
-        {
-            _isPowered = initiallyPowered;
-        }
-        if (_poweredByBattery)
-            _isPowered = true;
+        }       
     }
 
     private void GetBatteryPowerAndPropagate(PowerableBase powerableBase, Direction? inputDirection)
     {
+        _previousPowerState = _isPowered;
+        _poweredBySource = false;
         // Get our new powered state from batteries. 
         for (int i = 0; i < Batteries.Length; i++)
         {
             if (Batteries[i].Powerable.IsPowered && Batteries[i].Powerable.CurrentColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
             {
-                _poweredByBattery = true;
-
-                foreach (var color in Batteries[i].Powerable.CurrentColorTypes)
-                {
-                    if (!UserSetColorTypes.Contains(color))
-                    {
-                        _power.ColorTypes.Add(color);
-                    }
-                }
+                _poweredBySource = true;
             }
         }
 
-        // Tell all Inhibitors to check their power state based on batteries
-        for (int i = 0; i < Inhibitors.Length; i++)
+        // Get our powred state from other Inhibitors
+        for (int i = Inhibitors.Length - 1; i >= 0; i--)
         {
-            if (Inhibitors[i].Powerable == powerableBase || Inhibitors[i].InputDirection == inputDirection) //skip the guy who is telling us to update
-                continue;
-            Inhibitors[i].Powerable.GetBatteryPowerState(this);
+            if (Inhibitors[i].Powerable.IsPowered && Inhibitors[i].Powerable.CurrentColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
+            {
+                _poweredBySource = true;               
+            }
         }
 
-        // Tell all PassThroughs to check their power state based on batteries
-        for (int i = 0; i < PassThroughs.Length; i++)
+        // Get our powered state from other Passthroughs
+        for (int i = PassThroughs.Length - 1; i >= 0; i--)
         {
-            if (PassThroughs[i].Powerable == powerableBase || PassThroughs[i].InputDirection == inputDirection) //skip the guy who is telling us to update
-                continue;
-            PassThroughs[i].Powerable.GetBatteryPowerState(this);
+            if (PassThroughs[i].Powerable.IsPowered && PassThroughs[i].Powerable.CurrentColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
+            {
+                _poweredBySource = true;                
+            }
+        }
+
+        _isPowered = _currentPowerState = _poweredBySource;
+
+        if (_previousPowerState != _currentPowerState)
+        {
+            // Tell all Inhibitors to check their power state based on batteries
+            for (int i = 0; i < Inhibitors.Length; i++)
+            {
+                if (Inhibitors[i].Powerable == powerableBase || Inhibitors[i].InputDirection == inputDirection) //skip the guy who is telling us to update
+                    continue;
+                Inhibitors[i].Powerable.GetBatteryPowerState(this);
+            }
+
+            // Tell all PassThroughs to check their power state based on batteries
+            for (int i = 0; i < PassThroughs.Length; i++)
+            {
+                if (PassThroughs[i].Powerable == powerableBase || PassThroughs[i].InputDirection == inputDirection) //skip the guy who is telling us to update
+                    continue;
+                PassThroughs[i].Powerable.GetBatteryPowerState(this);
+            }
         }
     }
 
@@ -465,38 +428,6 @@ public class Inhibitor : PowerableBase
         {
             AudioManager.PlayOneShot(_powerDownClip);
         }
-    }
-
-    private void RetrievePowerColorInfo(PowerableBase powerableBase)
-    {
-        foreach (var source in _powerSources)
-        {
-            foreach (var color in source.Powerable.CurrentColorTypes)
-            {
-                if (!UserSetColorTypes.Contains(color))
-                {
-                    _power.ColorTypes.Add(color);
-                }
-            }
-        }
-    }
-
-    private void SetNewPoweredState(Direction? direction)
-    {
-        bool newPoweredState = false;
-        
-        foreach (var source in _powerSources)
-        {
-            if (source.Powerable is Bulb)
-                continue;
-            newPoweredState = source.Powerable.IsPowered && source.Powerable.CurrentColorTypes.Any(c => !UserSetColorTypes.Contains(c));
-            if (newPoweredState)
-                break;
-        }
-        //if (IsPowered != isPowered)
-        //{
-        //    _isPowered = isPowered;
-        //}
     }
 
     private void UpdateColorDisplay()
