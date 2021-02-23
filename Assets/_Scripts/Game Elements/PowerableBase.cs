@@ -25,7 +25,7 @@ public abstract class PowerableBase : MonoBehaviour
     
     public abstract void GetBatteryPowerState(PowerableBase powerableBase);
 
-    public abstract void DetermineNewPowerState(PowerableBase powerableBase);
+    public abstract void DetermineNewPowerState(PowerableBase powerableBase, bool checkDirection = false);
 
     //Method to determine if a powerableBase object is being powered from the direction other than the direction of the requestor.
     public abstract bool GetPoweredState(PowerableBase requestor);

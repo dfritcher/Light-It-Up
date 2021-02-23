@@ -145,7 +145,7 @@ public class Junction : PowerableBase
         
     }
 
-    public override void DetermineNewPowerState(PowerableBase powerableBase)
+    public override void DetermineNewPowerState(PowerableBase powerableBase, bool checkDirection = false)
     {
         
     }

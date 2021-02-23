@@ -548,7 +548,7 @@ public class Bulb : PowerableBase
         //Do Nothing
     }
 
-    public override void DetermineNewPowerState(PowerableBase powerableBase)
+    public override void DetermineNewPowerState(PowerableBase powerableBase, bool checkDirection = false)
     {
         
     }
