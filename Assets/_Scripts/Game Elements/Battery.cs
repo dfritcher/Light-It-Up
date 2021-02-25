@@ -246,7 +246,7 @@ public class Battery : PowerableBase
 
     private void UpdatePoweredObjects()
     {
-        //_objectsWePower.ForEach(p => p.SetPowerStateOff(this));
+        _objectsWePower.ForEach(p => p.SetPowerStateOff(this));
         _objectsWePower.ForEach(p => p.GetBatteryPowerState(this));
         _objectsWePower.ForEach(p => p.DetermineNewPowerState(this));
         _wires.ForEach(w => w.GetBatteryPowerState(this));
