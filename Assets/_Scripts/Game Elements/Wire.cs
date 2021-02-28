@@ -118,7 +118,23 @@ public class Wire : PowerableBase
 
     public override void DetermineNewPowerState(PowerableBase powerableBase, bool checkDirection = false)
     {
-        
+        ResetPowerable();
+        SetCurrentPower();
+        CheckPoweredState();
+        UpdateColorDisplay();
+    }
+
+    public override List<ColorType> GetOtherSideColors(PowerableBase requestor)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void CheckStateChanged()
+    {
+        ResetPowerable();
+        SetCurrentPower();
+        CheckPoweredState();
+        UpdateColorDisplay();
     }
     #endregion Methods (end)
 }

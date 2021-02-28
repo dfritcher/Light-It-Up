@@ -246,12 +246,19 @@ public class Battery : PowerableBase
 
     private void UpdatePoweredObjects()
     {
-        _objectsWePower.ForEach(p => p.SetPowerStateOff(this));
+        // We could make each part a subroutine that waits for others to finish if we need UI responsiveness
+
+        //_objectsWePower.ForEach(p => p.SetPowerStateOff(this));
         _objectsWePower.ForEach(p => p.GetBatteryPowerState(this));
         _objectsWePower.ForEach(p => p.DetermineNewPowerState(this));
-        _wires.ForEach(w => w.GetBatteryPowerState(this));
-        _bulbs.ForEach(b => b.GetBatteryPowerState(this));        
+        _objectsWePower.ForEach(p => p.CheckStateChanged());
+                
+        _wires.ForEach(w => w.DetermineNewPowerState(this));
+        
+        _bulbs.ForEach(b => b.DetermineNewPowerState(this));        
     }
+
+
 
     private void UpdateColorDisplay()
     {
@@ -285,6 +292,7 @@ public class Battery : PowerableBase
     {
         //Do Nothing.
     }
+    
     public void SetSelectedState(bool selected)
     {
         _selectedSprite.gameObject.SetActive(selected);
@@ -293,6 +301,16 @@ public class Battery : PowerableBase
     public override void DetermineNewPowerState(PowerableBase powerableBase, bool checkDirection = false)
     {
         
+    }
+
+    public override List<ColorType> GetOtherSideColors(PowerableBase requestor)
+    {
+        return CurrentColorTypes;
+    }
+
+    public override void CheckStateChanged()
+    {
+        throw new NotImplementedException();
     }
 
     #endregion Methods (end)

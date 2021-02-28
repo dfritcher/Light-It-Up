@@ -188,9 +188,9 @@ public class Bulb : PowerableBase
 
     public override void GetBatteryPowerState(PowerableBase powerableBase)
     {
-        ResetPowerable();
-        SetCurrentPower();
-        UpdateUI();
+        //ResetPowerable();
+        //SetCurrentPower();
+        //UpdateUI();
     }
 
     public override bool GetPoweredState(PowerableBase requestor)
@@ -550,7 +550,21 @@ public class Bulb : PowerableBase
 
     public override void DetermineNewPowerState(PowerableBase powerableBase, bool checkDirection = false)
     {
-        
+        //ResetPowerable();
+        //SetCurrentPower();
+        //UpdateUI();
+    }
+
+    public override List<ColorType> GetOtherSideColors(PowerableBase requestor)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void CheckStateChanged()
+    {
+        ResetPowerable();
+        SetCurrentPower();        
+        UpdateUI();
     }
     #endregion Private Methods (end)
     #endregion Methods (end)

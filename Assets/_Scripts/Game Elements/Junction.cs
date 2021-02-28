@@ -149,4 +149,16 @@ public class Junction : PowerableBase
     {
         
     }
+
+    public override List<ColorType> GetOtherSideColors(PowerableBase requestor)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void CheckStateChanged()
+    {
+        ResetPowerable();
+        SetCurrentPower();
+        UpdateColorDisplay();
+    }
 }

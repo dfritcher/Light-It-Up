@@ -32,6 +32,10 @@ public abstract class PowerableBase : MonoBehaviour
 
     public abstract void SetPowerStateOff(PowerableBase requestor);
 
+    public abstract List<ColorType> GetOtherSideColors(PowerableBase requestor);
+
+    public abstract void CheckStateChanged();
+
     protected virtual void Awake()
     {
         ResetPowerable();
