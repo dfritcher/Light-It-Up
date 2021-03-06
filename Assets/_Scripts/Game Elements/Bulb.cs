@@ -51,7 +51,7 @@ public class Bulb : PowerableBase
 
     [SerializeField, ReadOnly(true)]
     private List<ColorType> _currentColorTypes = null;
-    public override List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
+    public List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
 
     [SerializeField]
     private bool _isBroken = false;
@@ -152,7 +152,26 @@ public class Bulb : PowerableBase
     {
         UpdateUI();
     }
-    
+
+    public override void Setup(PowerableBase powerableBase)
+    {
+        try
+        {
+            var source = _externalPowerSources.Find(ps => ps.Powerable == powerableBase);
+            if(source == null)
+            {
+                Debug.LogError($"{name} could not find {powerableBase.name} in its External Power Sources.");
+                return;
+            }
+                
+            //source.Powerable.PoweredColors = powerableBase.PoweredColors;
+        }
+        catch(Exception ex)
+        {
+            Debug.LogError($"{ex.Message} Occurred in {name}");
+        }
+    }
+
     public void IncreasePower(int amount, bool updateDisplay = false)
     {
         _powerLevel += amount;
@@ -171,7 +190,7 @@ public class Bulb : PowerableBase
 
     public override List<Power> GetPowers(PowerableBase requestor)
     {
-        return new List<Power>() { new Power() { Amount = 0, ColorTypes = new List<ColorType>() { ColorType.None } } };
+        throw new NotImplementedException();
     }
 
     public override void ResetPowerable()
@@ -186,7 +205,7 @@ public class Bulb : PowerableBase
         UpdateUI();
     }
 
-    public override void GetBatteryPowerState(PowerableBase powerableBase)
+    public override void DetermineNewPowerState(PowerableBase powerableSource)
     {
         //ResetPowerable();
         //SetCurrentPower();
@@ -313,20 +332,28 @@ public class Bulb : PowerableBase
     }
    
     private void SetCurrentPower()
-    {
-        foreach(var powerable in _powerables)
+    {            
+        foreach (var externalSource in _externalPowerSources)
         {
-            var currentPower = powerable.GetPowers(this);
-            foreach(var power in currentPower)
+            if (!externalSource.Powerable.IsPoweredFromOtherSide(this))
+                continue;
+            if (externalSource.Powerable is Battery battery)
             {
-                foreach(var color in power.ColorTypes)
+                if (battery.CurrentPower.ColorTypes.Any(c => CurrentColorTypes.Contains(c)))
                 {
-                    if (CurrentColorTypes.Contains(color))
+                    IncreasePower(battery.CurrentPower.Amount);
+                }
+            }
+            else
+            {
+                var poweredsources = externalSource.Powerable.GetPowers(this);
+                foreach (var power in poweredsources)
+                {
+                    if (power.ColorTypes.Any(c => CurrentColorTypes.Contains(c)))
                     {
-                        IncreasePower(power.Amount); //TODO: This will need to change to grabbing the power level plus color coming from the source.
-                        break;
+                        IncreasePower(power.Amount);
                     }
-                }                                    
+                }
             }
         }
         CheckState();
@@ -548,7 +575,7 @@ public class Bulb : PowerableBase
         //Do Nothing
     }
 
-    public override void DetermineNewPowerState(PowerableBase powerableBase, bool checkDirection = false)
+    public override void DeterminePowerColorStateChange(PowerableBase powerableSource, bool checkDirection = false)
     {
         //ResetPowerable();
         //SetCurrentPower();
@@ -560,7 +587,7 @@ public class Bulb : PowerableBase
         throw new NotImplementedException();
     }
 
-    public override void CheckStateChanged()
+    public override void CheckStateChanged(PowerableBase powerableSource, bool forceCheck)
     {
         ResetPowerable();
         SetCurrentPower();        

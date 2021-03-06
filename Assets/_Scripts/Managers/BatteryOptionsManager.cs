@@ -89,7 +89,7 @@ public class BatteryOptionsManager : MonoBehaviour
 
     private void BatteryOption_OnClick(BatteryOption batteryOption)
     {
-        _activeBattery.SetBatteryTypes(batteryOption.BatteryOptionColorTypes);
+        _activeBattery.SetBatteryTypes(batteryOption.BatteryOptionColorTypes.Clone());
         AnimationController.Instance.StopAllCoroutines();
         AnimateOptionPanel();
     }

@@ -1,4 +1,6 @@
-﻿public enum Direction 
+﻿using System;
+[Serializable]
+public enum Direction 
 {
     NORTH = 0,
     SOUTH = 1,

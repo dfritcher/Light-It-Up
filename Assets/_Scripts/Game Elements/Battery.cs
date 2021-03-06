@@ -12,7 +12,7 @@ public class Battery : PowerableBase
     /// <summary>
     /// Reference to the current colors we are generating.
     /// </summary>
-    public override List<ColorType> CurrentColorTypes { get { return _power.ColorTypes; } }
+    //public List<ColorType> CurrentColorTypes { get { return Power.ColorTypes; } }
 
     [SerializeField]
     private List<PowerableBase> _objectsWePower = new List<PowerableBase>();
@@ -23,8 +23,8 @@ public class Battery : PowerableBase
     [SerializeField]
     private List<Bulb> _bulbs = null;
 
-    [SerializeField]
-    private List<Image> _batteryColors = null;
+    //[SerializeField]
+    //private List<Image> _batteryColors = null;
 
     [SerializeField]
     private bool _isClickable = true;
@@ -33,7 +33,8 @@ public class Battery : PowerableBase
     [SerializeField]
     private bool _hasVariablePower = false;
 
-    public override bool IsPowered { get { return _power.ColorTypes.Any(c => c != ColorType.None); } }
+    private bool _isPowered = false;
+    public override bool IsPowered { get { return _isPowered; } }
 
     [SerializeField]
     private Button _selectBatteryOption = null;
@@ -97,15 +98,15 @@ public class Battery : PowerableBase
         if(_lockedIcon != null)
             _lockedIcon.gameObject.SetActive(!_isClickable);
 
-        _power.ColorTypes = _originalColorTypes;
+        CurrentPower.ColorTypes = _originalColorTypes.Clone();
         SetSelectedState(false);
+        SetupPoweredObjects();
     }
 
     private void Start()
-    {
-        _power.ColorTypes = _originalColorTypes;
-        UpdateColorDisplay();
+    {        
         UpdatePoweredObjects();
+        UpdateColorDisplay();
     }
 
     private void Update()
@@ -144,30 +145,30 @@ public class Battery : PowerableBase
         if(_increasePowerButton)
         {
             _increasePowerButton.gameObject.SetActive(_hasVariablePower && _isClickable);
-            _increasePowerButton.interactable = _power.Amount < _maxPower;
+            _increasePowerButton.interactable = CurrentPower.Amount < _maxPower;
         }
         if(_decreasePowerButton)
         {
             _decreasePowerButton.gameObject.SetActive(_hasVariablePower && _isClickable);
-            _decreasePowerButton.interactable = _power.Amount > _minPower;
+            _decreasePowerButton.interactable = CurrentPower.Amount > _minPower;
         }
         
         if(_powerDisplay)
-            _powerDisplay.text = _power.Amount.ToString();        
+            _powerDisplay.text = CurrentPower.Amount.ToString();        
     }
 
     public override void ResetPowerable()
     {
-        _power.ColorTypes = new List<ColorType>(_originalColorTypes);
-        _power.Amount = _minPower;
+        CurrentPower.Amount = _minPower;
+        CurrentPower.ColorTypes= _originalColorTypes.Clone();
         if(_powerDisplay)
             _powerDisplay.text = _minPower.ToString();
-        //UpdateColorDisplay();
+        UpdateColorDisplay();
     }
 
     public void ResetPower()
     {
-        SetBatteryTypes(_originalColorTypes, false);
+        SetBatteryTypes(_originalColorTypes.Clone(), false);
     }
 
 #region Unity Called Methods
@@ -185,27 +186,28 @@ public class Battery : PowerableBase
 
     public void IncreasePower()
     {
-        _power.Amount++;
-        if (_power.Amount > _maxPower)
+        CurrentPower.Amount++;
+        if (CurrentPower.Amount > _maxPower)
         {
-            _power.Amount = _maxPower;
+            CurrentPower.Amount = _maxPower;
             _increasePowerButton.interactable = false;
         }
+
         _decreasePowerButton.interactable = true;
-        _powerDisplay.text = _power.Amount.ToString();
+        _powerDisplay.text = CurrentPower.Amount.ToString();
         UpdatePoweredObjects();
     }
 
     public void DecreasePower()
     {
-        _power.Amount--;
-        if (_power.Amount < _minPower)
+        CurrentPower.Amount--;
+        if (CurrentPower.Amount < _minPower)
         {
-            _power.Amount = _minPower;
+            CurrentPower.Amount = _minPower;
             _decreasePowerButton.interactable = false;
         }
         _increasePowerButton.interactable = true;
-        _powerDisplay.text = _power.Amount.ToString();
+        _powerDisplay.text = CurrentPower.Amount.ToString();
         UpdatePoweredObjects();
     }
 #endregion Unity Called Methods (end)
@@ -221,11 +223,11 @@ public class Battery : PowerableBase
 
     private IEnumerator SetBatteryTypesCoroutine(List<ColorType> colorTypes, bool playAudio = true)
     {
-        _power.ColorTypes = colorTypes;
+        CurrentPower.ColorTypes = colorTypes;
+        _isPowered = colorTypes.Any(c => c != ColorType.None);
         yield return null;
         UpdateColorDisplay();
-        yield return null;
-        
+        yield return null;        
         UpdatePoweredObjects();
         yield return null;
         if (playAudio)
@@ -234,7 +236,7 @@ public class Battery : PowerableBase
 
     private void PlayAudio()
     {
-        if(_power.ColorTypes.Any(c => c != ColorType.None))
+        if(IsPowered)
         {
             AudioManager.PlayOneShot(_powerUpClip);            
         }
@@ -247,24 +249,25 @@ public class Battery : PowerableBase
     private void UpdatePoweredObjects()
     {
         // We could make each part a subroutine that waits for others to finish if we need UI responsiveness
-
-        //_objectsWePower.ForEach(p => p.SetPowerStateOff(this));
-        _objectsWePower.ForEach(p => p.GetBatteryPowerState(this));
-        _objectsWePower.ForEach(p => p.DetermineNewPowerState(this));
-        _objectsWePower.ForEach(p => p.CheckStateChanged());
-                
-        _wires.ForEach(w => w.DetermineNewPowerState(this));
-        
-        _bulbs.ForEach(b => b.DetermineNewPowerState(this));        
+        //_objectsWePower.ForEach(p => p.DetermineNewPowerState(this));
+        //_objectsWePower.ForEach(p => p.DeterminePowerColorStateChange(this));
+        _objectsWePower.ForEach(p => p.CheckStateChanged(this, true));                
+        _wires.ForEach(w => w.CheckStateChanged(this, true));        
+        _bulbs.ForEach(b => b.CheckStateChanged(this, true));        
     }
-
-
+    
+    private void SetupPoweredObjects()
+    {
+        _objectsWePower.ForEach(p => p.Setup(this));
+        _wires.ForEach(w => w.Setup(this));
+        _bulbs.ForEach(b => b.Setup(this));
+    }
 
     private void UpdateColorDisplay()
     {
-        _redSection.SetActive(CurrentColorTypes.Contains(ColorType.Red));
-        _greenSection.SetActive(CurrentColorTypes.Contains(ColorType.Green));
-        _blueSection.SetActive(CurrentColorTypes.Contains(ColorType.Blue));        
+        _redSection.SetActive(CurrentPower.ColorTypes.Contains(ColorType.Red));
+        _greenSection.SetActive(CurrentPower.ColorTypes.Contains(ColorType.Green));
+        _blueSection.SetActive(CurrentPower.ColorTypes.Contains(ColorType.Blue));        
     }
 
     /// <summary>
@@ -275,17 +278,22 @@ public class Battery : PowerableBase
     /// <returns></returns>
     public override List<Power> GetPowers(PowerableBase requestor)
     {
-        return new List<Power>() { _power };
+        throw new NotImplementedException();
     }
 
-    public override void GetBatteryPowerState(PowerableBase powerableBase)
+    public override void DetermineNewPowerState(PowerableBase powerableSource)
     {
         //Do nothing
     }
    
+    /// <summary>
+    /// DEPRECATED - Should Check IsPowered Property to determin if this object is powered.
+    /// </summary>
+    /// <param name="requestor"></param>
+    /// <returns></returns>
     public override bool GetPoweredState(PowerableBase requestor)
-    {        
-        return _power.ColorTypes.Any(c => c != ColorType.None);
+    {
+        return CurrentPower.ColorTypes.Any(c => c != ColorType.None);
     }
 
     public override void SetPowerStateOff(PowerableBase requestor)
@@ -298,19 +306,24 @@ public class Battery : PowerableBase
         _selectedSprite.gameObject.SetActive(selected);
     }
 
-    public override void DetermineNewPowerState(PowerableBase powerableBase, bool checkDirection = false)
+    public override void DeterminePowerColorStateChange(PowerableBase powerableSource, bool checkDirection = false)
     {
         
     }
 
     public override List<ColorType> GetOtherSideColors(PowerableBase requestor)
     {
-        return CurrentColorTypes;
+        return CurrentPower.ColorTypes;
     }
 
-    public override void CheckStateChanged()
+    public override void CheckStateChanged(PowerableBase powerableSource, bool forceCheck)
     {
         throw new NotImplementedException();
+    }
+
+    public override bool IsPoweredFromOtherSide(PowerableBase requestor)
+    {
+        return IsPowered;
     }
 
     #endregion Methods (end)

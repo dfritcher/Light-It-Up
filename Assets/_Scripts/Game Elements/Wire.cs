@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 
 public class Wire : PowerableBase
 {
     #region Fields, Properties
-    [SerializeField]
+    //[SerializeField]
     private List<ColorType> _currentColorTypes = null;
-    public override List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
+    public List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
 
     public override bool IsClickable => false;
 
@@ -19,6 +19,9 @@ public class Wire : PowerableBase
     [SerializeField]
     private List<Image> _wireColors = null;
 
+    /// <summary>
+    /// DEPRECATED - Retained until External Sources is populated across all levels
+    /// </summary>
     [SerializeField]
     private List<PowerableBase> _powerables = null;
 
@@ -33,29 +36,43 @@ public class Wire : PowerableBase
     #region Methods
     protected override void Awake()
     {
-        base.Awake();
-        UpdateColorDisplay();
+        base.Awake();        
     }
 
     public void Setup()
     {
-        
+        UpdateColorDisplay();
+    }
+
+    public override void Setup(PowerableBase powerableBase)
+    {
+        try
+        {
+            var source = _externalPowerSources.Find(ps => ps.Powerable == powerableBase);
+            if (source == null)
+            {
+                Debug.LogError($"{name} could not find {powerableBase.name} in its External Power Sources.");
+                return;
+            }
+                
+            //source.Powerable.PoweredColors = powerableBase.PoweredColors;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{ex.Message} Occurred in {name}");
+        }
     }
 
     private void UpdateColorDisplay()
     {
         _red.SetActive(CurrentColorTypes.Contains(ColorType.Red));
         _green.SetActive(CurrentColorTypes.Contains(ColorType.Green));
-        _blue.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
-        //_wireColors[1].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Red));
-        //_wireColors[2].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Green));
-        //_wireColors[3].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
-        //_wireColors[0].gameObject.SetActive(!_wireColors[1].IsActive() && !_wireColors[2].IsActive() && !_wireColors[3].IsActive());
+        _blue.SetActive(CurrentColorTypes.Contains(ColorType.Blue));        
     }
 
     public override List<Power> GetPowers(PowerableBase requestor)
     {
-        return new List<Power>() { _power };
+        throw new NotImplementedException();
     }
 
     public override void ResetPowerable()
@@ -64,7 +81,7 @@ public class Wire : PowerableBase
         UpdateColorDisplay();
     }
 
-    public override void GetBatteryPowerState(PowerableBase powerableBase)
+    public override void DetermineNewPowerState(PowerableBase powerableBase)
     {
         ResetPowerable();
         SetCurrentPower();
@@ -74,34 +91,46 @@ public class Wire : PowerableBase
 
     private void SetCurrentPower()
     {
-        var colors = new List<ColorType>();
-        //Figure out our current power/colors
-        foreach (var powerable in _powerables)
+        _currentColorTypes = _originalColorTypes.Clone();
+        foreach (var externalSource in _externalPowerSources)
         {
-            if (powerable.IsPowered)
+            if (!externalSource.Powerable.IsPoweredFromOtherSide(this))
+                continue;
+            if (externalSource.Powerable is Battery battery)
             {
-                var colorsToAdd = powerable.GetPowers(this);
-                colorsToAdd.ForEach(c => c.ColorTypes.Remove(ColorType.None));
-                colors.AddRange(colorsToAdd.SelectMany(c => c.ColorTypes));
+                foreach (var color in battery.CurrentPower.ColorTypes)
+                {
+                    if (!CurrentColorTypes.Contains(color))
+                    {
+                        CurrentColorTypes.Add(color);                         
+                    }
+                }
             }
-        }
-        colors.Distinct().ToList();
-        if (colors.Count > 0)
-            _currentColorTypes = colors;
-        else
-        {
-            _currentColorTypes = _originalColorTypes;
-        }
+            else
+            {
+                //var poweredSources = externalSource.Powerable.GetPowers(this);
+                foreach (var poweredColor in externalSource.Powerable.PoweredColors)
+                {
+                    foreach (var color in poweredColor.ColorTypes)
+                    {
+                        if (!CurrentColorTypes.Contains(color))
+                        {
+                            CurrentColorTypes.Add(color);
+                        }
+                    }
+                }
+            }
+        }        
     }
 
     private void CheckPoweredState()
     {
         var isPowered = false;
-        foreach (var source in _powerables)
+        foreach (var source in _externalPowerSources)
         {
             if (isPowered)
                 break;
-            isPowered = source.IsPowered;
+            isPowered = source.Powerable.IsPowered;
         }
         _isPowered = isPowered;
     }
@@ -116,7 +145,7 @@ public class Wire : PowerableBase
         //Do Nothing
     }
 
-    public override void DetermineNewPowerState(PowerableBase powerableBase, bool checkDirection = false)
+    public override void DeterminePowerColorStateChange(PowerableBase powerableSource, bool checkDirection = false)
     {
         ResetPowerable();
         SetCurrentPower();
@@ -124,12 +153,7 @@ public class Wire : PowerableBase
         UpdateColorDisplay();
     }
 
-    public override List<ColorType> GetOtherSideColors(PowerableBase requestor)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void CheckStateChanged()
+    public override void CheckStateChanged(PowerableBase powerableSource, bool forceCheck)
     {
         ResetPowerable();
         SetCurrentPower();

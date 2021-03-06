@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
+using System;
 
 public class Junction : PowerableBase
 {
 
     [SerializeField]
     private List<ColorType> _currentColorTypes = null;
-    public override List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
+    public List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
 
     public override bool IsClickable => false;
 
@@ -23,14 +23,14 @@ public class Junction : PowerableBase
     private List<PowerableBase> _powerables = null;
 
     [SerializeField]
-    private List<PowerSource> _poweredBulbs = null;
+    private List<ExternalPower> _poweredBulbs = null;
 
     /// <summary>
     /// Reference to all the sources providing us power and the direction the power is coming from.
     /// This will help us determine which directions power is flowing when asked for our colors.
     /// </summary>
     [SerializeField]
-    private List<PowerSource> _powerSources = null;
+    private List<ExternalPower> _powerSources = null;
 
     protected override void Awake()
     {
@@ -45,27 +45,27 @@ public class Junction : PowerableBase
 
     private void SetCurrentPower()
     {
-        if (_powerables == null)
-            return;
+        //if (_powerables == null)
+        //    return;
 
-        var colors = new List<ColorType>();
-        //Figure out our current power/colors
-        foreach (var powerable in _powerables)
-        {
-            if (powerable.IsPowered)
-            {
-                var colorsToAdd = powerable.GetPowers(this);
-                colorsToAdd.ForEach(c => c.ColorTypes.Remove(ColorType.None));
-                colors.AddRange(colorsToAdd.SelectMany(c => c.ColorTypes));
-            }
-        }
-        colors.Distinct().ToList();
-        if (colors.Count > 0)
-            _currentColorTypes = colors;
-        else
-        {
-            _currentColorTypes = _originalColorTypes;
-        }
+        //var colors = new List<ColorType>();
+        ////Figure out our current power/colors
+        //foreach (var powerable in _powerables)
+        //{
+        //    if (powerable.IsPowered)
+        //    {
+        //        var colorsToAdd = powerable.GetPowers(this);
+        //        colorsToAdd.ForEach(c => c.ColorTypes.Remove(ColorType.None));
+        //        colors.AddRange(colorsToAdd.SelectMany(c => c.ColorTypes));
+        //    }
+        //}
+        //colors.Distinct().ToList();
+        //if (colors.Count > 0)
+        //    _currentColorTypes = colors;
+        //else
+        //{
+        //    _currentColorTypes = _originalColorTypes;
+        //}
     }
 
     private int GetIndexFromPower(ColorType power)
@@ -98,7 +98,7 @@ public class Junction : PowerableBase
    
     public override List<Power> GetPowers(PowerableBase requestor)
     {
-        return new List<Power>() { _power };
+        throw new NotImplementedException();
     }
 
     public override void ResetPowerable()
@@ -107,11 +107,11 @@ public class Junction : PowerableBase
         UpdateColorDisplay();
     }
 
-    public override void GetBatteryPowerState(PowerableBase powerableBase)
+    public override void DetermineNewPowerState(PowerableBase powerableBase)
     {
         ResetPowerable();
         SetCurrentPower();
-        CheckPoweredState(powerableBase);
+        CheckPoweredState(this);
         UpdateColorDisplay();
 
         ////Notify everyone we updated
@@ -145,7 +145,7 @@ public class Junction : PowerableBase
         
     }
 
-    public override void DetermineNewPowerState(PowerableBase powerableBase, bool checkDirection = false)
+    public override void DeterminePowerColorStateChange(PowerableBase powerableBase, bool checkDirection = false)
     {
         
     }
@@ -155,7 +155,7 @@ public class Junction : PowerableBase
         throw new System.NotImplementedException();
     }
 
-    public override void CheckStateChanged()
+    public override void CheckStateChanged(PowerableBase requestor, bool forcheCheck)
     {
         ResetPowerable();
         SetCurrentPower();
