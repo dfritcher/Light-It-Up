@@ -99,6 +99,7 @@ public class Battery : PowerableBase
             _lockedIcon.gameObject.SetActive(!_isClickable);
 
         CurrentPower.ColorTypes = _originalColorTypes.Clone();
+        _isPowered = _originalColorTypes.Any(c => c != ColorType.None);
         SetSelectedState(false);
         SetupPoweredObjects();
     }

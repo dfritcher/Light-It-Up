@@ -125,12 +125,14 @@ public class PassThrough : PowerableBase
         base.Awake();
         _selectPassThroughOption.interactable = _isClickable;
         _lockedIcon.gameObject.SetActive(!_isClickable);
+        _userSetColorTypes = _originalColorTypes.Clone();
         SetSelectedState(false);        
         SetupPoweredObjects();
     }
 
     private void Start()
     {
+        CheckStateChanged(this, true);
         UpdateColorDisplay();        
     }
 
@@ -255,10 +257,8 @@ public class PassThrough : PowerableBase
 
     public override void ResetPowerable()
     {
-        //CurrentPower.Amount = 1;
-        //CurrentPower.ColorTypes = _originalColorTypes.Clone();
-        _userSetColorTypes = _currentPower.ColorTypes.Clone();       
-        _isPowered = false;
+        _userSetColorTypes = _originalColorTypes.Clone();
+        _isPowered = false;        
         UpdateColorDisplay();
     }
 

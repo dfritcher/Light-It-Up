@@ -126,13 +126,14 @@ public class Inhibitor : PowerableBase
         base.Awake();
         _selectInhibitorOption.interactable = _isClickable;
         _lockedIcon.gameObject.SetActive(!_isClickable);
+        _userSetColorTypes = _originalColorTypes.Clone();
         SetSelectedState(false);        
         SetupPoweredObjects();
     }
 
     private void Start()
     {
-        //GetPoweredState(null);        
+        CheckStateChanged(this, true);
         UpdateColorDisplay();        
     }
     private void Update()
@@ -391,10 +392,8 @@ public class Inhibitor : PowerableBase
 
     public override void ResetPowerable()
     {
-        //CurrentPower.Amount = 1;
-        //CurrentPower.ColorTypes = _originalColorTypes.Clone();
-        _userSetColorTypes = _currentPower.ColorTypes.Clone();        
-        _isPowered = false;
+        _userSetColorTypes = _originalColorTypes.Clone();
+        _isPowered = false;        
         UpdateColorDisplay();
     }
 
