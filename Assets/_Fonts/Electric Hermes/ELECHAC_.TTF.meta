@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 579009e92d7c03749a3d9136997eaaee
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Electric Hermes AOE
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: d26fa22f150d64040b1b9f0eb2263310, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
