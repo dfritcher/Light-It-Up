@@ -145,12 +145,12 @@ public class Battery : PowerableBase
 
         if(_increasePowerButton)
         {
-            _increasePowerButton.gameObject.SetActive(_hasVariablePower && _isClickable);
+            _increasePowerButton.gameObject.SetActive(_hasVariablePower);
             _increasePowerButton.interactable = CurrentPower.Amount < _maxPower;
         }
         if(_decreasePowerButton)
         {
-            _decreasePowerButton.gameObject.SetActive(_hasVariablePower && _isClickable);
+            _decreasePowerButton.gameObject.SetActive(_hasVariablePower);
             _decreasePowerButton.interactable = CurrentPower.Amount > _minPower;
         }
         
@@ -252,7 +252,7 @@ public class Battery : PowerableBase
         // We could make each part a subroutine that waits for others to finish if we need UI responsiveness
         //_objectsWePower.ForEach(p => p.DetermineNewPowerState(this));
         //_objectsWePower.ForEach(p => p.DeterminePowerColorStateChange(this));
-        _objectsWePower.ForEach(p => p.CheckStateChanged(this, true));                
+        _externalPowerSources.ForEach(p => p.Powerable.CheckStateChanged(this, true));                
         _wires.ForEach(w => w.CheckStateChanged(this, true));        
         _bulbs.ForEach(b => b.CheckStateChanged(this, true));        
     }

@@ -338,7 +338,7 @@ public class PassThrough : PowerableBase
                 {
                     if (poweredColor.ColorTypes.Any(c => UserSetColorTypes.Contains(c)))
                     {
-                        var power = new Power() { Amount = 1, ColorTypes = new List<ColorType>(), Direction = inhibitorSource.InputDirection };
+                        var power = new Power() { Amount = poweredColor.Amount, ColorTypes = new List<ColorType>(), Direction = inhibitorSource.InputDirection };
                         foreach (var color in poweredColor.ColorTypes)
                         {
                             if (UserSetColorTypes.Contains(color))
@@ -361,7 +361,7 @@ public class PassThrough : PowerableBase
                 {
                     if (poweredColor.ColorTypes.Any(c => UserSetColorTypes.Contains(c)))
                     {
-                        var power = new Power() { Amount = 1, ColorTypes = new List<ColorType>(), Direction = passthroughSource.InputDirection };
+                        var power = new Power() { Amount = poweredColor.Amount, ColorTypes = new List<ColorType>(), Direction = passthroughSource.InputDirection };
                         foreach (var color in poweredColor.ColorTypes)
                         {
                             if (UserSetColorTypes.Contains(color))
