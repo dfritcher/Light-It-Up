@@ -82,6 +82,8 @@ public class Battery : PowerableBase
     private AudioClip _powerDownClip = null;
     [SerializeField]
     private AudioClip _powerUpClip = null;
+    [SerializeField]
+    private float[] _pitch = null;
     #endregion Fields, Properties (end)
 
     #region Delegates, Events
@@ -164,6 +166,14 @@ public class Battery : PowerableBase
         CurrentPower.ColorTypes= _originalColorTypes.Clone();
         if(_powerDisplay)
             _powerDisplay.text = _minPower.ToString();
+        if (CurrentPower.Amount == _maxPower)
+        {
+            _increasePowerButton.interactable = false;
+        }
+        if (CurrentPower.Amount == _minPower)
+        {            
+            _decreasePowerButton.interactable = false;
+        }
         UpdateColorDisplay();
     }
 
@@ -188,7 +198,7 @@ public class Battery : PowerableBase
     public void IncreasePower()
     {
         CurrentPower.Amount++;
-        if (CurrentPower.Amount > _maxPower)
+        if (CurrentPower.Amount >= _maxPower)
         {
             CurrentPower.Amount = _maxPower;
             _increasePowerButton.interactable = false;
@@ -197,12 +207,14 @@ public class Battery : PowerableBase
         _decreasePowerButton.interactable = true;
         _powerDisplay.text = CurrentPower.Amount.ToString();
         UpdatePoweredObjects();
+        if(IsPowered)
+            PlayIncreasePowerAudio();
     }
 
     public void DecreasePower()
     {
         CurrentPower.Amount--;
-        if (CurrentPower.Amount < _minPower)
+        if (CurrentPower.Amount <= _minPower)
         {
             CurrentPower.Amount = _minPower;
             _decreasePowerButton.interactable = false;
@@ -210,8 +222,11 @@ public class Battery : PowerableBase
         _increasePowerButton.interactable = true;
         _powerDisplay.text = CurrentPower.Amount.ToString();
         UpdatePoweredObjects();
+        if(IsPowered)
+            PlayDecreasePowerAudio();
     }
-#endregion Unity Called Methods (end)
+
+    #endregion Unity Called Methods (end)
     /// <summary>
     /// Sets our current colors.
     /// </summary>
@@ -232,19 +247,29 @@ public class Battery : PowerableBase
         UpdatePoweredObjects();
         yield return null;
         if (playAudio)
-            PlayAudio();
+            PlayPowerStateAudio();
     }
 
-    private void PlayAudio()
+    private void PlayPowerStateAudio()
     {
         if(IsPowered)
         {
-            AudioManager.PlayOneShot(_powerUpClip);            
+            PlayIncreasePowerAudio();           
         }
         else
         {
-            AudioManager.PlayOneShot(_powerDownClip);
+            PlayDecreasePowerAudio();
         }
+    }
+
+    private void PlayIncreasePowerAudio()
+    {
+        AudioManager.PlayOneShot(_powerUpClip, _pitch[CurrentPower.Amount - 1]);
+    }
+
+    private void PlayDecreasePowerAudio()
+    {
+        AudioManager.PlayOneShot(_powerDownClip, _pitch[CurrentPower.Amount - 1]);
     }
 
     private void UpdatePoweredObjects()

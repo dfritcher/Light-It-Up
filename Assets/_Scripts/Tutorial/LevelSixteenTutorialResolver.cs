@@ -234,16 +234,29 @@ public class LevelSixteenTutorialResolver : TutorialResolverBase
     private void ResetTriggers()
     {
         _animationIndex = 0;
-        _battery1Animator.ResetTrigger("RedOn");
-        _battery1Animator.ResetTrigger("RedOff");
-        _battery1Animator.ResetTrigger("HighlightOn");
-        _battery1Animator.ResetTrigger("HighlightOff");
-        _batteryOptionsAnimator.ResetTrigger("MoveUp");
-        _passthrough1Animator.ResetTrigger("HighlightOn");
-        _passthrough2Animator.ResetTrigger("HighlightOn");        
-        _battery1Animator.Rebind();
-        _passthrough1Animator.Rebind();
-        _passthrough2Animator.Rebind();
+        if (_battery1Animator.isActiveAndEnabled)
+        {
+            _battery1Animator.ResetTrigger("RedOn");
+            _battery1Animator.ResetTrigger("RedOff");
+            _battery1Animator.ResetTrigger("HighlightOn");
+            _battery1Animator.ResetTrigger("HighlightOff");
+            _battery1Animator.Rebind();
+        }
+        
+        if(_batteryOptionsAnimator.isActiveAndEnabled)
+            _batteryOptionsAnimator.ResetTrigger("MoveUp");
+
+        if (_passthrough1Animator.isActiveAndEnabled)
+        {
+            _passthrough1Animator.ResetTrigger("HighlightOn");
+            _passthrough1Animator.Rebind();
+        }
+
+        if (_passthrough2Animator.isActiveAndEnabled)
+        {
+            _passthrough2Animator.ResetTrigger("HighlightOn");
+            _passthrough2Animator.Rebind();
+        }        
     }
     #endregion Methods (end)
 }

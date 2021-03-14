@@ -235,16 +235,31 @@ public class LevelElevenTutorialResolver : TutorialResolverBase
 
     private void ResetTriggers()
     {
-        _battery1Animator.ResetTrigger("RedOn");
-        _battery1Animator.ResetTrigger("RedOff");
-        _battery1Animator.ResetTrigger("HighlightOn");
-        _battery1Animator.ResetTrigger("HighlightOff");
-        _batteryOptionsAnimator.ResetTrigger("MoveUp");
-        _inhibitor1Animator.ResetTrigger("HighlightOn");
-        _inhibitor2Animator.ResetTrigger("HighlightOn");        
-        _battery1Animator.Rebind();
-        _inhibitor1Animator.Rebind();
-        _inhibitor2Animator.Rebind();        
+        if (_battery1Animator.isActiveAndEnabled)
+        {
+            _battery1Animator.ResetTrigger("RedOn");
+            _battery1Animator.ResetTrigger("RedOff");
+            _battery1Animator.ResetTrigger("HighlightOn");
+            _battery1Animator.ResetTrigger("HighlightOff");
+            _battery1Animator.Rebind();
+        }
+
+        if (_batteryOptionsAnimator.isActiveAndEnabled)
+        {
+            _batteryOptionsAnimator.ResetTrigger("MoveUp");
+        }
+
+        if (_inhibitor1Animator.isActiveAndEnabled)
+        {
+            _inhibitor1Animator.ResetTrigger("HighlightOn");
+            _inhibitor1Animator.Rebind();
+        }
+
+        if (_inhibitor2Animator.isActiveAndEnabled)
+        {
+            _inhibitor2Animator.ResetTrigger("HighlightOn");
+            _inhibitor2Animator.Rebind();
+        }                              
     }
     #endregion Methods (end)
 }

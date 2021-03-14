@@ -202,11 +202,15 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
 
     private void ResetTriggers()
     {
-        _battery1Animator.ResetTrigger("RedOn");
-        _battery1Animator.ResetTrigger("RedOff");
-        _battery1Animator.ResetTrigger("HighlightOn");
-        _battery1Animator.ResetTrigger("HighlightOff");
-        _batteryOptionsAnimator.ResetTrigger("MoveUp");        
+        if (_battery1Animator.isActiveAndEnabled)
+        {
+            _battery1Animator.ResetTrigger("RedOn");
+            _battery1Animator.ResetTrigger("RedOff");
+            _battery1Animator.ResetTrigger("HighlightOn");
+            _battery1Animator.ResetTrigger("HighlightOff");
+        }
+        if(_batteryOptionsAnimator.isActiveAndEnabled)
+            _batteryOptionsAnimator.ResetTrigger("MoveUp");        
     }
     #endregion Methods (end)
 }

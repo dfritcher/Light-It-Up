@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7182850024915441696}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.0032, z: 0}
+  m_LocalPosition: {x: 0, y: -0.0006, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6282305176016543640}
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1, y: 0.120212555}
+  m_Size: {x: 1, y: 0.15791167}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -523,10 +523,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _originalColorTypes: 
-  _power:
+  _externalPowerSources: []
+  _poweredColors: []
+  _currentPower:
     Amount: 1
-    ColorTypes: 00000000
-  _currentColorTypes: 
+    colorTypes: 00000000
+    Direction: 0
   _isPowered: 0
   _wireColors: []
   _powerables: []
@@ -558,7 +560,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7182850026056472216}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.004, z: 0}
+  m_LocalPosition: {x: 0, y: -0.0003, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4261364134285153849}
@@ -609,7 +611,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1, y: 0.12074459}
+  m_Size: {x: 1, y: 0.15090393}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -640,7 +642,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7182850026084705877}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.0032, z: 0}
+  m_LocalPosition: {x: 0, y: -0.0039, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7917349013819755405}
@@ -686,12 +688,12 @@ SpriteRenderer:
   m_SortingLayerID: 1217794491
   m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 8bc28f03f20b95140bac9caf4eca296b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 89d22afd3d608e840a1b79a835d1806b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1, y: 0.13510631}
+  m_Size: {x: 1, y: 0.15343128}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

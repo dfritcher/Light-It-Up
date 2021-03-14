@@ -60,7 +60,8 @@ public class LevelOneTutorialResolver : TutorialResolverBase
 
     private IEnumerator InitialezeTutorialCoroutine(int index)
     {
-        _batteryAnimator.SetTrigger("Reset");
+        if(_batteryAnimator.isActiveAndEnabled)
+            _batteryAnimator.SetTrigger("Reset");
         ResetTriggers();
         ResetFingerLocation();
         yield return new WaitForEndOfFrame();
@@ -155,15 +156,23 @@ public class LevelOneTutorialResolver : TutorialResolverBase
 
     private void ResetTriggers()
     {
-        _batteryAnimator.ResetTrigger("RedOn");
-        _batteryAnimator.ResetTrigger("RedOff");
-        _batteryAnimator.ResetTrigger("HighlightOn");
-        _batteryAnimator.ResetTrigger("HighlightOff");
-        _batteryOptionsAnimator.ResetTrigger("MoveUp");
-        _bulbAnimator.ResetTrigger("RedOn");
-        _bulbAnimator.SetTrigger("RedOff");
-        _wireAnimator.ResetTrigger("RedOn");
-        _batteryAnimator.Rebind();
+        if (_batteryAnimator.isActiveAndEnabled)
+        {
+            _batteryAnimator.ResetTrigger("RedOn");
+            _batteryAnimator.ResetTrigger("RedOff");
+            _batteryAnimator.ResetTrigger("HighlightOn");
+            _batteryAnimator.ResetTrigger("HighlightOff");
+            _batteryAnimator.Rebind();
+        }
+        if(_batteryOptionsAnimator.isActiveAndEnabled)
+            _batteryOptionsAnimator.ResetTrigger("MoveUp");
+        if (_bulbAnimator.isActiveAndEnabled)
+        {
+            _bulbAnimator.ResetTrigger("RedOn");
+            _bulbAnimator.SetTrigger("RedOff");
+        }
+        if(_wireAnimator.isActiveAndEnabled)
+            _wireAnimator.ResetTrigger("RedOn");        
         _animationIndex = 0;
     }
 

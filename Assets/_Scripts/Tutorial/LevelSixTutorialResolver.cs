@@ -186,19 +186,27 @@ public class LevelSixTutorialResolver : TutorialResolverBase
 
     private void ResetTriggers()
     {
-        _battery1Animator.ResetTrigger("RedOn");
-        _battery1Animator.ResetTrigger("RedOff");
-        _battery1Animator.ResetTrigger("HighlightOn");
-        _battery1Animator.ResetTrigger("HighlightOff");
-        _battery2Animator.ResetTrigger("RedOn");
-        _battery2Animator.ResetTrigger("RedOff");
-        _battery2Animator.ResetTrigger("HighlightOn");
-        _battery2Animator.ResetTrigger("HighlightOff");
+        if (_battery1Animator.isActiveAndEnabled)
+        {
+            _battery1Animator.ResetTrigger("RedOn");
+            _battery1Animator.ResetTrigger("RedOff");
+            _battery1Animator.ResetTrigger("HighlightOn");
+            _battery1Animator.ResetTrigger("HighlightOff");
+            _battery1Animator.Rebind();
+        }
+        if (_battery2Animator.isActiveAndEnabled)
+        {
+            _battery2Animator.ResetTrigger("RedOn");
+            _battery2Animator.ResetTrigger("RedOff");
+            _battery2Animator.ResetTrigger("HighlightOn");
+            _battery2Animator.ResetTrigger("HighlightOff");
+            _battery2Animator.Rebind();
+        }
+        
         _batteryOptionsAnimator.ResetTrigger("MoveUp");
-        _doubleColorBulbAnimator.ResetTrigger("SetBrokenImage");
+        //_doubleColorBulbAnimator.ResetTrigger("SetBrokenImage");
         _doubleColorBulbAnimator.ResetTrigger("RedBlueOn");
-        _battery1Animator.Rebind();
-        _battery2Animator.Rebind();
+                
         _animationIndex = 0;
     }
     #endregion Methods (end)

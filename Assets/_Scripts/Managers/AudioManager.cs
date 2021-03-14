@@ -29,10 +29,11 @@ public class AudioManager : MonoBehaviour
         else
             Destroy(_instance);
     }
-    public static void PlayOneShot(AudioClip clip)
+    public static void PlayOneShot(AudioClip clip, float pitchSetting = 1f)
     {
         if (Instance.Settings.IsSfxOn)
         {
+            Instance.SFXSource.pitch = pitchSetting;
             Instance.SFXSource.PlayOneShot(clip);
         }
     }
