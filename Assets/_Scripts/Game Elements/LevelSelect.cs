@@ -25,6 +25,9 @@ public class LevelSelect : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _levelNumberDisplay = null;
 
+    [SerializeField]
+    private AudioClip _clickSFX = null;
+
     private bool _isLocked = false;
     #endregion Fields, Properites (end)
 
@@ -41,6 +44,7 @@ public class LevelSelect : MonoBehaviour
     {
         if (_isLocked)
             return;
+        AudioManager.PlayOneShot(_clickSFX);
         _levelManager.LevelSelect_LevelClicked(_levelNumber);
     }
     #endregion Methods (end)

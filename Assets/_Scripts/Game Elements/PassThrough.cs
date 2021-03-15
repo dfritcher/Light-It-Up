@@ -268,7 +268,7 @@ public class PassThrough : PowerableBase
         var inputDirection = _externalPowerSources.Find(ps => ps.Powerable == requestor).InputDirection;
         foreach (var source in _externalPowerSources)
         {
-            if (source.InputDirection == inputDirection || source is Bulb)
+            if (source.InputDirection == inputDirection || source.Powerable is Bulb)
                 continue;
             var otherColors = source.Powerable.GetOtherSideColors(this);
             foreach (var color in otherColors)

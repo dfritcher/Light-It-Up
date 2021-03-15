@@ -166,14 +166,9 @@ public class Battery : PowerableBase
         CurrentPower.ColorTypes= _originalColorTypes.Clone();
         if(_powerDisplay)
             _powerDisplay.text = _minPower.ToString();
-        if (CurrentPower.Amount == _maxPower)
-        {
-            _increasePowerButton.interactable = false;
-        }
-        if (CurrentPower.Amount == _minPower)
-        {            
-            _decreasePowerButton.interactable = false;
-        }
+        _increasePowerButton.interactable = CurrentPower.Amount == _maxPower ? false : true;
+        _decreasePowerButton.interactable = CurrentPower.Amount == _minPower ? false : true;
+        
         UpdateColorDisplay();
     }
 

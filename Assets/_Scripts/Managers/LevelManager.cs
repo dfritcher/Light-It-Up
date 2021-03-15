@@ -38,6 +38,8 @@ public class LevelManager : MonoBehaviour
     private AudioClip _menuMusic = null;
     [SerializeField]
     private GameObject _skipLevelButton = null;
+    [SerializeField]
+    private AudioClip _playClickSFX = null;
 
     [Header("Screens")]
     [SerializeField]
@@ -166,7 +168,8 @@ public class LevelManager : MonoBehaviour
     #endregion Unity Engine Hooks (en)
     
     public void PlayClicked()
-    {        
+    {
+        AudioManager.PlayOneShot(_playClickSFX);
         TriggerLevelAnimation(PlayClickedCallback);        
     }
 
