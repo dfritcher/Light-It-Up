@@ -20,9 +20,6 @@ public class Junction : PowerableBase
     private List<Image> _junctionColors = null;
 
     [SerializeField]
-    private List<PowerableBase> _powerables = null;
-
-    [SerializeField]
     private List<ExternalPower> _poweredBulbs = null;
 
     /// <summary>
@@ -32,10 +29,65 @@ public class Junction : PowerableBase
     [SerializeField]
     private List<ExternalPower> _powerSources = null;
 
+    [SerializeField]
+    private ParticleSystem _redSpark = null;
+
+    [SerializeField]
+    private ParticleSystem _blueSpark = null;
+
+    [SerializeField]
+    private ParticleSystem _greenSpark = null;
+
+    private float _redSparkInterval = 1f;
+    private float _blueSparkInterval = 1f;
+    private float _greenSparkInterval = 1f;
+    private float _redSparkTime = 0f;
+    private float _blueSparkTime = 0f;
+    private float _greenSparkTime = 0f;
+
     protected override void Awake()
     {
         base.Awake();
         UpdateColorDisplay();
+        _redSparkInterval = UnityEngine.Random.Range(5f, 10f);
+        _blueSparkInterval = UnityEngine.Random.Range(5f, 10f);
+        _greenSparkInterval = UnityEngine.Random.Range(5f, 10f);
+    }
+
+    private void Update()
+    {
+        if(_redSparkTime > _redSparkInterval)
+        {
+            if(CurrentColorTypes.Contains(ColorType.Red))
+                _redSpark.Play();
+            _redSparkTime = 0f;
+        }
+        else
+        {
+            _redSparkTime += Time.deltaTime;
+        }
+
+        if (_blueSparkTime > _blueSparkInterval)
+        {
+            if(CurrentColorTypes.Contains(ColorType.Blue))
+                _blueSpark.Play();
+            _blueSparkTime = 0f;
+        }
+        else
+        {
+            _blueSparkTime += Time.deltaTime;
+        }
+
+        if (_greenSparkTime > _greenSparkInterval)
+        {
+            if(CurrentColorTypes.Contains(ColorType.Green))
+                _greenSpark.Play();
+            _greenSparkTime = 0f;
+        }
+        else
+        {
+            _greenSparkTime += Time.deltaTime;
+        }
     }
 
     public void Setup()
@@ -45,55 +97,46 @@ public class Junction : PowerableBase
 
     private void SetCurrentPower()
     {
-        //if (_powerables == null)
-        //    return;
-
-        //var colors = new List<ColorType>();
-        ////Figure out our current power/colors
-        //foreach (var powerable in _powerables)
-        //{
-        //    if (powerable.IsPowered)
-        //    {
-        //        var colorsToAdd = powerable.GetPowers(this);
-        //        colorsToAdd.ForEach(c => c.ColorTypes.Remove(ColorType.None));
-        //        colors.AddRange(colorsToAdd.SelectMany(c => c.ColorTypes));
-        //    }
-        //}
-        //colors.Distinct().ToList();
-        //if (colors.Count > 0)
-        //    _currentColorTypes = colors;
-        //else
-        //{
-        //    _currentColorTypes = _originalColorTypes;
-        //}
-    }
-
-    private int GetIndexFromPower(ColorType power)
-    {
-        switch (power)
+        _currentColorTypes = _originalColorTypes.Clone();
+        foreach (var externalSource in _externalPowerSources)
         {
-            case ColorType.None:
-                return 0;
-            case ColorType.Red:
-                return 1;
-            case ColorType.Green:
-                return 2;
-            case ColorType.Blue:
-                return 3;
-            default:
-                return 0;
+            if (!externalSource.Powerable.IsPoweredFromOtherSide(this))
+                continue;
+            if (externalSource.Powerable is Battery battery)
+            {
+                foreach (var color in battery.CurrentPower.ColorTypes)
+                {
+                    if (!CurrentColorTypes.Contains(color))
+                    {
+                        CurrentColorTypes.Add(color);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var poweredColor in externalSource.Powerable.PoweredColors)
+                {
+                    foreach (var color in poweredColor.ColorTypes)
+                    {
+                        if (!CurrentColorTypes.Contains(color))
+                        {
+                            CurrentColorTypes.Add(color);
+                        }
+                    }
+                }
+            }
         }
     }
 
     private void UpdateColorDisplay()
     {
-        if (_junctionColors == null || _junctionColors.Count <= 0)
-            return;
-        _junctionColors[1].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Red));
-        _junctionColors[2].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Green));
-        _junctionColors[3].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
+        //if (_junctionColors == null || _junctionColors.Count <= 0)
+        //    return;
+        //_junctionColors[1].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Red));
+        //_junctionColors[2].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Green));
+        //_junctionColors[3].gameObject.SetActive(CurrentColorTypes.Contains(ColorType.Blue));
 
-        _junctionColors[0].gameObject.SetActive(!_junctionColors[1].IsActive() && !_junctionColors[2].IsActive() && !_junctionColors[3].IsActive());
+        //_junctionColors[0].gameObject.SetActive(!_junctionColors[1].IsActive() && !_junctionColors[2].IsActive() && !_junctionColors[3].IsActive());
     }
    
     public override List<Power> GetPowers(PowerableBase requestor)
@@ -111,26 +154,18 @@ public class Junction : PowerableBase
     {
         ResetPowerable();
         SetCurrentPower();
-        CheckPoweredState(this);
-        UpdateColorDisplay();
-
-        ////Notify everyone we updated
-        //foreach (var powerable in _powerables)
-        //{
-        //    if (powerable == powerableBase)
-        //        continue;
-        //    powerable.UpdatePowerState(this);
-        //}
+        CheckPoweredState();
+        UpdateColorDisplay();       
     }
 
-    private void CheckPoweredState(PowerableBase powerableBase)
+    private void CheckPoweredState()
     {
         var isPowered = false;
-        foreach (var source in _powerables)
+        foreach (var source in _externalPowerSources)
         {
             if (isPowered)
                 break;
-            isPowered = source.IsPowered;
+            isPowered = source.Powerable.IsPowered;
         }
         _isPowered = isPowered;
     }
@@ -147,18 +182,22 @@ public class Junction : PowerableBase
 
     public override void DeterminePowerColorStateChange(PowerableBase powerableBase, bool checkDirection = false)
     {
-        
+        ResetPowerable();
+        SetCurrentPower();
+        CheckPoweredState();
+        UpdateColorDisplay();
     }
 
     public override List<ColorType> GetOtherSideColors(PowerableBase requestor)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public override void CheckStateChanged(PowerableBase requestor, bool forcheCheck)
     {
         ResetPowerable();
         SetCurrentPower();
+        CheckPoweredState();
         UpdateColorDisplay();
     }
 }

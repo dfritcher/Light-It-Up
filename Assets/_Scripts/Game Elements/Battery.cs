@@ -23,6 +23,9 @@ public class Battery : PowerableBase
     [SerializeField]
     private List<Bulb> _bulbs = null;
 
+    [SerializeField]
+    private List<Junction> _junctions = null;
+
     //[SerializeField]
     //private List<Image> _batteryColors = null;
 
@@ -274,7 +277,8 @@ public class Battery : PowerableBase
         //_objectsWePower.ForEach(p => p.DeterminePowerColorStateChange(this));
         _externalPowerSources.ForEach(p => p.Powerable.CheckStateChanged(this, true));                
         _wires.ForEach(w => w.CheckStateChanged(this, true));        
-        _bulbs.ForEach(b => b.CheckStateChanged(this, true));        
+        _bulbs.ForEach(b => b.CheckStateChanged(this, true));
+        _junctions.ForEach(w => w.CheckStateChanged(this, true));
     }
     
     private void SetupPoweredObjects()
@@ -282,6 +286,7 @@ public class Battery : PowerableBase
         _objectsWePower.ForEach(p => p.Setup(this));
         _wires.ForEach(w => w.Setup(this));
         _bulbs.ForEach(b => b.Setup(this));
+        _junctions.ForEach(b => b.Setup(this));
     }
 
     private void UpdateColorDisplay()

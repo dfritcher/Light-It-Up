@@ -40,6 +40,9 @@ public class PassThrough : PowerableBase
     private List<Wire> _wires = null;
 
     [SerializeField]
+    private List<Junction> _junctions = null;
+
+    [SerializeField]
     private bool _isClickable = true;
     public override bool IsClickable { get { return _isClickable; } }
 
@@ -584,6 +587,10 @@ public class PassThrough : PowerableBase
         for (int i = 0; i < Bulbs.Length; i++)
         {
             Bulbs[i].CheckStateChanged(this, false);
+        }
+        foreach (var junction in _junctions)
+        {
+            junction.CheckStateChanged(this, false);
         }
     }
 
