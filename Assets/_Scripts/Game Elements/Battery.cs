@@ -87,6 +87,8 @@ public class Battery : PowerableBase
     private AudioClip _powerUpClip = null;
     [SerializeField]
     private float[] _pitch = null;
+
+    private Level _level = null;
     #endregion Fields, Properties (end)
 
     #region Delegates, Events
@@ -143,8 +145,9 @@ public class Battery : PowerableBase
     }
     #endregion Unity Engine Methos (end)
 
-    public void Setup(Camera mainCamera)
+    public void Setup(Level level, Camera mainCamera)
     {
+        _level = level;
         _increaseButtonCanvas.worldCamera = mainCamera;
         _decreaseButtonCanvas.worldCamera = mainCamera;
 
@@ -186,6 +189,8 @@ public class Battery : PowerableBase
     /// </summary>
     public void BatteryClicked()
     {
+        if (!_level.CanPlay)
+            return;
         if (_isClickable)
         {
             SetSelectedState(true);

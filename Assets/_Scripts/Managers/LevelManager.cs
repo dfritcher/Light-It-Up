@@ -87,6 +87,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private CreditsManager _creditsManager = null;
 
+    [SerializeField]
+    private PlayManager _playManager = null;
+
     [Header("Action Menu"), Space(8)]
     [SerializeField]
     private GameObject _actionsMenu = null;
@@ -142,7 +145,7 @@ public class LevelManager : MonoBehaviour
     private void Awake()
     {
         LoadGameInfo();
-
+        _playManager.IsActive = true;
         if (_instance == null)
             _instance = this;
         else
@@ -175,6 +178,7 @@ public class LevelManager : MonoBehaviour
 
     private void PlayClickedCallback()
     {
+        _playManager.IsActive = false;
         SetLevelSelectState(true);
         SetOverlayState(false);
         SetPlayScreenState(false);
@@ -206,6 +210,7 @@ public class LevelManager : MonoBehaviour
     {
         SetOverlayState(true);
         _currentLevel.gameObject.SetActive(true);
+        StartCoroutine(HideDefeatMessage());
     }
 
     public void ResetVictoryState()
@@ -240,11 +245,12 @@ public class LevelManager : MonoBehaviour
             _currentLevel.gameObject.SetActive(false);
             SetOverlayState(false);
             _defeatParent.SetActive(true);
+            _defeatMessage.gameObject.SetActive(true);
             _defeatMessage.text = _currentLevel.DefeatMessage != string.Empty ? _currentLevel.DefeatMessage : "SORRY YOU LOSE! TRY AGAIN!";
-            _victoryParent.SetActive(false);
+            _victoryParent.SetActive(false);            
         }
 
-        if(_failCount > 2)
+        if(_failCount > 8)
         {
             SetSkipLevelButtonState(true);
         }
@@ -254,8 +260,14 @@ public class LevelManager : MonoBehaviour
     {
         _skipLevelButton.SetActive(active);
     }
+
+    private IEnumerator HideDefeatMessage()
+    {
+        yield return new WaitForSeconds(2.5f);
+        _defeatMessage.gameObject.SetActive(false);
+    }
     #endregion Victory Defeat State (end)
-    
+
     #region Level Select 
     internal void LevelSelect_LevelClicked(int levelNumber)
     {

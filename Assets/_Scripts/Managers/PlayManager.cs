@@ -15,6 +15,7 @@ public class PlayManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI[] _titleTexts = new TextMeshProUGUI[3];
 
+    public bool IsActive { get; set; }
     private int _index = 0;
 
     private Color _originalColor;
@@ -30,6 +31,8 @@ public class PlayManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsActive)
+            return;
         if(_changeDuration > _changeTargetTime)
         {
             SwitchHighlightedText();

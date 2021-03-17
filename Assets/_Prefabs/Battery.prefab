@@ -25,8 +25,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 77866931005407898}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1, y: 1.04, z: 1}
+  m_LocalPosition: {x: 0.01, y: -0.0042, z: 0}
+  m_LocalScale: {x: 1.1504425, y: 1.533129, z: 1}
   m_Children: []
   m_Father: {fileID: 7023106374097906549}
   m_RootOrder: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.13, y: 1.85}
+  m_Size: {x: 1.3, y: 2.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -638,7 +638,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6267148944496241688}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.008, y: -0.011, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7023106374097906549}
@@ -932,6 +932,7 @@ MonoBehaviour:
   _objectsWePower: []
   _wires: []
   _bulbs: []
+  _junctions: []
   _isClickable: 1
   _hasVariablePower: 0
   _selectBatteryOption: {fileID: 0}
@@ -1007,7 +1008,7 @@ Transform:
   m_GameObject: {fileID: 7023106374472606540}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.1084, z: 0}
-  m_LocalScale: {x: 1, y: 0.99996835, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7023106374097906549}
   m_RootOrder: 3
@@ -1171,7 +1172,7 @@ Transform:
   m_GameObject: {fileID: 7023106375505610433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.3992, z: 0}
-  m_LocalScale: {x: 1, y: 1.1085765, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7023106374097906549}
   m_RootOrder: 2

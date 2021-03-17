@@ -43,6 +43,7 @@ public class Inhibitor : PowerableBase
     private bool _isClickable = true;
     public override bool IsClickable { get { return _isClickable; } }
 
+
     #endregion Populated in Scene (end)
 
     #region Populated by Code
@@ -65,6 +66,7 @@ public class Inhibitor : PowerableBase
     private bool _stateChanged = false;
 
     private PowerableBase _triggeringSource = null;
+    private Level _level = null;
     #endregion Populated by Code (end)
 
     #region Populated By Prefab
@@ -413,9 +415,9 @@ public class Inhibitor : PowerableBase
     }
 
     #endregion Overrides (end)
-    public void Setup()
+    public void Setup(Level level)
     {
-
+        _level = level;
     }
 
     public override void Setup(PowerableBase powerableBase)
@@ -439,6 +441,8 @@ public class Inhibitor : PowerableBase
 
     public void InhibitorClicked()
     {
+        if(!_level.CanPlay)
+            return;
         if (_isClickable)
         {
             OnClick?.Invoke(this);

@@ -65,6 +65,8 @@ public class PassThrough : PowerableBase
     private bool _stateChanged = false;
 
     private PowerableBase _triggeringSource = null;
+
+    private Level _level = null;
     #endregion Populated by Code (end)
 
     #region Populated By Prefab
@@ -418,9 +420,9 @@ public class PassThrough : PowerableBase
 
     #endregion Overrides (end)
 
-    public void Setup()
+    public void Setup(Level level)
     {
-
+        _level = level;
     }
 
     public override void Setup(PowerableBase powerableBase)
@@ -445,6 +447,8 @@ public class PassThrough : PowerableBase
 
     public void PassThroughClicked()
     {
+        if (!_level.CanPlay)
+            return;
         if (_isClickable)
         {
             SetSelectedState(true);

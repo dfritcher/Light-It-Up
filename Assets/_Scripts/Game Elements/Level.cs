@@ -56,6 +56,7 @@ public class Level : MonoBehaviour
     public LevelManager LevelManager { get { return _levelManager; } }
 
     private bool _canPlay = false;
+    public bool CanPlay { get { return _canPlay; } }
     private bool _hasWon = false;
 
     #region Tutorial
@@ -125,17 +126,17 @@ public class Level : MonoBehaviour
         }
         foreach(var inhibitor in _inhibitors)
         {
-            inhibitor.Setup();
+            inhibitor.Setup(this);
             inhibitor.OnClick += Inhibitor_OnClick;
         }
         foreach (var passThrough in _passThroughs)
         {
-            passThrough.Setup();
+            passThrough.Setup(this);
             passThrough.OnClick += PassThrough_OnClick;
         }
         foreach (var battery in _batteries)
         {
-            battery.Setup(LevelManager.Instance.MainCamera);
+            battery.Setup(this, LevelManager.Instance.MainCamera);
             battery.OnClick += Battery_OnClick;
         }
 
