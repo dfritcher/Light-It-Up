@@ -40,6 +40,12 @@ public class LevelManager : MonoBehaviour
     private GameObject _skipLevelButton = null;
     [SerializeField]
     private AudioClip _playClickSFX = null;
+    [SerializeField]
+    private Image _currentHint = null;
+    [SerializeField]
+    private Button _showHintsButton = null;
+    [SerializeField]
+    private Button _nextHintButton = null;
 
     [Header("Screens")]
     [SerializeField]
@@ -53,7 +59,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private CanvasGroup _levelOverlay = null;
     [SerializeField]
-    private CanvasGroup _levelSelect = null; 
+    private CanvasGroup _levelSelect = null;
+    [SerializeField]
+    private CanvasGroup _hintScreen = null;
 
     [SerializeField]
     private Camera _mainCamera;
@@ -169,7 +177,8 @@ public class LevelManager : MonoBehaviour
         InitializeAllLevels();        
     }
     #endregion Unity Engine Hooks (en)
-    
+
+    #region Unity Called Methods
     public void PlayClicked()
     {
         AudioManager.PlayOneShot(_playClickSFX);
@@ -186,6 +195,7 @@ public class LevelManager : MonoBehaviour
         SetActionMenuButtonsState();
         SetPageLevelButtonState(0);
         SetSkipLevelButtonState(false);
+        SetHintButtonState(false);
     }
 
     public void SkipLevelClicked()
@@ -197,6 +207,33 @@ public class LevelManager : MonoBehaviour
     {
         _mainCanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);        
     }
+
+    public void ShowLevelHints()
+    {
+        _hintScreen.alpha = 1;
+        _hintScreen.blocksRaycasts = true;
+        _hintScreen.interactable = true;
+        GetCurrentHint();
+    }
+
+    public void CloseLevelHints()
+    {
+        _hintScreen.alpha = 0;
+        _hintScreen.blocksRaycasts = false;
+        _hintScreen.interactable = false;        
+    }
+
+    public void GetCurrentHint()
+    {
+        _currentHint.sprite = _currentLevel.GetHint();
+    }
+
+    public void GetNextHint()
+    {
+        _currentHint.sprite = _currentLevel.GetNextHint();
+        _nextHintButton.interactable = _currentLevel.NextHintAvailable;
+    }
+    #endregion Unity Called Methods (end)
 
     #region Audio
     internal void SetLevelMusic(AudioClip levelMusic)
@@ -235,6 +272,7 @@ public class LevelManager : MonoBehaviour
                 SaveGameInfo();
             }
             SetSkipLevelButtonState(false);
+            SetHintButtonState(false);
             _failCount = 0;
         }            
         else 
@@ -254,11 +292,20 @@ public class LevelManager : MonoBehaviour
         {
             SetSkipLevelButtonState(true);
         }
+        if(_failCount > 2)
+        {
+            SetHintButtonState(true);
+        }
     }
 
     public void SetSkipLevelButtonState(bool active)
     {
         _skipLevelButton.SetActive(active);
+    }
+
+    public void SetHintButtonState(bool active)
+    {
+        _showHintsButton.gameObject.SetActive(active);
     }
 
     private IEnumerator HideDefeatMessage()
@@ -321,6 +368,7 @@ public class LevelManager : MonoBehaviour
         SetLevelSelectState(false);
         SetOverlayState(true);
         SetSkipLevelButtonState(false);
+        SetHintButtonState(false);
         var index = _levels.IndexOf(_levels.Find(l => l.IsActive));
         if (index == -1)
             index = 0;
@@ -419,7 +467,8 @@ public class LevelManager : MonoBehaviour
         {
             _tutorialButton.gameObject.SetActive(false);
             SetOverlayState(true);
-        }        
+        }
+        SetHintButtonState(false);
     }
 
     private void InitializeLevelSelectScreen()
@@ -468,6 +517,7 @@ public class LevelManager : MonoBehaviour
 
         _levels.Find(l => l.IsActive).RestartLevel();
         ResetVictoryState();
+        SetHintButtonState(_failCount > 2);
     }
 
     public void QuitGame()

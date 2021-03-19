@@ -41,6 +41,8 @@ public class Level : MonoBehaviour
     [SerializeField]
     private string _defeatMessage = string.Empty;
     public string DefeatMessage { get { return _defeatMessage; } }
+    [SerializeField]
+    private Sprite[] _hints = null;
 
     [SerializeField]
     private AudioClip _levelMusic = null;
@@ -54,11 +56,14 @@ public class Level : MonoBehaviour
 
     private LevelManager _levelManager = null;
     public LevelManager LevelManager { get { return _levelManager; } }
-
+    
+    [SerializeField]
     private bool _canPlay = false;
     public bool CanPlay { get { return _canPlay; } }
     private bool _hasWon = false;
+    private int _hintIndex = 0;
 
+    public bool NextHintAvailable { get { return _hintIndex != _hints.Length - 1; } }
     #region Tutorial
     [Header("Tutorial"), Space(8)]
     [SerializeField]
@@ -88,10 +93,10 @@ public class Level : MonoBehaviour
 
     //[SerializeField]
     //private Animator _batteryAnimator = null;
-    
+
     //[SerializeField]
     //private Animator _wireAnimator = null;
-    
+
     //[SerializeField]
     //private Animator _bulbAnimator = null;
 
@@ -104,6 +109,7 @@ public class Level : MonoBehaviour
     #endregion Fields, Properties (end)
 
     #region Methods
+    #region Unity Engine Hooks
     private void Awake()
     {
         _canPlay = true;
@@ -114,6 +120,7 @@ public class Level : MonoBehaviour
         _inhibitors = _gameObjectsParent.transform.GetComponentsInChildren<Inhibitor>(true).ToList();
         _passThroughs = _gameObjectsParent.transform.GetComponentsInChildren<PassThrough>(true).ToList();
     }
+    
     private void Start()
     {
         foreach (var bulb in _bulbs)
@@ -157,6 +164,7 @@ public class Level : MonoBehaviour
             CheckWinCondition();
         }        
     }
+    #endregion Unity Engine Hooks (end)
 
     public void Setup(LevelManager levelManager)
     {
@@ -182,6 +190,19 @@ public class Level : MonoBehaviour
         gameObject.SetActive(_isActive);
         if(_isActive)
             _levelManager?.SetLevelDisplay(_levelNumber);
+    }
+
+    public Sprite GetHint()
+    {       
+        return _hints[_hintIndex];
+    }
+
+    public Sprite GetNextHint()
+    {
+        _hintIndex++;
+        if (_hintIndex > _hints.Length - 1)
+            _hintIndex = _hints.Length - 1;
+        return GetHint();
     }
 
     private void Battery_OnClick(Battery battery)

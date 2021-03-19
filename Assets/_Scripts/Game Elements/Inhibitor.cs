@@ -441,7 +441,7 @@ public class Inhibitor : PowerableBase
 
     public void InhibitorClicked()
     {
-        if(!_level.CanPlay)
+        if (!_level.CanPlay)
             return;
         if (_isClickable)
         {
