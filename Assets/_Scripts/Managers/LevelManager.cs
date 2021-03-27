@@ -46,6 +46,8 @@ public class LevelManager : MonoBehaviour
     private Button _showHintsButton = null;
     [SerializeField]
     private Button _nextHintButton = null;
+    [SerializeField]
+    private EndLevel _endLevel = null;
 
     [Header("Screens")]
     [SerializeField]
@@ -163,6 +165,7 @@ public class LevelManager : MonoBehaviour
         _originalWidth = _actionMenuTransform.rect.width;
         _originalHeight = _actionMenuTransform.rect.height;
         _actionMenuTransform.sizeDelta = new Vector2(0f, 0f);
+        _endLevel.gameObject.SetActive(false);
         SetScreenResolution();
         SetActionMenuInactive();
         SetMainCanvasState(true);
@@ -421,19 +424,34 @@ public class LevelManager : MonoBehaviour
         var index = _levels.IndexOf(_levels.Find(l => l.IsActive));
         if (index == -1)
             index = 0;
-        DisableLevel(index);
-        InitializeLevel(index - 1);
+        if(index + 1 < _levels.Count)
+        {
+            DisableLevel(index);
+            InitializeLevel(index - 1);
+        }
+        else
+        {
+            _endLevel.gameObject.SetActive(false);
+            InitializeLevel(index);
+        }
     }
 
     private void InitializeNextLevel()
     {
         var index = _levels.IndexOf(_levels.Find(l => l.IsActive));
-        if (index == -1)
+        if (index == -1)//Check No level is active
             index = 0;
-
-        DisableLevel(index);
-        InitializeLevel(index + 1);
-        
+                            
+        if (index + 1 < _levels.Count)//Check if we've reached the last level.
+        {
+            DisableLevel(index);
+            InitializeLevel(index + 1);
+        }
+        else
+        {
+            DisableLevel(index);
+            _endLevel.gameObject.SetActive(true);
+        }
     }
 
     private void DisableLevel(int index)
@@ -624,7 +642,7 @@ public class LevelManager : MonoBehaviour
         if(_currentLevel!= null)
         {
             _previousLevelButton.interactable = _currentLevel.LevelNumber > 1;
-            _nextLevelButton.interactable = _currentLevel.LevelNumber < _levels.Count - 1;
+            _nextLevelButton.interactable = _currentLevel.LevelNumber < _levels.Count;
         }
         else
         {
