@@ -19,11 +19,11 @@ public class EndLevel : MonoBehaviour
     private void Awake()
     {
 #if UNITY_ANDROID
-        _message.text = $"Thank you for playing Light 'Em Up. If you enjoyed this game please check out my other game at: {_androidStoreText}";
+        _message.text = $"Thank you for playing Light 'Em Up. If you enjoyed this game please check out my other game at: <color=blue><u>{_androidStoreText}</color=blue></u>";
 #endif
 
 #if UNITY_IOS
-        _message.text = $"Thank you for playing Light 'Em Up. If you enjoyed this game please check out my other game at: {_iosStoreText}";
+        _message.text = $"Thank you for playing Light 'Em Up. If you enjoyed this game please check out my other game at: <color=blue><u>{_iosStoreText}</color=blue></u>";
 #endif
     }
     #endregion Methods (end)
