@@ -176,8 +176,8 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        InitializeAllLevels();
         AudioManager.PlayMusic();
-        InitializeAllLevels();        
     }
     #endregion Unity Engine Hooks (en)
 
@@ -213,6 +213,7 @@ public class LevelManager : MonoBehaviour
 
     public void ShowLevelHints()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         _hintScreen.alpha = 1;
         _hintScreen.blocksRaycasts = true;
         _hintScreen.interactable = true;
@@ -221,6 +222,7 @@ public class LevelManager : MonoBehaviour
 
     public void CloseLevelHints()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         _hintScreen.alpha = 0;
         _hintScreen.blocksRaycasts = false;
         _hintScreen.interactable = false;        
@@ -233,6 +235,7 @@ public class LevelManager : MonoBehaviour
 
     public void GetNextHint()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         _currentHint.sprite = _currentLevel.GetNextHint();
         _nextHintButton.interactable = _currentLevel.NextHintAvailable;
     }
@@ -327,6 +330,7 @@ public class LevelManager : MonoBehaviour
 
     public void NextPageLevelClicked()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         var index = _levelPages.IndexOf(_levelPages.Find(l => l.activeSelf));
         _levelPages[index].SetActive(false);
         index++;
@@ -343,6 +347,7 @@ public class LevelManager : MonoBehaviour
 
     public void PreviousPageLevelClicked()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         var index = _levelPages.IndexOf(_levelPages.Find(l => l.activeSelf));
         _levelPages[index].SetActive(false);
         index--;
@@ -540,11 +545,13 @@ public class LevelManager : MonoBehaviour
 
     public void QuitGame()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         Application.Quit();
     }
 
     public void NextLevelClicked()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         if (_skipTransitions)
         {
             ResetLevel();
@@ -565,6 +572,7 @@ public class LevelManager : MonoBehaviour
 
     public void PreviousLevelClicked()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         if (_skipTransitions)
         {
             ResetLevel();
@@ -585,12 +593,14 @@ public class LevelManager : MonoBehaviour
 
     public void LevelSelectClicked()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         InitializeLevelSelectScreen();
         SetLevelSelectState(true);
     }
 
     public void SettingsClicked()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         TriggerLevelAnimation(InitializeSettings);
     }
 
@@ -611,6 +621,7 @@ public class LevelManager : MonoBehaviour
 
     public void ToggleActionMenu()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         if (!_actionsMenu.activeSelf)
         {
             _actionsMenu.SetActive(true);
@@ -655,6 +666,7 @@ public class LevelManager : MonoBehaviour
     #region Tutorial
     public void PlayTutorialClicked()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         _batteryOptionsManager.ResetOptions();
         _inhibitorOptionsManager.ResetOptions();
         _passThroughOptionsManager.ResetOptions();
@@ -676,12 +688,18 @@ public class LevelManager : MonoBehaviour
     #endregion Tutorial (end)
 
     #region Saving/Loading
+    public static void SaveSettingChanges()
+    {
+        Instance._gameInfo.IsMusicOn = Instance._settingsManager.IsMusicOn;
+        Instance._gameInfo.IsSfxOn = Instance._settingsManager.IsSfxOn;
+        Instance.SaveGameInfo();
+    }
+    
     private void SaveGameInfo()
     {
         //Debug.Log("Save Game Started.");
         _saveDataManager.SaveGame(SaveGameCallback);
     }
-
     
     private void SaveGameCallback()
     {
@@ -691,17 +709,29 @@ public class LevelManager : MonoBehaviour
     private void LoadGameInfo()
     {
         //Debug.Log("Load Game Started.");
-        _saveDataManager.LoadGame(LoadGameCallback);
+        _saveDataManager.LoadGame(LoadGameSuccessCallback, LoadGameFailureCallback);
     }
 
-    private void LoadGameCallback()
+    private void LoadGameSuccessCallback(SaveData saveData)
     {
-        //Debug.Log("Load Game Completed.");
-        if(_unlockAllLevels)
-            _gameInfo.HighestLevelUnlocked = 30;
+        if (_unlockAllLevels)
+            _gameInfo.HighestLevelUnlocked = 35;
+        else
+            _gameInfo.HighestLevelUnlocked = saveData.HighestLevelUnlocked;
+
+        _gameInfo.IsMusicOn = saveData.MusicOn;
+        _gameInfo.IsSfxOn = saveData.SoundEffectsOn;
+        _settingsManager.InitializeSettings(saveData);        
     }
 
-    
+    private void LoadGameFailureCallback(SaveData saveData)
+    {
+        _gameInfo.HighestLevelUnlocked = saveData.HighestLevelUnlocked;
+        _gameInfo.IsMusicOn = saveData.MusicOn;
+        _gameInfo.IsSfxOn = saveData.SoundEffectsOn;
+        _settingsManager.InitializeSettings(saveData);
+        
+    }
     #endregion Saving/Loading (end)
     #endregion Methods (end)
 }

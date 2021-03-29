@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f741e1553a1f4f4a8af769fdc64acec, type: 3}
-  m_Name: SavedData
+  m_Name: Saved Data
   m_EditorClassIdentifier: 
-  _highestLevelUnlocked: 36
+  _highestLevelUnlocked: 1
   _isMusicOn: 1
   _isSfxOn: 1
