@@ -294,14 +294,8 @@ public class LevelManager : MonoBehaviour
             _victoryParent.SetActive(false);            
         }
 
-        if(_failCount > 8)
-        {
-            SetSkipLevelButtonState(true);
-        }
-        if(_failCount > 2)
-        {
-            SetHintButtonState(true);
-        }
+        SetSkipLevelButtonState(_failCount > 8);
+        SetHintButtonState(_failCount > 2 && _currentLevel.HasHints);
     }
 
     public void SetSkipLevelButtonState(bool active)
@@ -540,7 +534,7 @@ public class LevelManager : MonoBehaviour
 
         _levels.Find(l => l.IsActive).RestartLevel();
         ResetVictoryState();
-        SetHintButtonState(_failCount > 2);
+        SetHintButtonState(_failCount > 2 && _currentLevel.HasHints);
     }
 
     public void QuitGame()

@@ -62,7 +62,7 @@ public class Level : MonoBehaviour
     public bool CanPlay { get { return _canPlay; } }
     private bool _hasWon = false;
     private int _hintIndex = 0;
-
+    public bool HasHints { get { return _hints.Count() > 0; } }
     public bool NextHintAvailable { get { return _hintIndex != _hints.Length - 1; } }
     #region Tutorial
     [Header("Tutorial"), Space(8)]
