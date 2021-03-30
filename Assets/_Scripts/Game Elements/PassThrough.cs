@@ -155,7 +155,7 @@ public class PassThrough : PowerableBase
         }
 #endif
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             var response = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.touches[0].position), Vector2.zero, 100f);
