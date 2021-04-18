@@ -182,6 +182,7 @@ public class Level : MonoBehaviour
         _levelManager.ResetVictoryState();
         _canPlay = true;
         _hasWon = false;
+        _hintIndex = 0;
     }
 
     public void SetActiveState(bool isActive)
@@ -272,82 +273,12 @@ public class Level : MonoBehaviour
     #region Tutorial
     public void PlayTutorial()
     {
+        RestartLevel();
         _tutorialResolver.InitializeTutorial(0);        
     }
-    //public void TutorialSkipClicked()
-    //{
-    //    _tutorialIndex = 0;
-    //    //Stop any animations
-    //    _tutorialObjectsParent.SetActive(false);
-    //    _gameObjectsParent.SetActive(true);
-    //}
-    //public void TutorialNextClicked()
-    //{
-    //    _nextButton.interactable = false;
-    //    _tutorialIndex++;
-    //    InitializeTutorial(_tutorialIndex);
-    //    //Play animation at specific points.
-    //    //_levelManger.TriggerAnimation(_levelNumber, _tutorialIndex);
-    //    //How can we tie this all together genericly for all levels????
-    //}
-
-    //internal void OnFingerAnimationEnd(int index)
-    //{        
-    //    switch (index)
-    //    {
-    //        case 3:
-    //            _batteryOptionsAnimator.SetBool("BatteryOptions_MoveUp", true);
-    //            _nextButton.interactable = true;
-    //            break;
-    //        case 4:
-    //            _batteryAnimator.SetBool($"Battery_RedOn", true);
-    //            _bulbAnimator.SetBool($"RedOn", true);
-    //            _wireAnimator.SetBool($"RedOn", true);
-    //            break;
-    //    }        
-    //}
-
-    //private void InitializeTutorial(int index)
-    //{
-    //    if (index < 0)
-    //        index = 0;
-    //    if (index > _tutorialTexts.Count() - 1)
-    //        index = _tutorialTexts.Count() - 1;
-
-    //    //for(int i = 0; i < _tutorialTexts.Count(); i++)
-    //    //{
-    //    //    _tutorialTexts[i].gameObject.SetActive(i == index);
-    //    //}
-    //    _tutorialTexts.ForEach(t => t.gameObject.SetActive(false));
-    //    _tutorialTexts[index].gameObject.SetActive(true);
-
-    //    switch (index)
-    //    {
-    //        case 0:                
-    //        case 1:
-    //        case 2:
-    //            _nextButton.interactable = true;
-    //            break;
-    //        case 3:
-    //            _fingerAnimator.SetBool($"Lvl{_levelNumber}_Finger{1}", true);
-    //            _nextButton.interactable = false;
-    //            break;
-    //        case 4:
-    //            _fingerAnimator.SetBool($"Lvl{_levelNumber}_Finger{2}", true);
-    //            _nextButton.interactable = false;
-    //            break;
-    //        default:
-    //            _nextButton.interactable = true;
-    //            break;
-    //    }
-    //}
-
-
+    
     public void TutorialAnimationEnd(int index)
     {
-        //_nextButton.interactable = true;
-        //_tutorialIndex++;
-        //InitializeTutorial(_tutorialIndex);
         _levelManager.TriggerAnimation(_levelNumber, index);
     }
 

@@ -270,6 +270,7 @@ public class LevelManager : MonoBehaviour
         if (hasWon)
         {
             _victoryParent.SetActive(true);
+            _victoryMessage.gameObject.SetActive(true);
             _victoryMessage.text = _currentLevel.VictoryMessage != string.Empty ? _currentLevel.VictoryMessage : "YOU WIN!";
             _defeatParent.SetActive(false);
             if(level.IsActive && _gameInfo.HighestLevelUnlocked < _currentLevel.LevelNumber + 1)
@@ -279,6 +280,7 @@ public class LevelManager : MonoBehaviour
             }
             SetSkipLevelButtonState(false);
             SetHintButtonState(false);
+            StartCoroutine(HideVictoryMessage());
             _failCount = 0;
         }            
         else 
@@ -306,6 +308,12 @@ public class LevelManager : MonoBehaviour
     public void SetHintButtonState(bool active)
     {
         _showHintsButton.gameObject.SetActive(active);
+    }
+    
+    private IEnumerator HideVictoryMessage()
+    {
+        yield return new WaitForSeconds(2.5f);
+        _victoryMessage.gameObject.SetActive(false);
     }
 
     private IEnumerator HideDefeatMessage()
@@ -376,6 +384,7 @@ public class LevelManager : MonoBehaviour
             index = 0;
         SetActionMenuButtonsState();
         DisableLevel(index);
+        SetHintButtonState(false);
         InitializeLevel(_currentLevel.LevelNumber - 1);
         BatteryOptionsManager.Initialize();
     }
@@ -482,6 +491,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
+            _levels[index].RestartLevel();
             _tutorialButton.gameObject.SetActive(false);
             SetOverlayState(true);
         }
@@ -561,6 +571,7 @@ public class LevelManager : MonoBehaviour
             });
             ResetVictoryState();
         }
+        SetHintButtonState(false);
         SetActionMenuButtonsState();
     }
 
@@ -582,6 +593,7 @@ public class LevelManager : MonoBehaviour
             });
             ResetVictoryState();
         }
+        SetHintButtonState(false);
         SetActionMenuButtonsState();
     }
 
@@ -590,6 +602,7 @@ public class LevelManager : MonoBehaviour
         AudioManager.PlayOneShot(_playClickSFX);
         InitializeLevelSelectScreen();
         SetLevelSelectState(true);
+        SetHintButtonState(false);
     }
 
     public void SettingsClicked()

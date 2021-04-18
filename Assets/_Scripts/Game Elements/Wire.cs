@@ -46,21 +46,7 @@ public class Wire : PowerableBase
 
     public override void Setup(PowerableBase powerableBase)
     {
-        try
-        {
-            var source = _externalPowerSources.Find(ps => ps.Powerable == powerableBase);
-            if (source == null)
-            {
-                Debug.LogError($"{name} could not find {powerableBase.name} in its External Power Sources.");
-                return;
-            }
-                
-            //source.Powerable.PoweredColors = powerableBase.PoweredColors;
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"{ex.Message} Occurred in {name}");
-        }
+        
     }
 
     private void UpdateColorDisplay()

@@ -424,14 +424,12 @@ public class Inhibitor : PowerableBase
     {
         try
         {
-            var source = _externalPowerSources.Find(ps => ps.Powerable == powerableBase);
-            if (source == null)
-            {
-                Debug.LogError($"{name} could not find {powerableBase.name} in its External Power Sources.");
-                return;
-            }
-            //source.Powerable.PoweredColors = powerableBase.PoweredColors;
-            //PoweredColors.Add(new Power() { Amount = source.Powerable.CurrentPower.Amount, ColorTypes = source.Powerable.CurrentPower.ColorTypes.Clone()});
+            //var source = _externalPowerSources.Find(ps => ps.Powerable == powerableBase);
+            //if (source == null)
+            //{
+            //    Debug.LogError($"{name} could not find {powerableBase.name} in its External Power Sources.");
+            //    return;
+            //}            
         }
         catch (Exception ex)
         {

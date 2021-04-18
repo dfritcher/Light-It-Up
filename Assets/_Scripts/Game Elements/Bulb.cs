@@ -157,14 +157,12 @@ public class Bulb : PowerableBase
     {
         try
         {
-            var source = _externalPowerSources.Find(ps => ps.Powerable == powerableBase);
-            if(source == null)
-            {
-                Debug.LogError($"{name} could not find {powerableBase.name} in its External Power Sources.");
-                return;
-            }
-                
-            //source.Powerable.PoweredColors = powerableBase.PoweredColors;
+            //var source = _externalPowerSources.Find(ps => ps.Powerable == powerableBase);
+            //if(source == null)
+            //{
+            //    Debug.LogError($"{name} could not find {powerableBase.name} in its External Power Sources.");
+            //    return;
+            //}                
         }
         catch(Exception ex)
         {
