@@ -374,7 +374,6 @@ public class LevelManager : MonoBehaviour
     private void LevelSelectClickedCallback()
     {
         SetActionMenuButtonsState();
-        ResetLevel();
         SetLevelSelectState(false);
         SetOverlayState(true);
         SetSkipLevelButtonState(false);
@@ -483,18 +482,17 @@ public class LevelManager : MonoBehaviour
         if (_levels[index].HasTutorial)
         {
             _tutorialButton.gameObject.SetActive(true);
-            SetOverlayState(false);
-            _levels[index].PlayTutorial();
+            SetOverlayState(false);            
             _batteryOptionsManager.SetInActive();
             _inhibitorOptionsManager.SetInactive();
             _passThroughOptionsManager.SetInactive();
         }
         else
-        {
-            _levels[index].RestartLevel();
+        {            
             _tutorialButton.gameObject.SetActive(false);
             SetOverlayState(true);
         }
+        _levels[index].InitializeLevel();
         SetHintButtonState(false);
     }
 
@@ -556,9 +554,9 @@ public class LevelManager : MonoBehaviour
     public void NextLevelClicked()
     {
         AudioManager.PlayOneShot(_playClickSFX);
+        _currentLevel.ResetInitialized();
         if (_skipTransitions)
         {
-            ResetLevel();
             InitializeNextLevel();
             ResetVictoryState();            
         }
@@ -566,7 +564,6 @@ public class LevelManager : MonoBehaviour
         {
             TriggerLevelAnimation(() => 
             {
-                ResetLevel();
                 InitializeNextLevel(); 
             });
             ResetVictoryState();
@@ -578,9 +575,9 @@ public class LevelManager : MonoBehaviour
     public void PreviousLevelClicked()
     {
         AudioManager.PlayOneShot(_playClickSFX);
+        _currentLevel.ResetInitialized();
         if (_skipTransitions)
         {
-            ResetLevel();
             InitializePreviousLevel();
             ResetVictoryState();
         }
@@ -588,7 +585,6 @@ public class LevelManager : MonoBehaviour
         {
             TriggerLevelAnimation(() =>
             {
-                ResetLevel();
                 InitializePreviousLevel();
             });
             ResetVictoryState();
@@ -600,6 +596,7 @@ public class LevelManager : MonoBehaviour
     public void LevelSelectClicked()
     {
         AudioManager.PlayOneShot(_playClickSFX);
+        _currentLevel.ResetInitialized();
         InitializeLevelSelectScreen();
         SetLevelSelectState(true);
         SetHintButtonState(false);

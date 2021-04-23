@@ -64,6 +64,7 @@ public class Level : MonoBehaviour
     private int _hintIndex = 0;
     public bool HasHints { get { return _hints.Count() > 0; } }
     public bool NextHintAvailable { get { return _hintIndex != _hints.Length - 1; } }
+    private bool _initialized = false;
     #region Tutorial
     [Header("Tutorial"), Space(8)]
     [SerializeField]
@@ -164,6 +165,7 @@ public class Level : MonoBehaviour
             CheckWinCondition();
         }        
     }
+   
     #endregion Unity Engine Hooks (end)
 
     public void Setup(LevelManager levelManager)
@@ -271,12 +273,26 @@ public class Level : MonoBehaviour
     }
 
     #region Tutorial
+    public void InitializeLevel()
+    {
+        _gameObjectsParent.SetActive(true);
+        RestartLevel();
+        if (HasTutorial)
+        {
+            _gameObjectsParent.SetActive(false);
+            PlayTutorial();
+        }
+    }
     public void PlayTutorial()
     {
-        RestartLevel();
         _tutorialResolver.InitializeTutorial(0);        
     }
-    
+
+    public void ResetInitialized()
+    {
+        _initialized = false;
+    }
+
     public void TutorialAnimationEnd(int index)
     {
         _levelManager.TriggerAnimation(_levelNumber, index);
@@ -284,12 +300,17 @@ public class Level : MonoBehaviour
 
     internal void OnTutorialResolverCloseClicked()
     {
-        _levelManager.OnTutorialComplete(this);
+        _levelManager.OnTutorialComplete(this);        
     }
 
     internal void OnTutorialResolvedSkipClosed()
     {
         _levelManager.OnTutorialComplete(this);
+        if (!_initialized)
+        {
+            RestartLevel();
+            _initialized = true;
+        }           
     }
     #endregion Tutorial (end)
     #endregion Methods (end)
