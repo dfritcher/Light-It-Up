@@ -486,6 +486,7 @@ public class LevelManager : MonoBehaviour
             _batteryOptionsManager.SetInActive();
             _inhibitorOptionsManager.SetInactive();
             _passThroughOptionsManager.SetInactive();
+            SetActionMenuInactive();
         }
         else
         {            
@@ -551,6 +552,14 @@ public class LevelManager : MonoBehaviour
         Application.Quit();
     }
 
+    public void MenuAction_NextLevelClicked()
+    {
+        AudioManager.PlayOneShot(_playClickSFX);
+        if (_currentLevel.LevelNumber >= _gameInfo.HighestLevelUnlocked)
+            return;
+        NextLevelClicked();
+    }
+
     public void NextLevelClicked()
     {
         AudioManager.PlayOneShot(_playClickSFX);
@@ -558,18 +567,19 @@ public class LevelManager : MonoBehaviour
         if (_skipTransitions)
         {
             InitializeNextLevel();
-            ResetVictoryState();            
+            ResetVictoryState();
+            SetActionMenuButtonsState();
         }
         else
         {
             TriggerLevelAnimation(() => 
             {
-                InitializeNextLevel(); 
+                InitializeNextLevel();
+                SetActionMenuButtonsState();
             });
             ResetVictoryState();
         }
-        SetHintButtonState(false);
-        SetActionMenuButtonsState();
+        SetHintButtonState(false);        
     }
 
     public void PreviousLevelClicked()
@@ -580,22 +590,24 @@ public class LevelManager : MonoBehaviour
         {
             InitializePreviousLevel();
             ResetVictoryState();
+            SetActionMenuButtonsState();
         }
         else
         {
             TriggerLevelAnimation(() =>
             {
                 InitializePreviousLevel();
+                SetActionMenuButtonsState();
             });
             ResetVictoryState();
         }
-        SetHintButtonState(false);
-        SetActionMenuButtonsState();
+        SetHintButtonState(false);        
     }
 
     public void LevelSelectClicked()
     {
         AudioManager.PlayOneShot(_playClickSFX);
+        ToggleActionMenu();
         _currentLevel.ResetInitialized();
         InitializeLevelSelectScreen();
         SetLevelSelectState(true);
@@ -626,6 +638,7 @@ public class LevelManager : MonoBehaviour
     public void ToggleActionMenu()
     {
         AudioManager.PlayOneShot(_playClickSFX);
+        SetActionMenuButtonsState();
         if (!_actionsMenu.activeSelf)
         {
             _actionsMenu.SetActive(true);
@@ -657,7 +670,7 @@ public class LevelManager : MonoBehaviour
         if(_currentLevel!= null)
         {
             _previousLevelButton.interactable = _currentLevel.LevelNumber > 1;
-            _nextLevelButton.interactable = _currentLevel.LevelNumber < _levels.Count;
+            _nextLevelButton.interactable = _currentLevel.LevelNumber < _gameInfo.HighestLevelUnlocked;
         }
         else
         {
