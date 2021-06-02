@@ -208,6 +208,11 @@ public class Level : MonoBehaviour
         return GetHint();
     }
 
+    public string GetHintCount()
+    {
+        return $"HINT {_hintIndex + 1} / {_hints.Length}";
+    }
+
     private void Battery_OnClick(Battery battery)
     {
         _batteries.ForEach(b => {

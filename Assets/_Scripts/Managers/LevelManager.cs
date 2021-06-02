@@ -11,135 +11,88 @@ public class LevelManager : MonoBehaviour
 {
     #region Fields, Properties
     [Header("Scene References")]
-    [SerializeField]
-    private GameObject _victoryDisplay = null;
-    [SerializeField]
-    private TextMeshProUGUI _victoryMessage = null;
-
-    [SerializeField]
-    private GameObject _victoryParent = null;
-    [SerializeField]
-    private TextMeshProUGUI _defeatMessage = null;
-    [SerializeField]
-    private GameObject _defeatParent = null;
-    [SerializeField]
-    private TextMeshProUGUI _levelDisplay = null;
-    [SerializeField]
-    private List<Level> _levels = null;
-    [SerializeField]
-    private Transform _levelsParent = null;
-    [SerializeField]
-    private List<LevelSelect> _selectableLevels = null;
-    [SerializeField]
-    private Animator _levelTransition = null;
-    [SerializeField]
-    private GameObject _transitionObject = null;
-    [SerializeField]
-    private AudioClip _menuMusic = null;
-    [SerializeField]
-    private GameObject _skipLevelButton = null;
-    [SerializeField]
-    private AudioClip _playClickSFX = null;
-    [SerializeField]
-    private Image _currentHint = null;
-    [SerializeField]
-    private Button _showHintsButton = null;
-    [SerializeField]
-    private Button _nextHintButton = null;
-    [SerializeField]
-    private EndLevel _endLevel = null;
+    [SerializeField] private GameObject _victoryDisplay = null;
+    [SerializeField] private TextMeshProUGUI _victoryMessage = null;
+    [SerializeField] private GameObject _victoryParent = null;
+    [SerializeField] private TextMeshProUGUI _defeatMessage = null;
+    [SerializeField] private GameObject _defeatParent = null;
+    [SerializeField] private TextMeshProUGUI _levelDisplay = null;
+    [SerializeField] private List<Level> _levels = null;
+    [SerializeField] private Transform _levelsParent = null;
+    [SerializeField] private List<LevelSelect> _selectableLevels = null;
+    [SerializeField] private Animator _levelTransition = null;
+    [SerializeField] private GameObject _transitionObject = null;
+    [SerializeField] private AudioClip _menuMusic = null;
+    [SerializeField] private GameObject _skipLevelButton = null;
+    [SerializeField] private AudioClip _playClickSFX = null;
+    [SerializeField] private Image _currentHint = null;
+    [SerializeField] private Button _showHintsButton = null;
+    [SerializeField] private Button _nextHintButton = null;
+    [SerializeField] private EndLevel _endLevel = null;
+    [SerializeField] private TextMeshProUGUI _hintCountDisplay = null;
 
     [Header("Screens")]
-    [SerializeField]
-    private CanvasGroup _mainCanvas = null;
-    [SerializeField]
-    private CanvasScaler _mainCanvasScaler = null;
+    [SerializeField] private CanvasGroup _mainCanvas = null;
+    [SerializeField] private CanvasScaler _mainCanvasScaler = null;
     public CanvasScaler MainCanvasScaler { get { return _mainCanvasScaler; } }
 
-    [SerializeField]
-    private CanvasGroup _playScreen = null;
-    [SerializeField]
-    private CanvasGroup _levelOverlay = null;
-    [SerializeField]
-    private CanvasGroup _levelSelect = null;
-    [SerializeField]
-    private CanvasGroup _hintScreen = null;
-
-    [SerializeField]
-    private Camera _mainCamera;
+    [SerializeField] private CanvasGroup _playScreen = null;
+    [SerializeField] private CanvasGroup _levelOverlay = null;
+    [SerializeField] private CanvasGroup _levelSelect = null;
+    [SerializeField] private CanvasGroup _hintScreen = null;
+    [SerializeField] private Camera _mainCamera;
     public Camera MainCamera { get { return _mainCamera; } }
 
     [Header("Managers"), Space(8)]
-    [SerializeField]
-    private BatteryOptionsManager _batteryOptionsManager = null;
+    [SerializeField] private BatteryOptionsManager _batteryOptionsManager = null;
     public BatteryOptionsManager BatteryOptionsManager { get { return _batteryOptionsManager; } }
 
-    [SerializeField]
-    private InhibitorOptionsManager _inhibitorOptionsManager = null;
+    [SerializeField] private InhibitorOptionsManager _inhibitorOptionsManager = null;
     public InhibitorOptionsManager InhibitorOptionsManager { get { return _inhibitorOptionsManager; } }
 
-    [SerializeField]
-    private PassThroughOptionsManager _passThroughOptionsManager = null;
+    [SerializeField] private PassThroughOptionsManager _passThroughOptionsManager = null;
     public PassThroughOptionsManager PassThroughOptionsManager { get {return _passThroughOptionsManager; } }
 
-    [SerializeField]
-    private BrokenBulbAnimationManager _brokenBulbAnimManager = null;
+    [SerializeField] private BrokenBulbAnimationManager _brokenBulbAnimManager = null;
 
-    [SerializeField]
-    private AudioManager _audioManager = null;
+    [SerializeField] private AudioManager _audioManager = null;
 
-    [SerializeField]
-    private SaveDataManager _saveDataManager = null;
+    [SerializeField] private SaveDataManager _saveDataManager = null;
 
-    [SerializeField]
-    private SettingsManager _settingsManager = null;
+    [SerializeField] private SettingsManager _settingsManager = null;
 
-    [SerializeField]
-    private CreditsManager _creditsManager = null;
+    [SerializeField] private CreditsManager _creditsManager = null;
 
-    [SerializeField]
-    private PlayManager _playManager = null;
+    [SerializeField] private PlayManager _playManager = null;
 
     [Header("Action Menu"), Space(8)]
-    [SerializeField]
-    private GameObject _actionsMenu = null;
+    [SerializeField] private GameObject _actionsMenu = null;
     [SerializeField, FormerlySerializedAs("_actionMenu")]
     private RectTransform _actionMenuTransform = null;
-    [SerializeField]
-    private Button _previousLevelButton = null;
-    [SerializeField]
-    private Button _nextLevelButton = null;
+    [SerializeField] private Button _previousLevelButton = null;
+    [SerializeField] private Button _nextLevelButton = null;
 
     private float _originalWidth = 0f;
     private float _originalHeight = 0f;
 
-    [SerializeField]
-    private float _actionMenuAnimateTime = 0f;
+    [SerializeField] private float _actionMenuAnimateTime = 0f;
 
-    [SerializeField]
-    private List<GameObject> _textItems = null;
+    [SerializeField] private List<GameObject> _textItems = null;
 
     [Header("Tutorial References"), Space(8)]
-    [SerializeField]
-    private Button _tutorialButton = null;
+    [SerializeField] private Button _tutorialButton = null;
 
     [Header("Game Info"), Space(8)]
-    [SerializeField]
-    private GameSaveInfo _gameInfo = null;
+    [SerializeField] private GameSaveInfo _gameInfo = null;
 
     [Header("Level Select"), Space(8)]
-    [SerializeField]
-    private Button _previousLevelPageButton = null;
-    [SerializeField]
-    private Button _nextLevelPageButton = null;
-    [SerializeField]
-    private List<GameObject> _levelPages = new List<GameObject>();
+    [SerializeField] private Button _previousLevelPageButton = null;
+    [SerializeField] private Button _nextLevelPageButton = null;
+    [SerializeField] private List<GameObject> _levelPages = new List<GameObject>();
 
     [Header("Debug Options"), Space(8)]
-    [SerializeField]
-    private bool _skipTransitions = false;
-    [SerializeField]
-    private bool _unlockAllLevels = false;
+    [SerializeField] private bool _skipTransitions = false;
+    [SerializeField] private bool _unlockAllLevels = false;
 
     private static LevelManager _instance = null;
     public static LevelManager Instance { get { return _instance; } }
@@ -231,6 +184,7 @@ public class LevelManager : MonoBehaviour
     public void GetCurrentHint()
     {
         _currentHint.sprite = _currentLevel.GetHint();
+        _hintCountDisplay.text = _currentLevel.GetHintCount();
     }
 
     public void GetNextHint()
@@ -238,6 +192,7 @@ public class LevelManager : MonoBehaviour
         AudioManager.PlayOneShot(_playClickSFX);
         _currentHint.sprite = _currentLevel.GetNextHint();
         _nextHintButton.interactable = _currentLevel.NextHintAvailable;
+        _hintCountDisplay.text = _currentLevel.GetHintCount();
     }
     #endregion Unity Called Methods (end)
 
