@@ -56,6 +56,7 @@ public abstract class TutorialResolverBase : MonoBehaviour
     internal abstract void MoveFingerEnd();
 
     internal abstract void HandleTutorialStateByIndex(int index);
+    
     virtual public void OnCloseClicked()
     {
         StartCoroutine(CloseCoroutine());
@@ -96,6 +97,7 @@ public abstract class TutorialResolverBase : MonoBehaviour
         _level.OnTutorialResolvedSkipClosed();
         yield return null;
     }
+    
     internal void SetTutorialTextState(int index)
     {
         _tutorialTexts.ForEach(t => t.gameObject.SetActive(false));
@@ -132,12 +134,21 @@ public abstract class TutorialResolverBase : MonoBehaviour
     internal void MoveFinger(int index, Vector3 startPosition, Vector3 endPosition, bool useLocalPosition)
     {
         _animationIndex = index;
-        StartCoroutine(AnimateObject(_fingerTransform, startPosition, endPosition, MoveFingerEnd, useLocalPosition));
+        StartCoroutine(AnimateObject(_fingerTransform, startPosition, GetFinterPositionAdjustment(endPosition, useLocalPosition), MoveFingerEnd, useLocalPosition));
     }
 
     internal void ResetFingerLocation()
     {
         _fingerTransform.position = _fingerLocations[0];
+    }
+
+    internal Vector2 GetFinterPositionAdjustment(Vector2 originalPos, bool useLocalPosition)
+    {
+        if(useLocalPosition && _level.LevelManager.MainCamera.aspect > 1.3f && _level.LevelManager.MainCamera.aspect < 1.4f)
+        {
+            return new Vector2(originalPos.x, originalPos.y - 100);
+        }
+        return originalPos;
     }
     #endregion Methods (end)
 }
