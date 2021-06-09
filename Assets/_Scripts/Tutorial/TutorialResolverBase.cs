@@ -146,7 +146,7 @@ public abstract class TutorialResolverBase : MonoBehaviour
     {
         if(useLocalPosition && _level.LevelManager.MainCamera.aspect > 1.3f && _level.LevelManager.MainCamera.aspect < 1.4f)
         {
-            return new Vector2(originalPos.x, originalPos.y - 200);
+            return new Vector2(originalPos.x, originalPos.y - 250);
         }
         return originalPos;
     }

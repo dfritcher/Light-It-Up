@@ -120,6 +120,10 @@ public class Level : MonoBehaviour
         _wires = _gameObjectsParent.transform.GetComponentsInChildren<Wire>(true).ToList();
         _inhibitors = _gameObjectsParent.transform.GetComponentsInChildren<Inhibitor>(true).ToList();
         _passThroughs = _gameObjectsParent.transform.GetComponentsInChildren<PassThrough>(true).ToList();
+        if(LevelManager.MainCamera.aspect > 1.3f && LevelManager.MainCamera.aspect < 1.4f)
+        {
+            _gameObjectsParent.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+        }
     }
     
     private void Start()
