@@ -77,34 +77,6 @@ public class Level : MonoBehaviour
     [SerializeField]
     private TutorialResolverBase _tutorialResolver = null;
 
-    //[SerializeField]
-    //private Button _nextButton = null;
-
-    //[SerializeField]
-    //private Button _skipButton = null;
-
-    //[SerializeField]
-    //private List<TextMeshProUGUI> _tutorialTexts;
-
-    //[SerializeField]
-    //private GameObject _tutorialObjectsParent = null;
-
-    //[SerializeField]
-    //private Animator _fingerAnimator = null;
-
-    //[SerializeField]
-    //private Animator _batteryAnimator = null;
-
-    //[SerializeField]
-    //private Animator _wireAnimator = null;
-
-    //[SerializeField]
-    //private Animator _bulbAnimator = null;
-
-    //[SerializeField]
-    //private Animator _batteryOptionsAnimator = null;
-
-    //private int _tutorialIndex = 0;
     #endregion Tutorial (end)
 
     #endregion Fields, Properties (end)
@@ -120,10 +92,7 @@ public class Level : MonoBehaviour
         _wires = _gameObjectsParent.transform.GetComponentsInChildren<Wire>(true).ToList();
         _inhibitors = _gameObjectsParent.transform.GetComponentsInChildren<Inhibitor>(true).ToList();
         _passThroughs = _gameObjectsParent.transform.GetComponentsInChildren<PassThrough>(true).ToList();
-        if(LevelManager.MainCamera.aspect > 1.3f && LevelManager.MainCamera.aspect < 1.4f)
-        {
-            _gameObjectsParent.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
-        }
+        
     }
     
     private void Start()
@@ -154,12 +123,13 @@ public class Level : MonoBehaviour
 
         if (_hasTutorial)
         {
-            _tutorialResolver.Setup(this, _levelManager.MainCanvasScaler);
-            //_tutorialObjectsParent.SetActive(true);
-            //_gameObjectsParent.SetActive(false);
-            //InitializeTutorial(0);
+            _tutorialResolver.Setup(this, LevelManager.MainCanvasScaler);          
         }
-        _levelManager.SetLevelMusic(_levelMusic);
+        LevelManager.SetLevelMusic(_levelMusic);
+        if (LevelManager.MainCamera.aspect > 1.3f && LevelManager.MainCamera.aspect < 1.4f)
+        {
+            _gameObjectsParent.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+        }
     }
 
     private void LateUpdate()
