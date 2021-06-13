@@ -55,8 +55,6 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private BrokenBulbAnimationManager _brokenBulbAnimManager = null;
 
-    [SerializeField] private AudioManager _audioManager = null;
-
     [SerializeField] private SaveDataManager _saveDataManager = null;
 
     [SerializeField] private SettingsManager _settingsManager = null;
@@ -89,6 +87,10 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Button _previousLevelPageButton = null;
     [SerializeField] private Button _nextLevelPageButton = null;
     [SerializeField] private List<GameObject> _levelPages = new List<GameObject>();
+
+    [Header("Level Sounds"), Space(8)]
+    [SerializeField] private AudioClip[] _victoryClips = null;
+    [SerializeField] private AudioClip[] _defeatClips = null;
 
     [Header("Debug Options"), Space(8)]
     [SerializeField] private bool _skipTransitions = false;
@@ -228,6 +230,7 @@ public class LevelManager : MonoBehaviour
             _victoryMessage.gameObject.SetActive(true);
             _victoryMessage.text = _currentLevel.VictoryMessage != string.Empty ? _currentLevel.VictoryMessage : "YOU WIN!";
             _defeatParent.SetActive(false);
+            AudioManager.PlayOneShot(_victoryClips[UnityEngine.Random.Range(0,4)]);
             if(level.IsActive && _gameInfo.HighestLevelUnlocked < _currentLevel.LevelNumber + 1)
             {
                 _gameInfo.HighestLevelUnlocked = _currentLevel.LevelNumber + 1;

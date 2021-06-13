@@ -10,45 +10,32 @@ public class Level : MonoBehaviour
     #region Fields, Properties
     [Header("Object Variables")]
     // Start is called before the first frame update
-    [SerializeField]
-    private List<Battery> _batteries = null;
+    [SerializeField] private List<Battery> _batteries = null;
 
-    [SerializeField]
-    private List<Bulb> _bulbs = null;
+    [SerializeField] private List<Bulb> _bulbs = null;
     public List<Bulb> Bulbs { get { return _bulbs; } }
 
-    [SerializeField]
-    private List<Wire> _wires = null;
+    [SerializeField] private List<Wire> _wires = null;
 
-    [SerializeField]
-    private List<Inhibitor> _inhibitors = null;
+    [SerializeField] private List<Inhibitor> _inhibitors = null;
     public bool HasInhibitors { get { return _inhibitors.Count > 0; } }
 
-    [SerializeField]
-    private List<PassThrough> _passThroughs = null;
+    [SerializeField] private List<PassThrough> _passThroughs = null;
     public bool HasPassThroughs { get { return _passThroughs.Count > 0; } }
 
-    [SerializeField]
-    private int _levelNumber = 0;
+    [SerializeField] private int _levelNumber = 0;
     public int LevelNumber { get { return _levelNumber; } }
 
     [Header("Scene References"), Space(8)]
-    [SerializeField]
-    private GameObject _gameObjectsParent = null;
-    [SerializeField]
-    private string _victoryMessage = string.Empty;
+    [SerializeField] private GameObject _gameObjectsParent = null;
+    [SerializeField] private string _victoryMessage = string.Empty;
     public string VictoryMessage { get { return _victoryMessage; } }
-    [SerializeField]
-    private string _defeatMessage = string.Empty;
+    [SerializeField] private string _defeatMessage = string.Empty;
     public string DefeatMessage { get { return _defeatMessage; } }
-    [SerializeField]
-    private Sprite[] _hints = null;
+    [SerializeField] private Sprite[] _hints = null;
 
-    [SerializeField]
-    private AudioClip _levelMusic = null;
-
-    [SerializeField]
-    private bool _allBatteryColorsAvailable = false;
+    [SerializeField] private AudioClip _levelMusic = null;
+    [SerializeField] private bool _allBatteryColorsAvailable = false;
     public bool AllBatteryColorsAvailable { get { return _allBatteryColorsAvailable; } }
 
     private bool _isActive = false;
@@ -70,7 +57,7 @@ public class Level : MonoBehaviour
     [SerializeField]
     private bool _hasTutorial = false;
     public bool HasTutorial { get { return _hasTutorial; } }
-
+    [SerializeField] private GameObject _tutorialGameObjectsParent = null;
     [SerializeField]
     private Canvas _levelCanvas = null;
 
@@ -123,13 +110,15 @@ public class Level : MonoBehaviour
 
         if (_hasTutorial)
         {
-            _tutorialResolver.Setup(this, LevelManager.MainCanvasScaler);          
+            _tutorialResolver.Setup(this, LevelManager.MainCanvasScaler);
+            if (LevelManager.MainCamera.aspect > 1.3f && LevelManager.MainCamera.aspect < 1.4f)
+            {
+                _gameObjectsParent.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+                _tutorialGameObjectsParent.transform.localScale = new Vector3(1.25f, 1.25f, 1f);
+            }
         }
         LevelManager.SetLevelMusic(_levelMusic);
-        if (LevelManager.MainCamera.aspect > 1.3f && LevelManager.MainCamera.aspect < 1.4f)
-        {
-            _gameObjectsParent.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
-        }
+        
     }
 
     private void LateUpdate()
