@@ -90,7 +90,7 @@ public class LevelManager : MonoBehaviour
 
     [Header("Level Sounds"), Space(8)]
     [SerializeField] private AudioClip[] _victoryClips = null;
-    [SerializeField] private AudioClip[] _defeatClips = null;
+    [SerializeField] private AudioClip[] _defeatClip = null;
 
     [Header("Debug Options"), Space(8)]
     [SerializeField] private bool _skipTransitions = false;
@@ -210,6 +210,7 @@ public class LevelManager : MonoBehaviour
     {
         SetOverlayState(true);
         _currentLevel.gameObject.SetActive(true);
+        AudioManager.PlayOneShot(_defeatClip[UnityEngine.Random.Range(0, _defeatClip.Length)], UnityEngine.Random.Range(0f, 2f));
         StartCoroutine(HideDefeatMessage());
     }
 
