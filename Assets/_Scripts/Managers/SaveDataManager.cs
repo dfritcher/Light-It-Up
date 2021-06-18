@@ -8,13 +8,9 @@ public class SaveDataManager : MonoBehaviour
     [SerializeField]
     private GameSaveInfo _gameSaveInfo = null;
 
-    public delegate void SaveGameCallback();
-    public event SaveGameCallback SaveGameComplete;
-
-    public delegate void LoadGameSuccessCallback(SaveData saveData);
-    public event LoadGameSuccessCallback LoadGameSuccessComplete;
-    public delegate void LoadGameFailureCallback(SaveData saveData);
-    public event LoadGameFailureCallback LoadGameFailureComplete;
+    public delegate void SaveGameCallback();    
+    public delegate void LoadGameSuccessCallback(SaveData saveData);    
+    public delegate void LoadGameFailureCallback(SaveData saveData);    
 
     public void SaveGame(SaveGameCallback callback)
     {

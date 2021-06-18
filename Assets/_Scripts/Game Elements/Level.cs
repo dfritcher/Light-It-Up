@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Level : MonoBehaviour
 {
@@ -47,19 +44,16 @@ public class Level : MonoBehaviour
     [SerializeField]
     private bool _canPlay = false;
     public bool CanPlay { get { return _canPlay; } }
-    private bool _hasWon = false;
+    
     private int _hintIndex = 0;
     public bool HasHints { get { return _hints.Count() > 0; } }
     public bool NextHintAvailable { get { return _hintIndex != _hints.Length - 1; } }
     private bool _initialized = false;
     #region Tutorial
     [Header("Tutorial"), Space(8)]
-    [SerializeField]
-    private bool _hasTutorial = false;
+    [SerializeField] private bool _hasTutorial = false;
     public bool HasTutorial { get { return _hasTutorial; } }
     [SerializeField] private GameObject _tutorialGameObjectsParent = null;
-    [SerializeField]
-    private Canvas _levelCanvas = null;
 
     [SerializeField]
     private TutorialResolverBase _tutorialResolver = null;
@@ -73,13 +67,12 @@ public class Level : MonoBehaviour
     private void Awake()
     {
         _canPlay = true;
-        _hasWon = false;
+        
         _batteries = _gameObjectsParent.transform.GetComponentsInChildren<Battery>(true).ToList();
         _bulbs = _gameObjectsParent.transform.GetComponentsInChildren<Bulb>(true).ToList();
         _wires = _gameObjectsParent.transform.GetComponentsInChildren<Wire>(true).ToList();
         _inhibitors = _gameObjectsParent.transform.GetComponentsInChildren<Inhibitor>(true).ToList();
-        _passThroughs = _gameObjectsParent.transform.GetComponentsInChildren<PassThrough>(true).ToList();
-        
+        _passThroughs = _gameObjectsParent.transform.GetComponentsInChildren<PassThrough>(true).ToList();        
     }
     
     private void Start()
@@ -111,11 +104,13 @@ public class Level : MonoBehaviour
         if (_hasTutorial)
         {
             _tutorialResolver.Setup(this, LevelManager.MainCanvasScaler);
-            if (LevelManager.MainCamera.aspect > 1.3f && LevelManager.MainCamera.aspect < 1.4f)
-            {
-                _gameObjectsParent.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+            
+        }
+        if (LevelManager.MainCamera.aspect > 1.3f && LevelManager.MainCamera.aspect < 1.4f)
+        {
+            _gameObjectsParent.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+            if(_tutorialGameObjectsParent != null)
                 _tutorialGameObjectsParent.transform.localScale = new Vector3(1.25f, 1.25f, 1f);
-            }
         }
         LevelManager.SetLevelMusic(_levelMusic);
         
@@ -146,7 +141,6 @@ public class Level : MonoBehaviour
         _batteries.ForEach(p => p.ResetPower());
         _levelManager.ResetVictoryState();
         _canPlay = true;
-        _hasWon = false;
         _hintIndex = 0;
     }
 
@@ -233,7 +227,6 @@ public class Level : MonoBehaviour
             _levelManager.InhibitorOptionsManager.ResetOptions();
             _levelManager.BatteryOptionsManager.ResetOptions();
             _levelManager.PassThroughOptionsManager.ResetOptions();
-            _hasWon = false;
             _canPlay = false;
         }
         if(!_canPlay)

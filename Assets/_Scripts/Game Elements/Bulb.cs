@@ -11,36 +11,22 @@ public class Bulb : PowerableBase
     #region Fields, Properties
     #region Populated in Scene
     [Header("Populated In Scene")]
-    [SerializeField]
-    private List<Image> _bulbColors = null;
+    [SerializeField] private TextMeshProUGUI _bulbPowerDisplay = null;
 
-    [SerializeField]
-    private TextMeshProUGUI _bulbPowerDisplay = null;
+    [SerializeField] private TextMeshProUGUI _bulbStatusDisplay = null;
 
-    [SerializeField]
-    private TextMeshProUGUI _bulbStatusDisplay = null;
+    [SerializeField]  private int _minPower = 0;
 
-    [SerializeField]
-    private int _minPower = 0;
-
-    [SerializeField]
-    private int _maxPower = 4;
-
-    [SerializeField]
-    private List<PowerableBase> _powerables = null;
-
-    [SerializeField]
-    private BulbType _bulbType;
+    [SerializeField] private int _maxPower = 4;
+    
+    [SerializeField] private BulbType _bulbType;
     public BulbType BulbType { get { return _bulbType; } }
 
-    [SerializeField]
-    private bool _shouldUpdateVisuals = true;
-    [SerializeField]
-    private bool _shouldResetState = true;
+    [SerializeField] private bool _shouldUpdateVisuals = true;
+    [SerializeField] private bool _shouldResetState = true;
 
     [Header("Animation")]
-    [SerializeField]
-    private Animator _animator = null;
+    [SerializeField] private Animator _animator = null;
     #endregion Populated in Scene (end)
 
     #region Populated by Code
@@ -73,64 +59,37 @@ public class Bulb : PowerableBase
     [Header("Populated by Prefab")]
     
     [Header("Lit References")]
-    [SerializeField]
-    private GameObject _redFullLit = null;
-    [SerializeField]
-    private GameObject _redTopLit = null;
-    [SerializeField]
-    private GameObject _redSmallTopLit = null;
-    [SerializeField]
-    private GameObject _greenFullLit = null;
-    [SerializeField]
-    private GameObject _greenTopLit = null;
-    [SerializeField]
-    private GameObject _greenSmallMiddleLit = null;
-    [SerializeField]
-    private GameObject _greenBottomLit = null;
-    [SerializeField]
-    private GameObject _blueFullLit = null;
-    [SerializeField]
-    private GameObject _blueBottomLit = null;
-    [SerializeField]
-    private GameObject _blueSmallBottomLit = null;
+    [SerializeField] private GameObject _redFullLit = null;
+    [SerializeField] private GameObject _redTopLit = null;
+    [SerializeField] private GameObject _redSmallTopLit = null;
+    [SerializeField] private GameObject _greenFullLit = null;
+    [SerializeField] private GameObject _greenTopLit = null;
+    [SerializeField] private GameObject _greenSmallMiddleLit = null;
+    [SerializeField] private GameObject _greenBottomLit = null;
+    [SerializeField] private GameObject _blueFullLit = null;
+    [SerializeField] private GameObject _blueBottomLit = null;
+    [SerializeField] private GameObject _blueSmallBottomLit = null;
 
     [Header("UnLit References"), Space(5)]
-    [SerializeField]
-    private GameObject _redFullUnLit = null;
-    [SerializeField]
-    private GameObject _redTopUnLit = null;
-    [SerializeField]
-    private GameObject _redSmallTopUnLit = null;
-    [SerializeField]
-    private GameObject _greenFullUnLit = null;
-    [SerializeField]
-    private GameObject _greenTopUnLit = null;
-    [SerializeField]
-    private GameObject _greenSmallMiddleUnLit = null;
-    [SerializeField]
-    private GameObject _greenBottomUnLit = null;
-    [SerializeField]
-    private GameObject _blueFullUnLit = null;
-    [SerializeField]
-    private GameObject _blueBottomUnLit = null;
-    [SerializeField]
-    private GameObject _blueSmallBottomUnLit = null;
+    [SerializeField] private GameObject _redFullUnLit = null;
+    [SerializeField] private GameObject _redTopUnLit = null;
+    [SerializeField] private GameObject _redSmallTopUnLit = null;
+    [SerializeField] private GameObject _greenFullUnLit = null;
+    [SerializeField] private GameObject _greenTopUnLit = null;
+    [SerializeField] private GameObject _greenSmallMiddleUnLit = null;
+    [SerializeField] private GameObject _greenBottomUnLit = null;
+    [SerializeField] private GameObject _blueFullUnLit = null;
+    [SerializeField] private GameObject _blueBottomUnLit = null;
+    [SerializeField] private GameObject _blueSmallBottomUnLit = null;
 
     [Header("Image References"), Space(5)]
-    [SerializeField]
-    private SpriteRenderer _bulbImage = null;
-    [SerializeField]
-    private Sprite _brokenSprite = null;
-    [SerializeField]
-    private Sprite _normalSprite = null;
+    [SerializeField] private SpriteRenderer _bulbImage = null;
+    [SerializeField] private Sprite _brokenSprite = null;
+    [SerializeField] private Sprite _normalSprite = null;
 
-    [Header("Audio References"), Space(8)]
-    [SerializeField]
-    private AudioSource _bulbAudioSource = null;
-    [SerializeField]
-    private AudioClip _glassBreakClip = null;
-    [SerializeField]
-    private AudioClip _increasePowerClip = null;
+    [Header("Audio References"), Space(8)]    
+    [SerializeField] private AudioClip _glassBreakClip = null;
+    [SerializeField] private AudioClip _increasePowerClip = null;
 
     #endregion Populated by Prefab (end)
 
@@ -154,20 +113,7 @@ public class Bulb : PowerableBase
     }
 
     public override void Setup(PowerableBase powerableBase)
-    {
-        try
-        {
-            //var source = _externalPowerSources.Find(ps => ps.Powerable == powerableBase);
-            //if(source == null)
-            //{
-            //    Debug.LogError($"{name} could not find {powerableBase.name} in its External Power Sources.");
-            //    return;
-            //}                
-        }
-        catch(Exception ex)
-        {
-            Debug.LogError($"{ex.Message} Occurred in {name}");
-        }
+    {       
     }
 
     public void IncreasePower(int amount, bool updateDisplay = false)
@@ -246,7 +192,6 @@ public class Bulb : PowerableBase
         _animatedSprites = GetLitMaterials();
         _originalSprites = _animatedSprites.Select(t => new Material(t)).ToList();
         AudioManager.PlayOneShot(_increasePowerClip);
-        //UpdateColorDisplay();
     }
 
     public void OnIncreaseIntensity()
@@ -297,7 +242,6 @@ public class Bulb : PowerableBase
     {
         //Play broken bulb sound.
         AudioManager.PlayOneShot(_glassBreakClip);
-        //_bulbAudioSource.PlayOneShot(_glassBreakClip);
         //Disable the bulb colors
         BreakBulb();
         UpdateUI();
@@ -310,13 +254,7 @@ public class Bulb : PowerableBase
             if (_animatedSprites[i].color == null)
                 continue;
 
-            _animatedSprites[i].color = _originalSprites[i].color;
-
-            //var newColor = new Color(materials.color.r * 1.75f, _animatedSprites[i].color.b * 1.75f, _animatedSprites[i].color.b * 1.75f);
-            //foreach (var material in materials)
-            //{
-            //    material.SetColor("_Color", new Color(1.1f, 1.1f, 1.1f));
-            //}
+            _animatedSprites[i].color = _originalSprites[i].color;        
         }
         //Hide animation screen and return game to defeat screen.
         BrokenBulbAnimationEnd?.Invoke(this);
@@ -571,13 +509,6 @@ public class Bulb : PowerableBase
     public override void SetPowerStateOff(PowerableBase requestor)
     {
         //Do Nothing
-    }
-
-    public override void DeterminePowerColorStateChange(PowerableBase powerableSource, bool checkDirection = false)
-    {
-        //ResetPowerable();
-        //SetCurrentPower();
-        //UpdateUI();
     }
 
     public override List<ColorType> GetOtherSideColors(PowerableBase requestor)

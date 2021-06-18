@@ -78,9 +78,7 @@ public class Battery : PowerableBase
     [SerializeField]
     private Canvas _decreaseButtonCanvas = null;
 
-    [Header("Audio References"), Space(8)]
-    [SerializeField]
-    private AudioSource _audioSource = null;
+    [Header("Audio References"), Space(8)]   
     [SerializeField]
     private AudioClip _powerDownClip = null;
     [SerializeField]
@@ -335,11 +333,6 @@ public class Battery : PowerableBase
     public void SetSelectedState(bool selected)
     {
         _selectedSprite.gameObject.SetActive(selected);
-    }
-
-    public override void DeterminePowerColorStateChange(PowerableBase powerableSource, bool checkDirection = false)
-    {
-        
     }
 
     public override List<ColorType> GetOtherSideColors(PowerableBase requestor)

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Wire : PowerableBase
 {
     #region Fields, Properties
-    //[SerializeField]
+    
     private List<ColorType> _currentColorTypes = null;
     public List<ColorType> CurrentColorTypes { get { return _currentColorTypes ?? (_currentColorTypes = new List<ColorType>()); } }
 
@@ -15,15 +14,6 @@ public class Wire : PowerableBase
     [SerializeField]
     private bool _isPowered = false;
     public override bool IsPowered { get { return _isPowered; } }
-        
-    [SerializeField]
-    private List<Image> _wireColors = null;
-
-    /// <summary>
-    /// DEPRECATED - Retained until External Sources is populated across all levels
-    /// </summary>
-    [SerializeField]
-    private List<PowerableBase> _powerables = null;
 
     [SerializeField]
     private GameObject _red = null;
@@ -129,15 +119,7 @@ public class Wire : PowerableBase
     public override void SetPowerStateOff(PowerableBase requestor)
     {
         //Do Nothing
-    }
-
-    public override void DeterminePowerColorStateChange(PowerableBase powerableSource, bool checkDirection = false)
-    {
-        ResetPowerable();
-        SetCurrentPower();
-        CheckPoweredState();
-        UpdateColorDisplay();
-    }
+    }    
 
     public override void CheckStateChanged(PowerableBase powerableSource, bool forceCheck)
     {

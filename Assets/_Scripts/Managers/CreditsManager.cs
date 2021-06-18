@@ -1,22 +1,17 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class CreditsManager : MonoBehaviour
 {
     #region Fields, Properties
     [SerializeField]
     private CanvasGroup _canvas = null;
-
-    [SerializeField]
-    private AudioClip _music = null;
+   
     #endregion Fields, Properties (end)
 
     #region Methods
     public void Setup()
     {
-        SetCanvasState(true);
-        //AudioManager.SetMusic(_music);
-        //AudioManager.PlayMusic();
+        SetCanvasState(true);        
     }
     public void CloseClicked()
     {

@@ -15,17 +15,14 @@ public class CustomBatteryDrawer : Editor
     Image _lockedIcon = null;
     Button _increasePower = null;
     Button _decreasePower = null;
-    TextMeshProUGUI _powerDisplay = null;
-    Power _power = null;
-
+    
     bool _hasVariablePower = false;
     bool _isClickable = false;
     
     SerializedProperty _colorTypesProperty = null;
     ColorType[] _colorTypes = new ColorType[4];
     ColorType[] ColorTypes { get { return _colorTypes; } }
-
-    private bool IsPowered { get { return ColorTypes.Any(c => c != ColorType.None); } }
+    
     private void OnEnable()
     {
 #if UNITY_EDITOR
@@ -37,9 +34,7 @@ public class CustomBatteryDrawer : Editor
         _lockedIcon = serializedObject.FindProperty("_lockedIcon").objectReferenceValue as Image;
         _increasePower = serializedObject.FindProperty("_increasePowerButton").objectReferenceValue as Button;
         _decreasePower = serializedObject.FindProperty("_decreasePowerButton").objectReferenceValue as Button;
-        //_power = serializedObject.FindProperty("_power").serializedObject as Power;
-        _powerDisplay = serializedObject.FindProperty("_powerDisplay").objectReferenceValue as TextMeshProUGUI;
-
+        
         _isClickable = serializedObject.FindProperty("_isClickable").boolValue;
         _hasVariablePower = serializedObject.FindProperty("_hasVariablePower").boolValue;
         if (_colorTypesProperty.isArray)

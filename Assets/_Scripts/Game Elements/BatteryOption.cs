@@ -11,9 +11,7 @@ public class BatteryOption : MonoBehaviour
 
     [SerializeField]
     private List<Image> _batteryColors = null;
-
-    [SerializeField]
-    private TextMeshProUGUI _batteryOptionDisplay = null;
+    
     [SerializeField]
     private Image _lockedImage = null;
 

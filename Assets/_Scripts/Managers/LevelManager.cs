@@ -21,8 +21,6 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Transform _levelsParent = null;
     [SerializeField] private List<LevelSelect> _selectableLevels = null;
     [SerializeField] private Animator _levelTransition = null;
-    [SerializeField] private GameObject _transitionObject = null;
-    [SerializeField] private AudioClip _menuMusic = null;
     [SerializeField] private GameObject _skipLevelButton = null;
     [SerializeField] private AudioClip _playClickSFX = null;
     [SerializeField] private Image _currentHint = null;
@@ -377,11 +375,7 @@ public class LevelManager : MonoBehaviour
         _levels = _levelsParent.GetComponentsInChildren<Level>(true).ToList();
         for (int i = 0; i < _levels.Count; ++i)
         {
-            _levels[i].Setup(this);
-            //if (i == 0)
-            //    _levels[i].SetActiveState(true);
-            //else
-            //    _levels[i].SetActiveState(false);
+            _levels[i].Setup(this);            
         }
     }
 

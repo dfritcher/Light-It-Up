@@ -14,11 +14,7 @@ public class Inhibitor : PowerableBase
     [Header("Populated In Scene")]
     [SerializeField, FormerlySerializedAs("_userSetColorType")]
     private List<ColorType> _userSetColorTypes = new List<ColorType>();
-    private List<ColorType> UserSetColorTypes { get { return _userSetColorTypes; } }
-    
-    //DEPRECATED - Maintaing this until all levels have been updated in Unity
-    [SerializeField, ReadOnly(true)]
-    private List<ExternalPower> _powerSources = null;
+    private List<ColorType> UserSetColorTypes { get { return _userSetColorTypes; } }    
     
     private ExternalPower[] _batteries = null;
     private ExternalPower[] Batteries { get { return _batteries ??= _externalPowerSources.FindAll(ps => ps.Powerable is Battery).ToArray(); } }
@@ -51,13 +47,9 @@ public class Inhibitor : PowerableBase
     [SerializeField]
     private bool _isPowered = false;
     public override bool IsPowered { get { return _isPowered; } }
-    //public override bool IsPowered { get { return _externalPowerSources.Where(ps => !(ps.Powerable is Bulb)).Any(ps => ps.Powerable.IsPoweredFromOtherSide(this)); } }
-
+    
     [SerializeField, ReadOnly(true)]
     private bool _isPoweredFromOtherSide = false;
-
-    //public override List<ColorType> CurrentColorTypes { get { return _externalPowerSources.Where(ps => !(ps is Bulb)).SelectMany(ps => ps.PoweredColors.SelectMany(pc => pc.ColorTypes)).ToList(); } }
-    
     private List<Power> _emptyPower = new List<Power>();
 
     private bool _poweredBySource = false;
@@ -109,8 +101,6 @@ public class Inhibitor : PowerableBase
     private SpriteRenderer _selectedSprite = null;
 
     [Header("Audio References"), Space(8)]
-    [SerializeField]
-    private AudioSource _audioSource = null;
     [SerializeField]
     private AudioClip _powerDownClip = null;
     [SerializeField]
@@ -174,7 +164,6 @@ public class Inhibitor : PowerableBase
     {
         _triggeringSource = powerable;
         DetermineNewPowerState(powerable);
-        //DeterminePowerColorStateChange(powerable);
         TriggerPropagation(powerable);
         ReCheckStateChange();
         UpdateColorDisplay();
@@ -186,11 +175,8 @@ public class Inhibitor : PowerableBase
         _poweredBySource = false;
         // Get our new powered state from batteries.
         var newPoweredColors = new List<Power>();
-        //CurrentPower.ColorTypes.Clear();
-        //CurrentPower.Amount = 1;
         for (int i = 0; i < Batteries.Length; i++)
         {
-            //if (Batteries[i].Powerable.IsPowered && Batteries[i].Powerable.Power.ColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
             if (Batteries[i].Powerable.IsPowered && Batteries[i].Powerable.CurrentPower.ColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
             {
                 _poweredBySource = true;
@@ -209,9 +195,8 @@ public class Inhibitor : PowerableBase
         foreach (var inhibitorSource in Inhibitors)
         {
             var inhibitor = inhibitorSource.Powerable as Inhibitor;
-            //if (inhibitor.IsPoweredFromOtherSide(this) && inhibitor.Power.ColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
             
-            if (inhibitor.IsPoweredFromOtherSide(this))// && inhibitor.CurrentPower.ColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
+            if (inhibitor.IsPoweredFromOtherSide(this))
             {
                 
                 var poweredColors = inhibitor.GetPowers(this);
@@ -235,7 +220,6 @@ public class Inhibitor : PowerableBase
         foreach (var passthroughSource in PassThroughs)
         {
             var passthrough = passthroughSource.Powerable as PassThrough;
-            //if (passthrough.IsPoweredFromOtherSide(this) && passthrough.Power.ColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
             if (passthrough.IsPoweredFromOtherSide(this))// && passthrough.CurrentPower.ColorTypes.Any(c => !UserSetColorTypes.Contains(c)))
             {
                 var poweredColors = passthrough.GetPowers(this);
@@ -277,89 +261,7 @@ public class Inhibitor : PowerableBase
                 }
             }
         }
-        PoweredColors = newPoweredColors.Clone();
-        //foreach(var power in PoweredColors)
-        //{
-        //    foreach(var color in power.ColorTypes)
-        //    {
-        //        if (!UserSetColorTypes.Contains(color))
-        //        {
-        //            if (CurrentPower.ColorTypes.Contains(color))
-        //            {
-        //                CurrentPower.Amount++;
-        //            }
-        //            else
-        //            {
-        //                CurrentPower.ColorTypes.Add(color);
-        //            }                                        
-        //        }
-        //    }            
-        //}
-    }
-
-    public override void DeterminePowerColorStateChange(PowerableBase powerable, bool checkDirection = false)
-    {
-        //if(powerable != this)
-        //{
-        //    var source = _externalPowerSources.Find(ps => ps.Powerable == powerable);
-        //    if (source == null)
-        //    {
-        //        Debug.LogError($"Source IS NULL for {this.name}, Requestor:{powerable.name}");
-        //        return;
-        //    }
-        //}
-        
-        //var previousPowers = PoweredColors.Clone();
-        //PoweredColors.Clear();
-        //foreach (var powerSource in _externalPowerSources)
-        //{
-        //    if (powerSource.Powerable is Battery battery)
-        //    {
-        //        if (powerSource.Powerable.IsPowered && powerSource.Powerable.CurrentPower.ColorTypes.Any(pc => !UserSetColorTypes.Contains(pc)))
-        //        {
-        //            var power = new Power() { Amount = powerSource.Powerable.CurrentPower.Amount, ColorTypes = new List<ColorType>() };
-        //            foreach (var color in powerSource.Powerable.CurrentPower.ColorTypes)
-        //            {
-        //                if (!UserSetColorTypes.Contains(color))
-        //                    power.ColorTypes.Add(color);
-        //            }
-        //            PoweredColors.Add(power);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        //foreach (var poweredColor in powerSource.Powerable.CurrentPower)
-        //        //{
-        //            if (powerSource.Powerable.CurrentPower.ColorTypes.Any(pc => !UserSetColorTypes.Contains(pc)))
-        //            {
-        //                var power = new Power() { Amount = poweredColor.Amount, ColorTypes = new List<ColorType>() };
-        //                foreach (var color in poweredColor.ColorTypes)
-        //                {
-        //                    if (!UserSetColorTypes.Contains(color))
-        //                        power.ColorTypes.Add(color);
-        //                }
-        //                PoweredColors.Add(power);
-        //            }
-        //        //}
-        //    }
-        //}
-
-        //if (previousPowers.Count() != PoweredColors.Count())
-        //{
-        //    _stateChanged = true;
-        //}
-        //else
-        //{
-        //    for (int i = 0; i < PoweredColors.Count(); i++)
-        //    {
-        //        //if (PoweredColors[i].ColorTypes.All(c => previousPowers[i].ColorTypes.Contains(c)))
-        //        if (PoweredColors[i].ColorTypes.Intersect(previousPowers[i].ColorTypes).Count() != PoweredColors[i].ColorTypes.Count())
-        //        {
-        //            //_stateChanged = true;
-        //            PoweredColors[i].ColorTypes = previousPowers[i].ColorTypes.Clone();
-        //        }
-        //    }
-        //}
+        PoweredColors = newPoweredColors.Clone();       
     }
 
     public override List<Power> GetPowers(PowerableBase requestor)
@@ -422,19 +324,7 @@ public class Inhibitor : PowerableBase
 
     public override void Setup(PowerableBase powerableBase)
     {
-        try
-        {
-            //var source = _externalPowerSources.Find(ps => ps.Powerable == powerableBase);
-            //if (source == null)
-            //{
-            //    Debug.LogError($"{name} could not find {powerableBase.name} in its External Power Sources.");
-            //    return;
-            //}            
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"{ex.Message} Occurred in {name}");
-        }
+        
     }
 
     public void InhibitorClicked()
@@ -457,12 +347,6 @@ public class Inhibitor : PowerableBase
     private IEnumerator SetUserSelectedPowerCoroutine(List<ColorType> colorTypes, bool playAudio = true)
     {
         _userSetColorTypes = colorTypes;
-        //OriginalPower.ColorTypes.Clear();
-        //foreach(var color in _allColors)
-        //{
-        //    if (!_userSetColorTypes.Contains(color))
-        //        OriginalPower.ColorTypes.Add(color);
-        //}
         CheckStateChanged(this, true);
         yield return null;
         if (playAudio)
@@ -507,28 +391,6 @@ public class Inhibitor : PowerableBase
     {
         var providedPowers = new List<Power>();
         var direction = _externalPowerSources.Find(ps => ps.Powerable == requestor)?.InputDirection;
-
-        //foreach (var source in _externalPowerSources)
-        //{
-        //    if (source == null || source == null || source.Powerable == requestor || source.Powerable is Bulb || source.InputDirection == direction)
-        //        continue;
-        //    if (source.Powerable.IsPowered)
-        //    {
-        //        foreach(var poweredColors in source.Powerable.PoweredColors)
-        //        {
-        //            if(poweredColors.ColorTypes.Any(pc => !UserSetColorTypes.Contains(pc)))
-        //            {
-        //                var power = new Power() { Amount = poweredColors.Amount, ColorTypes = new List<ColorType>() };
-        //                foreach (var color in poweredColors.ColorTypes)
-        //                {
-        //                    if (!UserSetColorTypes.Contains(color))
-        //                        power.ColorTypes.Add(color);
-        //                    break;
-        //                }
-        //            }                    
-        //        }
-        //    }                 
-        //}
 
         foreach (var poweredColor in PoweredColors)
         {

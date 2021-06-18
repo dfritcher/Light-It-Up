@@ -16,21 +16,13 @@ public class PassThrough : PowerableBase
     private List<ColorType> _userSetColorTypes = new List<ColorType>();
     private List<ColorType> UserSetColorTypes { get { return _userSetColorTypes; } }
 
-    /// <summary>
-    /// DEPRECATED - Reference to all the Batteries providing us power and the direction the power is coming from.
-    /// This will help us determine which directions power is flowing when asked for our colors.
-    /// </summary>
-    [SerializeField]
-    private List<ExternalPower> _powerSources = null;
-    
-
-    private ExternalPower[] _batteries = null;
+    private ExternalPower[] _batteries;
     private ExternalPower[] Batteries { get { return _batteries ?? (_batteries = _externalPowerSources.FindAll(ps => ps.Powerable is Battery).ToArray()); } }
 
-    private ExternalPower[] _inhibitors = null;
+    private ExternalPower[] _inhibitors ;
     private ExternalPower[] Inhibitors { get { return _inhibitors ?? (_inhibitors = _externalPowerSources.FindAll(ps => ps.Powerable is Inhibitor).ToArray()); } }
 
-    private ExternalPower[] _passthroughs = null;
+    private ExternalPower[] _passthroughs;
     private ExternalPower[] PassThroughs { get { return _passthroughs ?? (_passthroughs = _externalPowerSources.FindAll(ps => ps.Powerable is PassThrough).ToArray()); } }
 
     private Bulb[] _bulbs = null;
@@ -53,7 +45,6 @@ public class PassThrough : PowerableBase
     [SerializeField]
     private bool _isPowered = false;
     public override bool IsPowered { get { return _isPowered; } }
-    //public override bool IsPowered { get { return _externalPowerSources.Where(ps => !(ps.Powerable is Bulb)).Any(ps => ps.Powerable.IsPoweredFromOtherSide(this)); } }
     [SerializeField, ReadOnly(true)]
     private bool _isPoweredFromOtherSide = false;
 
@@ -108,9 +99,7 @@ public class PassThrough : PowerableBase
     [SerializeField]
     private SpriteRenderer _selectedSprite = null;
 
-    [Header("Audio References"), Space(8)]
-    [SerializeField]
-    private AudioSource _audioSource = null;
+    [Header("Audio References"), Space(8)]    
     [SerializeField]
     private AudioClip _powerDownClip = null;
     [SerializeField]
@@ -170,69 +159,7 @@ public class PassThrough : PowerableBase
     #endregion Unity Engine Methods (end)
 
     #region Overrides
-    public override void DeterminePowerColorStateChange(PowerableBase powerable, bool checkDirection = false)
-    {
-        //if (powerable != this)
-        //{
-        //    var source = _externalPowerSources.Find(ps => ps.Powerable == powerable);
-        //    if (source == null)
-        //    {
-        //        Debug.LogError($"Source IS NULL for {this.name}, Requestor:{powerable.name}");
-        //        return;
-        //    }
-        //}
-
-        //var previousPowers = PoweredColors.Clone();
-        //PoweredColors.Clear();
-        //foreach (var powerSource in _externalPowerSources)
-        //{
-        //    if(powerSource.Powerable is Battery battery)
-        //    {
-        //        if (powerSource.Powerable.CurrentPower.ColorTypes.Any(pc => UserSetColorTypes.Contains(pc)))
-        //        {
-        //            var power = new Power() { Amount = powerSource.Powerable.CurrentPower.Amount, ColorTypes = new List<ColorType>() };
-        //            foreach (var color in powerSource.Powerable.CurrentPower.ColorTypes)
-        //            {
-        //                if (UserSetColorTypes.Contains(color))
-        //                    power.ColorTypes.Add(color);
-        //            }
-        //            PoweredColors.Add(power);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        foreach (var poweredColor in powerSource.Powerable.PoweredColors)
-        //        {
-        //            if (poweredColor.ColorTypes.Any(pc => UserSetColorTypes.Contains(pc)))
-        //            {
-        //                var power = new Power() { Amount = poweredColor.Amount, ColorTypes = new List<ColorType>() };
-        //                foreach (var color in poweredColor.ColorTypes)
-        //                {
-        //                    if (UserSetColorTypes.Contains(color))
-        //                        power.ColorTypes.Add(color);
-        //                }
-        //                PoweredColors.Add(power);
-        //            }
-        //        }
-        //    }            
-        //}
-        //if (previousPowers.Count() != PoweredColors.Count())
-        //{
-        //    _stateChanged = true;            
-        //}
-        //else
-        //{
-        //    for (int i = 0; i < PoweredColors.Count(); i++)
-        //    {
-        //        if (PoweredColors[i].ColorTypes.Intersect(previousPowers[i].ColorTypes).Count() != PoweredColors[i].ColorTypes.Count())
-        //        {
-        //            //_stateChanged = true;
-        //            PoweredColors[i].ColorTypes = previousPowers[i].ColorTypes.Clone();
-        //        }
-        //    }
-        //}
-    }
-
+    
     /// <summary>
     /// Method to determine if this powerable is getting power from another source.
     /// </summary>
@@ -240,15 +167,6 @@ public class PassThrough : PowerableBase
     /// <returns></returns>
     public override bool GetPoweredState(PowerableBase requestor)
     {
-        //_isPowered = false;
-        //foreach (var source in _powerSources)
-        //{
-        //    if (source.InputDirection != _powerSources.Find(ps => ps.Powerable == requestor)?.InputDirection)
-        //        _isPowered = source.Powerable.GetPoweredState(this);
-        //    if (_isPowered)
-        //        break;
-        //}
-
         return _isPowered;
     }
 
@@ -427,19 +345,7 @@ public class PassThrough : PowerableBase
 
     public override void Setup(PowerableBase powerableBase)
     {
-        try
-        {
-            //var source = _externalPowerSources.Find(ps => ps.Powerable == powerableBase);
-            //if (source == null)
-            //{
-            //    Debug.LogError($"{name} could not find {powerableBase.name} in its External Power Sources.");
-            //    return;
-            //}               
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"{ex.Message} Occurred in {name}");
-        }
+        
     }
 
     public void PassThroughClicked()
@@ -467,12 +373,6 @@ public class PassThrough : PowerableBase
     private IEnumerator SetUserSelectedPowerCoroutine(List<ColorType> colorTypes, bool playAudio = true)
     {
         _userSetColorTypes = colorTypes;
-        //CurrentPower.ColorTypes.Clear();
-        //foreach (var color in _allColors)
-        //{
-        //    if (UserSetColorTypes.Contains(color))
-        //        CurrentPower.ColorTypes.Add(color);
-        //}
         CheckStateChanged(this, true);
         yield return null;
         if (playAudio)
@@ -516,28 +416,6 @@ public class PassThrough : PowerableBase
         var providedPowers = new List<Power>();
         var direction = _externalPowerSources.Find(ps => ps.Powerable == requestor)?.InputDirection;
 
-        //foreach (var source in _externalPowerSources)
-        //{
-        //    if (source == null || source == null || source.Powerable == requestor || source.Powerable is Bulb || source.InputDirection == direction)
-        //        continue;
-        //    if (source.Powerable.IsPowered)
-        //    {
-        //        foreach (var poweredColors in source.Powerable.PoweredColors)
-        //        {
-        //            if (poweredColors.ColorTypes.Any(pc => UserSetColorTypes.Contains(pc)))
-        //            {
-        //                var power = new Power() { Amount = poweredColors.Amount, ColorTypes = new List<ColorType>() };
-        //                foreach (var color in poweredColors.ColorTypes)
-        //                {
-        //                    if (UserSetColorTypes.Contains(color))
-        //                        power.ColorTypes.Add(color);
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
         foreach (var poweredColor in PoweredColors)
         {
             if (poweredColor.Direction == direction)
@@ -556,11 +434,7 @@ public class PassThrough : PowerableBase
 
     private void TriggerPropagation(PowerableBase powerable)
     {
-        //TriggerPowerCheckPropagation();
-        //TriggerPowerStatePropagation();
-        TriggerCheckStateChangePropagation(powerable);
-        //CheckStateChanged();
-        //UpdateColorDisplay();
+        TriggerCheckStateChangePropagation(powerable);        
     }
 
     private void TriggerCheckStateChangePropagation(PowerableBase powerable)

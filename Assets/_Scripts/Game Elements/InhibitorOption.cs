@@ -6,24 +6,17 @@ using TMPro;
 
 public class InhibitorOption : MonoBehaviour
 {
-    [SerializeField]
-    private List<ColorType> _optionColorTypes = null;
+    [SerializeField] private List<ColorType> _optionColorTypes = null;
     public List<ColorType> OptionColorTypes { get { return _optionColorTypes ?? (_optionColorTypes = new List<ColorType>()); } }
 
-    [SerializeField]
-    private List<Image> _inhibitorColors = null;
+    [SerializeField] private List<Image> _inhibitorColors = null;
+   
+    [SerializeField] private Image _lockedImage = null;
 
-    [SerializeField]
-    private TextMeshProUGUI _optionDisplay = null;
-    [SerializeField]
-    private Image _lockedImage = null;
-
-    [SerializeField]
-    private bool _isClickable = true;
+    [SerializeField] private bool _isClickable = true;
     public bool IsClickable { get { return _isClickable; } }
 
-    [SerializeField]
-    private bool _isVisible = true;
+    [SerializeField] private bool _isVisible = true;
     public bool IsVisible { get { return _isVisible; } }
 
     public delegate void InhibitorOptionEvent(InhibitorOption option);

@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class PassThroughOption : MonoBehaviour
 {
@@ -13,8 +11,6 @@ public class PassThroughOption : MonoBehaviour
     [SerializeField]
     private List<Image> _optionColors = null;
 
-    [SerializeField]
-    private TextMeshProUGUI _optionDisplay = null;
     [SerializeField]
     private Image _lockedImage = null;
 
