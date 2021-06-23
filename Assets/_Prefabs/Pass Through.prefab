@@ -390,7 +390,6 @@ MonoBehaviour:
     colorTypes: 00000000
     Direction: 0
   _userSetColorTypes: 
-  _powerSources: []
   _wires: []
   _junctions: []
   _isClickable: 1
@@ -413,7 +412,6 @@ MonoBehaviour:
   _blueFullUnLit: {fileID: 8960846231039844488}
   _blueBottomUnLit: {fileID: 6340038445574458874}
   _selectedSprite: {fileID: 2283617001123569030}
-  _audioSource: {fileID: 2726344458279201409}
   _powerDownClip: {fileID: 8300000, guid: 1e5185acb7dfdd648be461eb7cd4b22c, type: 3}
   _powerUpClip: {fileID: 8300000, guid: 370a1c709308a704c89632ff0e794d0d, type: 3}
 --- !u!82 &2726344458279201409
@@ -1479,7 +1477,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

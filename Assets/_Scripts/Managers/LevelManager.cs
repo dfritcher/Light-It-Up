@@ -101,6 +101,7 @@ public class LevelManager : MonoBehaviour
     private Level CurrentLevel {  get { return _currentLevel ?? (_currentLevel = _levels[0]); } }
 
     private int _failCount = 0;
+    private int _unlockAllLevelsCount = 0;
     #endregion Fields, Properties (end)
 
     #region Methods
@@ -194,6 +195,16 @@ public class LevelManager : MonoBehaviour
         _nextHintButton.interactable = _currentLevel.NextHintAvailable;
         _hintCountDisplay.text = _currentLevel.GetHintCount();
     }
+
+    public void UnlockAllLevelsClicked()
+    {
+        if (_unlockAllLevelsCount >= 10)
+            _gameInfo.HighestLevelUnlocked = 35;
+        else
+        {
+            _unlockAllLevelsCount++;
+        }
+    }
     #endregion Unity Called Methods (end)
 
     #region Audio
@@ -217,6 +228,7 @@ public class LevelManager : MonoBehaviour
         _victoryDisplay.SetActive(false);
         _victoryMessage.text = string.Empty;
         _defeatMessage.text = string.Empty;
+        _unlockAllLevelsCount = 0;
     }
 
     public void SetVictoryState(bool hasWon, Level level)
