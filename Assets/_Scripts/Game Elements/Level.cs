@@ -108,7 +108,7 @@ public class Level : MonoBehaviour
         }
         if (LevelManager.MainCamera.aspect > 1.3f && LevelManager.MainCamera.aspect < 1.4f)
         {
-            _gameObjectsParent.transform.localScale = new Vector3(1.25f, 1.25f, 1f);
+            _gameObjectsParent.transform.localScale = new Vector3(1.15f, 1.15f, 1f);
             if(_tutorialGameObjectsParent != null)
                 _tutorialGameObjectsParent.transform.localScale = new Vector3(1.25f, 1.25f, 1f);
         }
