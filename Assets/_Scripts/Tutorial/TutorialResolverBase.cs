@@ -9,38 +9,29 @@ using UnityEngine.UI;
 public abstract class TutorialResolverBase : MonoBehaviour
 {
     #region Fields, Properties
-    [SerializeField]
-    internal Button _nextButton = null;
+    [SerializeField] internal Button _nextButton = null;
 
-    [SerializeField]
-    internal Button _skipButton = null;
+    [SerializeField] internal Button _skipButton = null;
 
-    [SerializeField]
-    internal Button _closeButton = null;
+    [SerializeField] internal Button _closeButton = null;
 
-    [SerializeField]
-    internal List<TextMeshProUGUI> _tutorialTexts;
+    [SerializeField] internal List<TextMeshProUGUI> _tutorialTexts;
 
-    [SerializeField]
-    internal RectTransform _fingerTransform = null;
+    [SerializeField] internal RectTransform _fingerTransform = null;
 
-    [SerializeField]
-    internal Animator _fingerAnimator = null;
+    [SerializeField] internal Animator _fingerAnimator = null;
 
-    [SerializeField]
-    internal Vector2[] _fingerLocations = null;
+    [SerializeField] internal Vector2[] _fingerLocations = null;
 
-    [SerializeField]
-    internal int _speed = 0;
+    [SerializeField] internal int _speed = 0;
 
-    [SerializeField]
-    internal GameObject _tutorialObjectsParent = null;
+    [SerializeField] internal GameObject _tutorialObjectsParent = null;
 
-    [SerializeField]
-    internal GameObject _gameObjectsParent = null;
+    [SerializeField] internal GameObject _gameObjectsParent = null;
 
-    [SerializeField]
-    internal CanvasScaler _canvasScaler = null;
+    [SerializeField] internal CanvasScaler _canvasScaler = null;
+
+    [SerializeField] internal AudioClip _playClickSFX = null;
 
     internal int _animationIndex = 0;
     internal int _tutorialIndex = 0;
@@ -59,6 +50,7 @@ public abstract class TutorialResolverBase : MonoBehaviour
     
     virtual public void OnCloseClicked()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         StartCoroutine(CloseCoroutine());
     }
 
@@ -72,6 +64,7 @@ public abstract class TutorialResolverBase : MonoBehaviour
     }
     virtual public void OnNextClicked()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         _nextButton.interactable = false;
         _tutorialIndex++;
         SetTutorialTextState(_tutorialIndex);
@@ -84,6 +77,7 @@ public abstract class TutorialResolverBase : MonoBehaviour
 
     virtual public void OnSkipClicked()
     {
+        AudioManager.PlayOneShot(_playClickSFX);
         StartCoroutine(SkipCoroutine());
     }
 

@@ -123,6 +123,10 @@ public class LevelSixTutorialResolver : TutorialResolverBase
                 MoveFinger(4, _fingerTransform.localPosition, _fingerLocations[4], true);
                 //_fingerAnimator.SetTrigger("Lvl6_Finger4");                
                 break;
+            case 5:
+                _nextButton.gameObject.SetActive(false);
+                _closeButton.gameObject.SetActive(true);
+                break;
             default:
                 _nextButton.interactable = true;
                 break;
@@ -178,8 +182,7 @@ public class LevelSixTutorialResolver : TutorialResolverBase
                 _battery2Animator.SetTrigger("BlueOn");
                 _doubleColorBulb.IncreasePower(1, true);
                 _battery2WireAnimator.SetTrigger("BlueOn");
-                _nextButton.gameObject.SetActive(false);
-                _closeButton.gameObject.SetActive(true);
+                _nextButton.interactable = true;
                 break;            
         }
     }
