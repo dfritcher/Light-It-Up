@@ -100,7 +100,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3000435102780252712
 RectTransform:
   m_ObjectHideFlags: 0
@@ -113,11 +113,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7023106374097906549}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -0.78, y: 1.25}
+  m_AnchoredPosition: {x: 0, y: 1.16}
   m_SizeDelta: {x: 0.75, y: 0.75}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &7206995104016234953
@@ -177,7 +177,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: -477490271
-  m_SortingOrder: 1
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!1 &542879772542817284
 GameObject:
@@ -212,7 +212,7 @@ RectTransform:
   m_Children:
   - {fileID: 2710091135075179544}
   m_Father: {fileID: 7023106374097906549}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -429,7 +429,7 @@ RectTransform:
   m_Children:
   - {fileID: 7374207704881969089}
   m_Father: {fileID: 7023106374097906549}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -850,7 +850,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: -1745248621
-  m_SortingOrder: -1
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &6448687012132097314
 MonoBehaviour:
@@ -903,9 +903,9 @@ Transform:
   - {fileID: 7023106375505610438}
   - {fileID: 7023106374472606541}
   - {fileID: 7023106374560241443}
-  - {fileID: 3000435102780252712}
   - {fileID: 8760722413796200544}
   - {fileID: 8994167085741997205}
+  - {fileID: 3000435102780252712}
   - {fileID: 4678399527509317275}
   m_Father: {fileID: 0}
   m_RootOrder: 0
