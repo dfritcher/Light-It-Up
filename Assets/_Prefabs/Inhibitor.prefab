@@ -236,7 +236,6 @@ MonoBehaviour:
     colorTypes: 00000000
     Direction: 0
   _userSetColorTypes: 
-  _powerSources: []
   _wires: []
   _junctions: []
   _isClickable: 1
@@ -259,7 +258,6 @@ MonoBehaviour:
   _blueFullUnLit: {fileID: 8960846231039844488}
   _blueBottomUnLit: {fileID: 6340038445574458874}
   _selectedSprite: {fileID: 4668106178186057574}
-  _audioSource: {fileID: -8016011915432878987}
   _powerDownClip: {fileID: 8300000, guid: 1e5185acb7dfdd648be461eb7cd4b22c, type: 3}
   _powerUpClip: {fileID: 8300000, guid: 370a1c709308a704c89632ff0e794d0d, type: 3}
 --- !u!114 &8509222182657501037
@@ -1023,7 +1021,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1039314137137463900
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1040,7 +1038,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -2.48, y: 3.47}
+  m_AnchoredPosition: {x: -0.01, y: 1.16}
   m_SizeDelta: {x: 3, y: 3}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &6803384942086759300

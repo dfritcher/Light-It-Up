@@ -6,41 +6,39 @@ using UnityEngine.UI;
 public class LevelSixTutorialResolver : TutorialResolverBase
 {
     #region Fields, Properties
-    [SerializeField]
-    private Transform _battery1Location = null;
+    [SerializeField] private Transform _battery1Location = null;
 
-    [SerializeField]
-    private Animator _battery1Animator = null;
+    [SerializeField] private Animator _battery1Animator = null;
 
-    [SerializeField]
-    private Transform _battery2Location = null;
+    [SerializeField] private Transform _battery2Location = null;
 
-    [SerializeField]
-    private Animator _battery2Animator = null;
+    [SerializeField] private Animator _battery2Animator = null;
 
-    [SerializeField]
-    private Animator[] _wireAnimators = null;
+    [SerializeField] private Animator[] _wireAnimators = null;
 
     /// <summary>
     /// Reference to the wire connected to the second battery.
     /// </summary>
-    [SerializeField]
-    private Animator _battery2WireAnimator = null;
+    [SerializeField] private Animator _battery2WireAnimator = null;
 
-    [SerializeField]
-    private Bulb _singleColorBulb = null;
+    /// <summary>
+    /// Reference to the wire connected to the second battery.
+    /// </summary>
+    [SerializeField] private Animator _battery3WireAnimator = null;
 
-    [SerializeField]
-    private Animator _singleColorBulbAnimator = null;
+    [SerializeField] private Bulb _singleColorBulb = null;
 
-    [SerializeField]
-    private Bulb _doubleColorBulb = null;
+    [SerializeField] private Animator _singleColorBulbAnimator = null;
 
-    [SerializeField]
-    private Animator _doubleColorBulbAnimator = null;
+    [SerializeField] private Bulb _singleColor2Bulb = null;
 
-    [SerializeField]
-    private Animator _batteryOptionsAnimator = null;
+    [SerializeField] private Animator _singleColor2BulbAnimator = null;
+
+    [SerializeField] private Bulb _doubleColorBulb = null;
+
+    [SerializeField] private Animator _doubleColorBulbAnimator = null;
+
+    [SerializeField] private Animator _batteryOptionsAnimator = null;
 
     #endregion Fields, Properties (end)
 
@@ -77,10 +75,14 @@ public class LevelSixTutorialResolver : TutorialResolverBase
         _nextButton.gameObject.SetActive(true);
         _closeButton.gameObject.SetActive(false);
         _singleColorBulb.ResetPowerable();
+        _singleColor2Bulb.ResetPowerable();
         _doubleColorBulb.ResetPowerable(); //Used mainly to reset the text display;
         _singleColorBulbAnimator.SetTrigger("RedOff");
         _singleColorBulbAnimator.SetTrigger("RedUnlitOn");
         _singleColorBulbAnimator.SetTrigger("SetNormalImage1");
+        _singleColor2BulbAnimator.SetTrigger("BlueOff");
+        _singleColor2BulbAnimator.SetTrigger("BlueUnlitOn");
+        _singleColor2BulbAnimator.SetTrigger("SetNormalImage1");
         _doubleColorBulbAnimator.SetTrigger("RedBlueUnlitOn");
         _doubleColorBulbAnimator.SetTrigger("SetNormalImage1");
         
@@ -181,7 +183,10 @@ public class LevelSixTutorialResolver : TutorialResolverBase
                 _doubleColorBulbAnimator.SetTrigger("SetBrokenImage1");
                 _battery2Animator.SetTrigger("BlueOn");
                 _doubleColorBulb.IncreasePower(1, true);
+                _singleColor2Bulb.IncreasePower(1, true);
+                _singleColor2BulbAnimator.SetTrigger("BlueOn");
                 _battery2WireAnimator.SetTrigger("BlueOn");
+                _battery3WireAnimator.SetTrigger("BlueOn");
                 _nextButton.interactable = true;
                 break;            
         }

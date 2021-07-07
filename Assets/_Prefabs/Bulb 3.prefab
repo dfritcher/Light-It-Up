@@ -90,7 +90,7 @@ SpriteMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758877378304961710}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -324,7 +324,7 @@ Transform:
   m_GameObject: {fileID: 1265558886660161418}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.0064, y: 0.0752, z: 0}
-  m_LocalScale: {x: 1.0949948, y: 1.0674593, z: 1}
+  m_LocalScale: {x: 1.0949947, y: 1.0674593, z: 1}
   m_Children: []
   m_Father: {fileID: 5060793163206867053}
   m_RootOrder: 8
@@ -378,8 +378,8 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_MaskInteraction: 2
+  m_SpriteSortPoint: 1
 --- !u!331 &5088289415727654463
 SpriteMask:
   m_ObjectHideFlags: 0
@@ -387,7 +387,7 @@ SpriteMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1265558886660161418}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -396,7 +396,7 @@ SpriteMask:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 0
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10758, guid: 0000000000000000f000000000000000, type: 0}
@@ -420,7 +420,7 @@ SpriteMask:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 83e1691e774bd8c468293cbde9ee7f7f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 91e3e3c422b9eff498e12294ae60e991, type: 3}
   m_MaskAlphaCutoff: 0.2
   m_FrontSortingLayerID: 0
   m_BackSortingLayerID: 0
@@ -429,7 +429,7 @@ SpriteMask:
   m_FrontSortingOrder: 0
   m_BackSortingOrder: 0
   m_IsCustomRangeActive: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!1 &1404019174585195460
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,7 +684,7 @@ SpriteMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469592390495499954}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -817,7 +817,7 @@ SpriteMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1608093792047069400}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1147,12 +1147,10 @@ MonoBehaviour:
     Amount: 1
     colorTypes: 00000000
     Direction: 0
-  _bulbColors: []
   _bulbPowerDisplay: {fileID: 2533851737936463714}
   _bulbStatusDisplay: {fileID: 0}
   _minPower: 0
   _maxPower: 3
-  _powerables: []
   _bulbType: 3
   _shouldUpdateVisuals: 1
   _shouldResetState: 1
@@ -1184,7 +1182,6 @@ MonoBehaviour:
   _bulbImage: {fileID: 405324866449135786}
   _brokenSprite: {fileID: 21300000, guid: 20d08326f5e9bc54687eeb0c01f913b8, type: 3}
   _normalSprite: {fileID: 21300000, guid: e17ba4294f99ca94289c5dc889817078, type: 3}
-  _bulbAudioSource: {fileID: 0}
   _glassBreakClip: {fileID: 0}
   _increasePowerClip: {fileID: 0}
 --- !u!1 &5357226831113230751
@@ -1679,7 +1676,7 @@ SpriteMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6321382932185702930}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1812,7 +1809,7 @@ SpriteMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6998842834093213861}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2027,7 +2024,7 @@ SpriteMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7359525346402660058}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2160,7 +2157,7 @@ SpriteMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7994251326328366586}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2293,7 +2290,7 @@ SpriteMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8333338376644463309}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2426,7 +2423,7 @@ SpriteMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8470732765705480041}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
