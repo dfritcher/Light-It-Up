@@ -6,27 +6,20 @@ public class LevelSelect : MonoBehaviour
 {
 
     #region Fields, Properties
-    [SerializeField]
-    private int _levelNumber = 0;
+    [SerializeField] private int _levelNumber = 0;
     public int LevelNumber { get { return _levelNumber; } }
 
-    [SerializeField]
-    private LevelManager _levelManager = null;
+    [SerializeField] private LevelManager _levelManager = null;
 
-    [SerializeField]
-    private Image _levelImage = null;
+    [SerializeField] private Image _levelImage = null;
 
-    [SerializeField]
-    private Sprite _lockedDisplay = null;
+    [SerializeField] private Sprite _lockedDisplay = null;
 
-    [SerializeField]
-    private Sprite _levelIconDisplay = null;
+    [SerializeField] private Sprite _levelIconDisplay = null;
 
-    [SerializeField]
-    private TextMeshProUGUI _levelNumberDisplay = null;
+    [SerializeField] private TextMeshProUGUI _levelNumberDisplay = null;
 
-    [SerializeField]
-    private AudioClip _clickSFX = null;
+    [SerializeField] private AudioClip _clickSFX = null;
 
     private bool _isLocked = false;
     #endregion Fields, Properites (end)
@@ -39,6 +32,15 @@ public class LevelSelect : MonoBehaviour
         _levelImage.sprite = _isLocked ? _lockedDisplay : _levelIconDisplay;
         _levelNumberDisplay.gameObject.SetActive(!_isLocked);
         _levelNumberDisplay.text = _levelNumber.ToString();
+        var ratio = manager.MainCanvasScaler.referenceResolution.x / manager.MainCanvasScaler.referenceResolution.y;
+        if ( ratio > 2 && ratio < 2.17)
+        {
+            transform.localScale = Vector3.one;
+        }
+        else if (ratio > 2 && ratio < 2.23)
+        {
+            transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+        }
     }
     public void OnLevelClicked()
     {

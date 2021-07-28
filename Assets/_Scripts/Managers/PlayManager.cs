@@ -1,19 +1,14 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
 
 public class PlayManager : MonoBehaviour
 {
     #region Fields, Properties
-    [SerializeField]
-    private float _changeDuration;
+    [SerializeField] private float _changeDuration;
 
-    [SerializeField]
-    private float _changeTargetTime;
+    [SerializeField] private float _changeTargetTime;
 
-    [SerializeField]
-    private TextMeshProUGUI[] _titleTexts = new TextMeshProUGUI[3];
+    [SerializeField] private TextMeshProUGUI[] _titleTexts = new TextMeshProUGUI[3];
 
     public bool IsActive { get; set; }
     private int _index = 0;

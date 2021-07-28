@@ -28,8 +28,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Button _nextHintButton = null;
     [SerializeField] private EndLevel _endLevel = null;
     [SerializeField] private TextMeshProUGUI _hintCountDisplay = null;
+    [SerializeField] private GridLayoutGroup[] _gridLayoutGroups = null;
 
-    [Header("Screens")]
+    [Header("Screens"), Space(8)]
     [SerializeField] private CanvasGroup _mainCanvas = null;
     [SerializeField] private CanvasScaler _mainCanvasScaler = null;
     public CanvasScaler MainCanvasScaler { get { return _mainCanvasScaler; } }
@@ -468,7 +469,21 @@ public class LevelManager : MonoBehaviour
         {
             level.Setup(this, _gameInfo.HighestLevelUnlocked);
         }
-        //AudioManager.SetMusic(_menuMusic, true);
+        var ratio = MainCanvasScaler.referenceResolution.x /MainCanvasScaler.referenceResolution.y;
+        if (ratio > 2 && ratio < 2.17)
+        {
+            foreach (var grid in _gridLayoutGroups)
+            {
+                grid.cellSize = new Vector2(150, 150);
+            }
+        }               
+        else if(ratio > 2 && ratio < 2.23)
+        {
+            foreach (var grid in _gridLayoutGroups)
+            {
+                grid.cellSize = new Vector2(300, 300);
+            }
+        }
     }
 
     private void SetMainCanvasState(bool enabled)
