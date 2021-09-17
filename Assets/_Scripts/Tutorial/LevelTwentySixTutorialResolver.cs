@@ -48,6 +48,7 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
         _level = level;
         _fingerLocations[1] = _level.LevelManager.MainCamera.WorldToScreenPoint(_battery1Location.position);
         _fingerLocations[3] = _level.LevelManager.MainCamera.WorldToScreenPoint(new Vector3(_battery1Location.position.x + .8f, _battery1Location.position.y, _battery1Location.position.z));
+        _canvasScaler = canvasScaler;
     }
 
     public override void OnCloseClicked()

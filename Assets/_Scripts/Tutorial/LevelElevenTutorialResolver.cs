@@ -59,6 +59,7 @@ public class LevelElevenTutorialResolver : TutorialResolverBase
         _fingerLocations[1] = _level.LevelManager.MainCamera.WorldToScreenPoint(_battery1Location.position);
         _fingerLocations[3] = _level.LevelManager.MainCamera.WorldToScreenPoint(_inhibitor2Location.position);
         _fingerLocations[6] = _level.LevelManager.MainCamera.WorldToScreenPoint(_inhibitor1Location.position);
+        _canvasScaler = canvasScaler;
     }
 
     public override void OnCloseClicked()

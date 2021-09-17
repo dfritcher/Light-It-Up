@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Level : MonoBehaviour
 {
@@ -55,8 +56,7 @@ public class Level : MonoBehaviour
     public bool HasTutorial { get { return _hasTutorial; } }
     [SerializeField] private GameObject _tutorialGameObjectsParent = null;
 
-    [SerializeField]
-    private TutorialResolverBase _tutorialResolver = null;
+    [SerializeField] private TutorialResolverBase _tutorialResolver = null;
 
     #endregion Tutorial (end)
 
