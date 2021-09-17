@@ -469,20 +469,10 @@ public class LevelManager : MonoBehaviour
         {
             level.Setup(this, _gameInfo.HighestLevelUnlocked);
         }
-        var ratio = MainCanvasScaler.referenceResolution.x /MainCanvasScaler.referenceResolution.y;
-        if (ratio > 2 && ratio < 2.17)
+        
+        foreach (var grid in _gridLayoutGroups)
         {
-            foreach (var grid in _gridLayoutGroups)
-            {
-                grid.cellSize = new Vector2(150, 150);
-            }
-        }               
-        else if(ratio > 2 && ratio < 2.23)
-        {
-            foreach (var grid in _gridLayoutGroups)
-            {
-                grid.cellSize = new Vector2(300, 300);
-            }
+            grid.cellSize = Utility.GetGridSize();
         }
     }
 

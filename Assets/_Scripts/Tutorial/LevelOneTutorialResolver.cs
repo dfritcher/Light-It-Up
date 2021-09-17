@@ -36,7 +36,8 @@ public class LevelOneTutorialResolver : TutorialResolverBase
     public override void Setup(Level level, CanvasScaler canvasScaler)
     {
         _level = level;
-        _fingerLocations[1] = _level.LevelManager.MainCamera.WorldToScreenPoint(_batteryLocation.position);        
+        _fingerLocations[1] = _level.LevelManager.MainCamera.WorldToScreenPoint(_batteryLocation.position);
+        _canvasScaler = canvasScaler;
     }
 
     public override void OnCloseClicked()
