@@ -367,6 +367,7 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator LevelAnimationRoutine(Action callback)
     {
+        yield return new WaitForSecondsRealtime(1f);
         _levelTransition.ResetTrigger("Start");
         _levelTransition.SetTrigger("End");
         yield return new WaitForSecondsRealtime(2f);
