@@ -15,9 +15,6 @@ public abstract class PowerableBase : MonoBehaviour
     [SerializeField]
     protected List<ExternalPower> _externalPowerSources = new List<ExternalPower>();
 
-    //Value to hold which direction a powerable is in relation to other powerables.
-    //public Direction InputDirection;
-
     /// <summary>
     /// Reference to the the list of powers we are currently getting from all other sources.
     /// We use this to determine which colors we provide outward.
@@ -32,9 +29,7 @@ public abstract class PowerableBase : MonoBehaviour
 
     public List<ColorType> OriginalColorTypes { get { return _originalColorTypes; } }
 
-    //protected PowerSource _powerSource;
-    //public PowerSource PowerSource { get { return _powerSource; } }    
-
+    
     [SerializeField]
     protected static List<ColorType> _allColors = new List<ColorType>() {ColorType.Red, ColorType.Green, ColorType.Blue};
 
@@ -54,8 +49,7 @@ public abstract class PowerableBase : MonoBehaviour
     /// <param name="requestor"></param>
     /// <returns></returns>
     public abstract List<Power> GetPowers(PowerableBase requestor);
-    //public abstract List<ColorType> CurrentColorTypes { get; }
-
+    
     public virtual void Setup(PowerableBase powerableBase) { }
     #endregion Fields, Properties (end)
 

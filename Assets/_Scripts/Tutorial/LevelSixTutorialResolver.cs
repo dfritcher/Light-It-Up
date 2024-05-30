@@ -109,22 +109,18 @@ public class LevelSixTutorialResolver : TutorialResolverBase
             case 1:
                 _nextButton.interactable = false;
                 MoveFinger(1, _fingerTransform.position, _fingerLocations[1], false);
-                //_fingerAnimator.SetTrigger("Lvl6_Finger1");
                 break;
             case 2:
                 _nextButton.interactable = false;
                 MoveFinger(2, _fingerTransform.localPosition, _fingerLocations[2], true);
-                //_fingerAnimator.SetTrigger("Lvl6_Finger2");                
                 break;
             case 3:                
                 _nextButton.interactable = false;
                 MoveFinger(3, _fingerTransform.position, _fingerLocations[3], false);
-                //_fingerAnimator.SetTrigger("Lvl6_Finger3");
                 break;
             case 4:                
                 _nextButton.interactable = false;
                 MoveFinger(4, _fingerTransform.localPosition, _fingerLocations[4], true);
-                //_fingerAnimator.SetTrigger("Lvl6_Finger4");                
                 break;
             case 5:
                 _nextButton.gameObject.SetActive(false);
@@ -213,7 +209,6 @@ public class LevelSixTutorialResolver : TutorialResolverBase
         }
         
         _batteryOptionsAnimator.ResetTrigger("MoveUp");
-        //_doubleColorBulbAnimator.ResetTrigger("SetBrokenImage");
         _doubleColorBulbAnimator.ResetTrigger("RedBlueOn");
                 
         _animationIndex = 0;

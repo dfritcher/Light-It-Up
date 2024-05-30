@@ -6,14 +6,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Game object that powers other game objects based on it's defined color(s).
+/// Interactable by the player. Interacts with other powerable objects.
+/// </summary>
 public class Battery : PowerableBase
 {
     #region Fields, Properties
-    /// <summary>
-    /// Reference to the current colors we are generating.
-    /// </summary>
-    //public List<ColorType> CurrentColorTypes { get { return Power.ColorTypes; } }
-
     [SerializeField]
     private List<PowerableBase> _objectsWePower = new List<PowerableBase>();
 
@@ -25,9 +24,6 @@ public class Battery : PowerableBase
 
     [SerializeField]
     private List<Junction> _junctions = null;
-
-    //[SerializeField]
-    //private List<Image> _batteryColors = null;
 
     [SerializeField]
     private bool _isClickable = true;
@@ -275,9 +271,6 @@ public class Battery : PowerableBase
 
     private void UpdatePoweredObjects()
     {
-        // We could make each part a subroutine that waits for others to finish if we need UI responsiveness
-        //_objectsWePower.ForEach(p => p.DetermineNewPowerState(this));
-        //_objectsWePower.ForEach(p => p.DeterminePowerColorStateChange(this));
         _externalPowerSources.ForEach(p => p.Powerable.CheckStateChanged(this, true));                
         _wires.ForEach(w => w.CheckStateChanged(this, true));        
         _bulbs.ForEach(b => b.CheckStateChanged(this, true));
@@ -303,8 +296,8 @@ public class Battery : PowerableBase
     /// Method to determine what colors we currently provide to other sources.
     /// For Batteries we return whatever color was set at the start or by the player.
     /// </summary>
-    /// <param name="requestor"></param>
-    /// <returns></returns>
+    /// <param name="requestor">The game object looking to be powered.</param>
+    /// <returns>A list of power.</returns>
     public override List<Power> GetPowers(PowerableBase requestor)
     {
         throw new NotImplementedException();

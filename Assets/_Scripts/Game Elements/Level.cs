@@ -50,6 +50,7 @@ public class Level : MonoBehaviour
     public bool HasHints { get { return _hints.Count() > 0; } }
     public bool NextHintAvailable { get { return _hintIndex != _hints.Length - 1; } }
     private bool _initialized = false;
+
     #region Tutorial
     [Header("Tutorial"), Space(8)]
     [SerializeField] private bool _hasTutorial = false;

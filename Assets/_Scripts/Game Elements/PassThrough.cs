@@ -395,7 +395,6 @@ public class PassThrough : PowerableBase
     {
         _triggeringSource = powerable;
         DetermineNewPowerState(powerable);
-        //DeterminePowerColorStateChange(powerable);
         TriggerPropagation(powerable);
         ReCheckStateChange();
         UpdateColorDisplay();

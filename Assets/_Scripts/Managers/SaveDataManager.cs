@@ -53,30 +53,19 @@ public class SaveDataManager : MonoBehaviour
 
     private IEnumerator LoadGameCouroutine(LoadGameSuccessCallback successCallback, LoadGameFailureCallback failureCallback)
     {
-        //Debug.Log("Load Game Coroutine Started");
         if (File.Exists(Application.persistentDataPath + "/gamesave.save"))
         {
-            //Debug.Log("Load File Found.");
             var bf = new BinaryFormatter();
             var file = File.Open(Application.persistentDataPath + "/gamesave.save", FileMode.Open);
             yield return null;
             var save = (SaveData)bf.Deserialize(file);
 
             file.Close();
-            //LoadGameSaveInfo(save);
             successCallback?.Invoke(save);
         }
         else
         {
-            //Debug.Log("NO Load File Found.");
             failureCallback?.Invoke(new SaveData() { HighestLevelUnlocked = 1, MusicOn = true, SkipTutorials = false, SoundEffectsOn =true });
         }
-    }
-
-    //private void LoadGameSaveInfo(SaveData save)
-    //{
-    //    _gameSaveInfo.HighestLevelUnlocked = save.HighestLevelUnlocked;
-    //    _gameSaveInfo.IsMusicOn = save.MusicOn;
-    //    _gameSaveInfo.IsSfxOn = save.SoundEffectsOn;
-    //}
+    }    
 }

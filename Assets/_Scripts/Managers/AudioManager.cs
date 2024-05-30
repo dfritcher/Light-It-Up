@@ -6,6 +6,7 @@
 /// </summary>
 public class AudioManager : MonoBehaviour
 {
+    #region Fields
     [SerializeField]
     private Settings _settings = null;
     private Settings Settings { get { return _settings; } }
@@ -21,7 +22,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     private static AudioManager _instance = null;
     private static AudioManager Instance { get { return _instance; } }
+    #endregion Fields (end)
 
+    #region Methods
     private void Awake()
     {
         if (_instance == null)
@@ -29,6 +32,7 @@ public class AudioManager : MonoBehaviour
         else
             Destroy(_instance);
     }
+    
     public static void PlayOneShot(AudioClip clip, float pitchSetting = 1f)
     {
         if (Instance.Settings.IsSfxOn)
@@ -64,4 +68,5 @@ public class AudioManager : MonoBehaviour
     {
         Instance.MusicSource.Play();
     }
+    #endregion Methods (end)
 }

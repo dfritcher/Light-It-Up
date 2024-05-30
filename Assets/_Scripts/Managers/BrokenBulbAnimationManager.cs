@@ -59,8 +59,7 @@ public class BrokenBulbAnimationManager : MonoBehaviour
     }
 
     private IEnumerator Bulb_BrokenAnimationEndCoroutine(Bulb bulb)
-    {
-        
+    {        
         yield return new WaitForSeconds(2f);
         bulb.BrokenBulbAnimationEnd -= Bulb_BrokenBulbAnimationEnd;
         bulb.ResetBrokenAnimation();

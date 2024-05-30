@@ -68,11 +68,7 @@ public abstract class TutorialResolverBase : MonoBehaviour
         _nextButton.interactable = false;
         _tutorialIndex++;
         SetTutorialTextState(_tutorialIndex);
-        HandleTutorialStateByIndex(_tutorialIndex);
-        //InitializeTutorial(_tutorialIndex);
-        //Play animation at specific points.
-        //_levelManger.TriggerAnimation(_levelNumber, _tutorialIndex);
-        //How can we tie this all together genericly for all levels????
+        HandleTutorialStateByIndex(_tutorialIndex);        
     }
 
     virtual public void OnSkipClicked()

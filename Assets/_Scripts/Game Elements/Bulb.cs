@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Linq;
 
 public class Bulb : PowerableBase
 {

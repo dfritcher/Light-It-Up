@@ -112,22 +112,6 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
                 _nextButton.interactable = false;
                 MoveFinger(3, _fingerTransform.position, _fingerLocations[3], false);
                 break;
-            //case 4:                
-            //    _nextButton.interactable = false;
-            //    _fingerAnimator.SetTrigger("Lvl26_Finger4");
-            //    break;
-            //case 5:
-            //    _nextButton.interactable = false;
-            //    _fingerAnimator.SetTrigger("Lvl26_Finger5");
-            //    break;
-            //case 6:
-            //    _nextButton.interactable = false;
-            //    _fingerAnimator.SetTrigger("Lvl26_Finger6");
-            //    break;
-            //case 7:
-            //    _nextButton.interactable = false;
-            //    _fingerAnimator.SetTrigger("Lvl26_Finger7");
-            //    break;
             default:
                 _nextButton.interactable = true;
                 break;
@@ -136,7 +120,6 @@ public class LevelTwentySixTutorialResolver : TutorialResolverBase
 
     public override void OnFingerAnimationEnd(int index)
     {
-        //Debug.Log($"OnFingerAnimationEnd Index: {index}");
         switch (index)
         {
             case 0:
