@@ -82,5 +82,8 @@ public abstract class PowerableBase : MonoBehaviour
     {
         return false;
     }
+
+    public abstract void OnMouseDown();
+    
     #endregion Methods (end)
 }

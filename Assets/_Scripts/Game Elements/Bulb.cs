@@ -177,6 +177,11 @@ public class Bulb : PowerableBase
         UpdateColorDisplay();
     }
 
+    public override void OnMouseDown()
+    {
+
+    }
+
     #region Broken Bulb Animation 
     public void ResetBrokenAnimation()
     {

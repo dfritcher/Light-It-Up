@@ -317,23 +317,13 @@ public class PassThrough : PowerableBase
             }
         }
         PoweredColors = newPoweredColors.Clone();
-        //foreach (var power in PoweredColors)
-        //{
-        //    foreach (var color in power.ColorTypes)
-        //    {
-        //        if (UserSetColorTypes.Contains(color))
-        //        {
-        //            if (CurrentPower.ColorTypes.Contains(color))
-        //            {
-        //                CurrentPower.Amount++;
-        //            }
-        //            else
-        //            {
-        //                CurrentPower.ColorTypes.Add(color);
-        //            }
-        //        }
-        //    }
-        //}
+    }
+
+    public override void OnMouseDown()
+    {
+#if UNITY_WEBGL
+       PassThroughClicked();
+#endif
     }
 
     #endregion Overrides (end)

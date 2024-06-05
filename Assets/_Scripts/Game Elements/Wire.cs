@@ -127,5 +127,10 @@ public class Wire : PowerableBase
         CheckPoweredState();
         UpdateColorDisplay();
     }
+
+    public override void OnMouseDown()
+    {
+
+    }
     #endregion Methods (end)
 }

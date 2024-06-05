@@ -343,5 +343,12 @@ public class Battery : PowerableBase
         return IsPowered;
     }
 
+    public override void OnMouseDown()
+    {
+#if UNITY_WEBGL || UNITY_EDITOR
+        BatteryClicked();
+#endif
+    }
+
     #endregion Methods (end)
 }

@@ -316,7 +316,14 @@ public class Inhibitor : PowerableBase
         }
     }
 
-    #endregion Overrides (end)
+    public override void OnMouseDown()
+    {
+#if UNITY_WEBGL
+        InhibitorClicked();
+#endif
+    }
+
+#endregion Overrides (end)
     public void Setup(Level level)
     {
         _level = level;
@@ -537,7 +544,6 @@ public class Inhibitor : PowerableBase
         }
 
     }
-
     #endregion Helper Methods (end)
-    #endregion Methods (end)
+#endregion Methods (end)
 }

@@ -163,4 +163,8 @@ public class Junction : PowerableBase
         CheckPoweredState();
         UpdateColorDisplay();
     }
+    public override void OnMouseDown()
+    {
+
+    }
 }
