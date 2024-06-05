@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class PassThroughOption : MonoBehaviour
 {
+    #region Fields, Properties
     [SerializeField]
     private List<ColorType> _optionColorTypes = null;
     public List<ColorType> OptionColorTypes { get { return _optionColorTypes ?? (_optionColorTypes = new List<ColorType>()); } }
@@ -21,10 +22,14 @@ public class PassThroughOption : MonoBehaviour
     [SerializeField]
     private bool _isVisible = true;
     public bool IsVisible { get { return _isVisible; } }
+    #endregion Fields, Properties (end)
 
+    #region Delegates, Events
     public delegate void PassThroughOptionEvent(PassThroughOption option);
     public event PassThroughOptionEvent OnClick;
+    #endregion Delegates, Events (end)
 
+    #region Methods
     public void OptionClicked()
     {
         if (!IsClickable)
@@ -51,4 +56,5 @@ public class PassThroughOption : MonoBehaviour
         _optionColors[1].gameObject.SetActive(OptionColorTypes.Contains(ColorType.Green));
         _optionColors[2].gameObject.SetActive(OptionColorTypes.Contains(ColorType.Blue));
     }
+    #endregion Methods (end)
 }

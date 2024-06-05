@@ -84,7 +84,6 @@ public class Wire : PowerableBase
             }
             else
             {
-                //var poweredSources = externalSource.Powerable.GetPowers(this);
                 foreach (var poweredColor in externalSource.Powerable.PoweredColors)
                 {
                     foreach (var color in poweredColor.ColorTypes)

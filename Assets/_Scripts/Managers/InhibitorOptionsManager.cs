@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class InhibitorOptionsManager : MonoBehaviour
 {
+    #region Fields
     [SerializeField]
     private GameObject _optionPrefab = null;
 
@@ -26,7 +25,9 @@ public class InhibitorOptionsManager : MonoBehaviour
     private Inhibitor _activeInhibitor = null;
     
     private bool _extended = false;
+    #endregion Fields (end)
 
+    #region Methods
     private void Awake()
     {
         var resetOption = Instantiate(_optionPrefab, _optionParent, false).GetComponent<InhibitorOption>();
@@ -61,7 +62,6 @@ public class InhibitorOptionsManager : MonoBehaviour
         ((RectTransform)transform).anchoredPosition = _startPosition;
     }
 
-    
     public void Setup(Inhibitor inhibitor)
     {
         _activeInhibitor = inhibitor;
@@ -99,8 +99,7 @@ public class InhibitorOptionsManager : MonoBehaviour
         if (immediate)
             AnimationController.Instance.AnimateDirection(_endPosition, _startPosition, 0f, _animationTime / 2, (RectTransform)transform, SetInactive);
         else
-            AnimationController.Instance.AnimateDirection(_endPosition, _startPosition, 3f, _animationTime / 2, (RectTransform)transform, SetInactive);
-        //_activeInhibitor = null;
+            AnimationController.Instance.AnimateDirection(_endPosition, _startPosition, 3f, _animationTime / 2, (RectTransform)transform, SetInactive);       
     }
 
     public void SetActive()
@@ -114,4 +113,5 @@ public class InhibitorOptionsManager : MonoBehaviour
         _extended = false;
         _activeInhibitor?.SetSelectedState(false);
     }
+    #endregion Methods (end)
 }

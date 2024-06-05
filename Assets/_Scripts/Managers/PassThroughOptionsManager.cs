@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PassThroughOptionsManager : MonoBehaviour
 {
+    #region Fields
     [SerializeField]
     private GameObject _optionPrefab = null;
 
@@ -25,6 +26,9 @@ public class PassThroughOptionsManager : MonoBehaviour
     private PassThrough _activePassThrough = null;
 
     private bool _extended = false;
+    #endregion Fields (end)
+
+    #region Methods
     private void Awake()
     {
         var resetOption = Instantiate(_optionPrefab, _optionParent, false).GetComponent<PassThroughOption>();
@@ -59,7 +63,6 @@ public class PassThroughOptionsManager : MonoBehaviour
         ((RectTransform)transform).anchoredPosition = _startPosition;
     }
 
-    
     public void Setup(PassThrough passThrough)
     {
         _activePassThrough = passThrough;
@@ -97,18 +100,18 @@ public class PassThroughOptionsManager : MonoBehaviour
             AnimationController.Instance.AnimateDirection(_endPosition, _startPosition, 0f, _animationTime / 2, (RectTransform)transform, SetInactive);
         else
             AnimationController.Instance.AnimateDirection(_endPosition, _startPosition, 3f, _animationTime / 2, (RectTransform)transform, SetInactive);
-        //_activePassThrough = null;
-        
     }
 
     public void SetActive()
     {
         _extended = true;
     }
+    
     public void SetInactive()
     {
         gameObject.SetActive(false);
         _extended = false;
         _activePassThrough?.SetSelectedState(false);
     }
+    #endregion Methods (end)
 }

@@ -367,6 +367,7 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator LevelAnimationRoutine(Action callback)
     {
+        yield return new WaitForSecondsRealtime(1f);
         _levelTransition.ResetTrigger("Start");
         _levelTransition.SetTrigger("End");
         yield return new WaitForSecondsRealtime(2f);
@@ -684,18 +685,16 @@ public class LevelManager : MonoBehaviour
     
     private void SaveGameInfo()
     {
-        //Debug.Log("Save Game Started.");
         _saveDataManager.SaveGame(SaveGameCallback);
     }
     
     private void SaveGameCallback()
     {
-       // Debug.Log("Save Game Completed.");
+       
     }
 
     private void LoadGameInfo()
     {
-        //Debug.Log("Load Game Started.");
         _saveDataManager.LoadGame(LoadGameSuccessCallback, LoadGameFailureCallback);
     }
 

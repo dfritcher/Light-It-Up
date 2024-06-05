@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,6 +50,5 @@ public class BatteryOption : MonoBehaviour
         _batteryColors[0].gameObject.SetActive(BatteryOptionColorTypes.Contains(ColorType.Red));
         _batteryColors[1].gameObject.SetActive(BatteryOptionColorTypes.Contains(ColorType.Green));
         _batteryColors[2].gameObject.SetActive(BatteryOptionColorTypes.Contains(ColorType.Blue));
-
     }
 }

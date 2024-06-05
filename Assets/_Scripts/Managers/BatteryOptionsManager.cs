@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BatteryOptionsManager : MonoBehaviour
 {
+    #region Fields
     [SerializeField]
     private GameObject _batteryOptionPrefab = null;
 
@@ -27,6 +28,9 @@ public class BatteryOptionsManager : MonoBehaviour
     private bool _extended = false;
 
     private BatteryOption _redBlueGreenOption = null;
+    #endregion Fields (end)
+
+    #region Methods
     private void Awake()
     {
         var resetOption = Instantiate(_batteryOptionPrefab, _batteryOptionParent, false).GetComponent<BatteryOption>();
@@ -104,13 +108,10 @@ public class BatteryOptionsManager : MonoBehaviour
     {
         if (!_extended)
             return;
-        //gameObject.SetActive(false);
         if(immediate)
             AnimationController.Instance.AnimateDirection(_endPosition, _startPosition, 0f, _animationTime / 2, (RectTransform)transform, SetInActive);
         else
-            AnimationController.Instance.AnimateDirection(_endPosition, _startPosition, 3f, _animationTime /2, (RectTransform)transform, SetInActive);
-        //_activeBattery = null;
-        
+            AnimationController.Instance.AnimateDirection(_endPosition, _startPosition, 3f, _animationTime /2, (RectTransform)transform, SetInActive);        
     }
 
     public void SetActive()
@@ -123,4 +124,5 @@ public class BatteryOptionsManager : MonoBehaviour
         _extended = false;
         _activeBattery?.SetSelectedState(false);
     }
+    #endregion Methods (end)
 }
